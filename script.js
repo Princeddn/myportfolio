@@ -39,7 +39,23 @@ const cvData = {
                 "Création de dashboards énergétiques et widgets",
                 "Suivi et support d'installations GTB",
                 "Prise en main du KNX sur Jeedom"
-            ]
+            ],
+            "details": {
+                "technologies": ["Zigbee", "LoRaWAN", "KNX", "JavaScript", "PHP", "MySQL", "Docker"],
+                "realisations": [
+                    "Déployement de plus de 50 capteurs IoT dans différents bâtiments",
+                    "Création de dashboards énergétiques permettant une économie de 15% sur la consommation",
+                    "Formation de 12 techniciens sur les protocoles Zigbee et LoRaWAN",
+                    "Développement de widgets personnalisés pour l'interface Jeedom"
+                ],
+                "defis": [
+                    "Intégration de protocoles différents dans un seul écosystème",
+                    "Optimisation des performances des réseaux sans fil en environnement urbain",
+                    "Création d'interfaces utilisateur intuitives pour des non-techniciens"
+                ],
+                "environnement": "Équipe de 8 personnes, méthodologie Agile, environnement Linux",
+                "impact": "Amélioration de l'efficacité énergétique de 15% sur les installations déployées"
+            }
         },
         {
             "entreprise": "JEEDOM",
@@ -53,7 +69,23 @@ const cvData = {
                 "Création de dashboards énergétiques et widgets",
                 "Suivi et support d'installations GTB",
                 "Prise en main du KNX sur Jeedom"
-            ]
+            ],
+            "details": {
+                "technologies": ["Zigbee", "LoRaWAN", "KNX", "JavaScript", "HTML5", "CSS3"],
+                "realisations": [
+                    "Mise en place d'un réseau LoRaWAN de 25 capteurs sur un campus universitaire",
+                    "Développement d'un dashboard temps réel pour le monitoring énergétique",
+                    "Documentation technique complète des protocoles d'intégration",
+                    "Tests de portée et d'interférences sur 3 protocoles sans fil"
+                ],
+                "defis": [
+                    "Apprentissage rapide des protocoles IoT industriels",
+                    "Adaptation aux contraintes techniques des bâtiments existants",
+                    "Optimisation de la consommation des capteurs autonomes"
+                ],
+                "environnement": "Stage en équipe R&D, encadrement par des experts IoT",
+                "impact": "Bases techniques solides qui ont permis la conversion en alternance"
+            }
         },
         {
             "entreprise": "Qotto",
@@ -65,7 +97,23 @@ const cvData = {
                 "Maintenance préventive et curative à distance",
                 "Analyse des données de production et de charge",
                 "Coordination des interventions terrain via Google Sheets"
-            ]
+            ],
+            "details": {
+                "technologies": ["Python", "Google Sheets API", "MQTT", "InfluxDB", "Grafana", "ThingSpeak"],
+                "realisations": [
+                    "Monitoring de 200+ installations solaires en temps réel",
+                    "Réduction de 30% du temps de diagnostic grâce à l'analyse automatisée",
+                    "Création d'alertes automatiques pour 15 types de pannes",
+                    "Développement d'un tableau de bord de performance énergétique"
+                ],
+                "defis": [
+                    "Gestion des connexions intermittentes en zone rurale",
+                    "Diagnostic à distance sans accès physique aux installations",
+                    "Formation des techniciens locaux aux outils numériques"
+                ],
+                "environnement": "Start-up, équipe internationale, travail en autonomie",
+                "impact": "30% d'amélioration de l'efficacité de maintenance, 200+ foyers alimentés"
+            }
         },
         {
             "entreprise": "Golf Business Company",
@@ -157,7 +205,7 @@ const cvData = {
                 "Électronique",
                 "Arduino IDE"
             ],
-            "statut": "En cours",
+            "statut": "Fait",
             "type": "Académique"
         },
         {
@@ -199,6 +247,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initScrollAnimations();
     initSmoothScrolling();
     initContactForm();
+    initMessaging();
+    initCalendlyListeners();
 });
 
 // Navigation mobile
@@ -290,6 +340,10 @@ function populateExperiences() {
                 <ul class="timeline-missions">
                     ${missionsHTML}
                 </ul>
+                <button class="btn-details" onclick="openExperienceDetails(${index})">
+                    <i class="fas fa-eye"></i>
+                    Voir les détails
+                </button>
             </div>
         `;
 
@@ -682,8 +736,10 @@ function closeInbox() {
     document.body.style.overflow = 'auto';
 }
 
-// Calendly events listeners
-document.addEventListener('DOMContentLoaded', function() {
+// Initialisation des événements Calendly
+function initCalendlyListeners() {
+    console.log('Initialisation des listeners Calendly');
+
     // Écouter les événements Calendly
     window.addEventListener('message', function(e) {
         if (e.data.event && e.data.event.indexOf('calendly') === 0) {
@@ -698,7 +754,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
-});
+}
 
 function openCalendly() {
     // Rediriger vers la nouvelle fonction Calendly
@@ -712,11 +768,28 @@ function closeCalendly() {
 
 // Système de messagerie
 function sendMessage() {
+    console.log('sendMessage() appelée');
+
     const input = document.getElementById('message-input');
     const messagesContainer = document.getElementById('messages-container');
-    const message = input.value.trim();
 
-    if (!message) return;
+    if (!input) {
+        console.error('Élément message-input non trouvé');
+        return;
+    }
+
+    if (!messagesContainer) {
+        console.error('Élément messages-container non trouvé');
+        return;
+    }
+
+    const message = input.value.trim();
+    console.log('Message à envoyer:', message);
+
+    if (!message) {
+        console.log('Message vide, arrêt');
+        return;
+    }
 
     // Ajouter le message de l'utilisateur
     const userMessageDiv = document.createElement('div');
@@ -797,22 +870,29 @@ function addAutoReply(userMessage) {
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
 
-// Gestion des touches dans l'input
-document.addEventListener('DOMContentLoaded', function() {
+// Initialisation de la messagerie
+function initMessaging() {
+    console.log('Initialisation de la messagerie');
+
     const messageInput = document.getElementById('message-input');
     if (messageInput) {
+        console.log('message-input trouvé, ajout event listener');
         messageInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
+                console.log('Touche Entrée pressée');
                 sendMessage();
             }
         });
+    } else {
+        console.warn('message-input non trouvé lors de l\'initialisation');
     }
-});
+}
 
 // Fermer les modals en cliquant en dehors
 document.addEventListener('click', function(e) {
     const inboxModal = document.getElementById('inbox-modal');
     const calendlyModal = document.getElementById('calendly-modal');
+    const experienceModal = document.getElementById('experience-details-modal');
 
     if (e.target === inboxModal) {
         closeInbox();
@@ -820,6 +900,10 @@ document.addEventListener('click', function(e) {
 
     if (e.target === calendlyModal) {
         closeCalendly();
+    }
+
+    if (e.target === experienceModal) {
+        closeExperienceDetails();
     }
 });
 
@@ -829,6 +913,7 @@ document.addEventListener('keydown', function(e) {
         closeInbox();
         closeCalendly();
         closePhoneBooking();
+        closeExperienceDetails();
     }
 });
 
@@ -1461,6 +1546,87 @@ function contactViaWhatsApp() {
 
     window.open(whatsappUrl, '_blank');
     showNotification('Redirection vers WhatsApp', 'info');
+}
+
+// Gestion des détails d'expérience
+function openExperienceDetails(experienceIndex) {
+    const experience = cvData.experiences[experienceIndex];
+    if (!experience) {
+        console.error('Expérience non trouvée:', experienceIndex);
+        return;
+    }
+
+    console.log('Ouverture des détails pour:', experience.entreprise);
+
+    // Remplir les informations de base
+    document.getElementById('detail-company').textContent = experience.entreprise;
+    document.getElementById('detail-position').textContent = experience.poste;
+    document.getElementById('detail-period').textContent = experience.periode;
+    document.getElementById('detail-location').textContent = experience.lieu;
+
+    // Remplir les missions
+    const missionsContainer = document.getElementById('detail-missions');
+    missionsContainer.innerHTML = '';
+    experience.missions.forEach(mission => {
+        const li = document.createElement('li');
+        li.textContent = mission;
+        missionsContainer.appendChild(li);
+    });
+
+    // Si l'expérience a des détails étendus
+    if (experience.details) {
+        // Technologies
+        const techContainer = document.getElementById('detail-technologies');
+        techContainer.innerHTML = '';
+        experience.details.technologies.forEach(tech => {
+            const badge = document.createElement('span');
+            badge.className = 'tech-badge';
+            badge.textContent = tech;
+            techContainer.appendChild(badge);
+        });
+
+        // Réalisations
+        const realisationsContainer = document.getElementById('detail-realisations');
+        realisationsContainer.innerHTML = '';
+        experience.details.realisations.forEach(realisation => {
+            const li = document.createElement('li');
+            li.textContent = realisation;
+            realisationsContainer.appendChild(li);
+        });
+
+        // Défis
+        const defisContainer = document.getElementById('detail-defis');
+        defisContainer.innerHTML = '';
+        experience.details.defis.forEach(defi => {
+            const li = document.createElement('li');
+            li.textContent = defi;
+            defisContainer.appendChild(li);
+        });
+
+        // Environnement
+        document.getElementById('detail-environnement').textContent = experience.details.environnement;
+
+        // Impact
+        document.getElementById('detail-impact').textContent = experience.details.impact;
+    } else {
+        // Si pas de détails étendus, masquer ou remplir avec des valeurs par défaut
+        document.getElementById('detail-technologies').innerHTML = '<span class="tech-badge">Informations à venir</span>';
+        document.getElementById('detail-realisations').innerHTML = '<li>Détails complets disponibles sur demande</li>';
+        document.getElementById('detail-defis').innerHTML = '<li>Expérience enrichissante avec de nombreux apprentissages</li>';
+        document.getElementById('detail-environnement').textContent = 'Environnement professionnel dynamique';
+        document.getElementById('detail-impact').textContent = 'Contribution significative aux objectifs de l\'entreprise';
+    }
+
+    // Ouvrir le modal
+    const modal = document.getElementById('experience-details-modal');
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeExperienceDetails() {
+    const modal = document.getElementById('experience-details-modal');
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
 }
 
 // Exportation pour utilisation en mode debug

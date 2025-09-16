@@ -161,29 +161,67 @@
                     </div>
                 </div>
                 <div class="appointment-booking">
-                    <div class="calendar-widget">
-                        <h4>Choisissez un créneau</h4>
-                        <div class="calendar-placeholder">
-                            <!-- Intégration Calendly ou Google Calendar -->
-                            <div class="calendar-embed" id="calendar-embed">
-                                <iframe
-                                    src="https://calendar.google.com/calendar/embed?src=noukounwouiprince%40gmail.com&ctz=Europe%2FParis&mode=WEEK&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0"
-                                    style="border: 0"
-                                    width="100%"
-                                    height="400"
-                                    frameborder="0"
-                                    scrolling="no">
-                                </iframe>
-                                <div class="calendar-actions">
-                                    <button class="btn btn-primary" onclick="openCalendlyWidget()">
-                                        <i class="fas fa-phone"></i>
-                                        Réserver un appel téléphonique
-                                    </button>
-                                    <button class="btn btn-secondary" onclick="openInbox('direct')">
-                                        <i class="fas fa-comments"></i>
-                                        Discuter d'abord par message
-                                    </button>
+                    <div class="contact-methods">
+                        <h4>Choisissez votre moyen de contact préféré</h4>
+                        <div class="contact-options-grid">
+                            <div class="contact-option" onclick="openCalendlyWidget()">
+                                <div class="contact-icon">
+                                    <i class="fas fa-calendar-alt"></i>
                                 </div>
+                                <h5>Prendre rendez-vous</h5>
+                                <p>Réservez un créneau pour un appel téléphonique</p>
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-phone"></i>
+                                    Calendly
+                                </button>
+                            </div>
+
+                            <div class="contact-option" onclick="contactViaLinkedIn()">
+                                <div class="contact-icon linkedin">
+                                    <i class="fab fa-linkedin"></i>
+                                </div>
+                                <h5>LinkedIn</h5>
+                                <p>Connectons-nous sur le réseau professionnel</p>
+                                <button class="btn btn-linkedin">
+                                    <i class="fab fa-linkedin"></i>
+                                    Me contacter
+                                </button>
+                            </div>
+
+                            <div class="contact-option" onclick="contactViaEmail()">
+                                <div class="contact-icon email">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <h5>Email</h5>
+                                <p>Envoyez-moi un message détaillé</p>
+                                <button class="btn btn-email">
+                                    <i class="fas fa-envelope"></i>
+                                    Écrire un mail
+                                </button>
+                            </div>
+
+                            <div class="contact-option" onclick="contactViaSMS()">
+                                <div class="contact-icon sms">
+                                    <i class="fas fa-sms"></i>
+                                </div>
+                                <h5>SMS</h5>
+                                <p>Message rapide par téléphone</p>
+                                <button class="btn btn-sms">
+                                    <i class="fas fa-sms"></i>
+                                    Envoyer SMS
+                                </button>
+                            </div>
+
+                            <div class="contact-option" onclick="openInbox('chat')">
+                                <div class="contact-icon chat">
+                                    <i class="fas fa-comments"></i>
+                                </div>
+                                <h5>Chat direct</h5>
+                                <p>Discussion en temps réel</p>
+                                <button class="btn btn-chat">
+                                    <i class="fas fa-comments"></i>
+                                    Chater maintenant
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -443,6 +481,76 @@
                 </div>
                 <div class="calendly-placeholder">
                     <p>Pour d'autres types de rendez-vous, contactez-moi directement pour que nous organisions une rencontre personnalisée.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Experience Details Modal -->
+    <div id="experience-details-modal" class="modal-overlay">
+        <div class="modal-content experience-modal">
+            <div class="modal-header">
+                <h3 id="experience-title">Détails de l'expérience</h3>
+                <button class="close-btn" onclick="closeExperienceDetails()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="experience-details-content">
+                    <div class="experience-header">
+                        <div class="experience-company">
+                            <h2 id="detail-company">Entreprise</h2>
+                            <h3 id="detail-position">Poste</h3>
+                        </div>
+                        <div class="experience-meta">
+                            <div class="detail-period" id="detail-period">Période</div>
+                            <div class="detail-location" id="detail-location">Lieu</div>
+                        </div>
+                    </div>
+
+                    <div class="experience-sections">
+                        <div class="detail-section">
+                            <h4><i class="fas fa-tasks"></i> Missions principales</h4>
+                            <ul id="detail-missions" class="detail-list">
+                                <!-- Missions dynamiques -->
+                            </ul>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4><i class="fas fa-cogs"></i> Technologies utilisées</h4>
+                            <div id="detail-technologies" class="tech-badges">
+                                <!-- Technologies dynamiques -->
+                            </div>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4><i class="fas fa-trophy"></i> Réalisations clés</h4>
+                            <ul id="detail-realisations" class="detail-list achievements">
+                                <!-- Réalisations dynamiques -->
+                            </ul>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4><i class="fas fa-mountain"></i> Défis relevés</h4>
+                            <ul id="detail-defis" class="detail-list challenges">
+                                <!-- Défis dynamiques -->
+                            </ul>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4><i class="fas fa-users"></i> Environnement de travail</h4>
+                            <p id="detail-environnement" class="environment-text">
+                                <!-- Environnement dynamique -->
+                            </p>
+                        </div>
+
+                        <div class="detail-section impact-section">
+                            <h4><i class="fas fa-chart-line"></i> Impact et résultats</h4>
+                            <div id="detail-impact" class="impact-text">
+                                <!-- Impact dynamique -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
