@@ -10,6 +10,9 @@
     <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
 </head>
 <body>
+    <!-- Curseur personnalisé -->
+    <div class="custom-cursor" id="custom-cursor"></div>
+
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
@@ -36,6 +39,7 @@
 
     <!-- Hero Section -->
     <section id="accueil" class="hero">
+        <canvas id="iot-background" class="iot-canvas"></canvas>
         <div class="hero-content">
             <div class="hero-text">
                 <h1 class="hero-title" id="nom-titre">Prince Noukounwoui</h1>
@@ -48,7 +52,7 @@
             </div>
             <div class="hero-image">
                 <div class="profile-circle">
-                    <i class="fas fa-user-tie"></i>
+                    <img id="profile-photo" src="" alt="Prince Noukounwoui" loading="eager">
                 </div>
             </div>
         </div>

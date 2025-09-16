@@ -1,12 +1,13 @@
 // Données CV intégrées directement
 const cvData = {
     "nom": "Prince Noukounwoui",
-    "localisation": "Rennes, Bretagne, France",
+    "localisation": "Lyon, Rhône Alpes, France",
     "titre": "Étudiant en Master 2 Ingénierie Durable des Bâtiments Communicants Intelligents (ISTIC Rennes)",
     "coordonnees": {
         "telephone": "0612719903",
         "email": "noukounwouiprince@gmail.com",
-        "linkedin": "https://www.linkedin.com/in/prince-noukounwoui-ba1978217"
+        "linkedin": "https://www.linkedin.com/in/prince-noukounwoui-ba1978217",
+        "photo": "images/profile.jpg"
     },
     "resume": "Actuellement en alternance chez JEEDOM, je travaille sur l'intégration de solutions Smarthome, Smartbuilding et Smartcity, en mettant l'accent sur les technologies Zigbee et LoRaWAN. Mes tâches incluent le choix et les tests de produits, la création de dashboards énergétiques, ainsi que le support d'installations GTB. Mes expériences précédentes, notamment chez Qotto et Golf Business Company, m'ont permis de développer des compétences solides en maintenance photovoltaïque, analyse de données IoT et optimisation des infrastructures électriques.",
     "competences": [
@@ -19,7 +20,10 @@ const cvData = {
         "Analyse de données IoT",
         "Maintenance photovoltaïque",
         "Électrotechnique",
-        "QGIS / ArcGIS"
+        "QGIS / ArcGIS",
+        "PHP",
+        "Jeedom",
+        "Energies renouvelables"
     ],
     "certifications": [
         "Certificat Solutions Victron Energy pour les télécoms",
@@ -237,8 +241,218 @@ const skillIcons = {
     'Analyse de données IoT': 'fas fa-chart-line',
     'Maintenance photovoltaïque': 'fas fa-solar-panel',
     'Électrotechnique': 'fas fa-bolt',
-    'QGIS / ArcGIS': 'fas fa-map'
+    'QGIS / ArcGIS': 'fas fa-map',
+    'PHP': 'fab fa-php',
+    'Jeedom': 'fas fa-home',
+    'Energies renouvelables': 'fas fa-leaf'
 };
+
+// Système de curseur interactif
+let customCursor = null;
+let trailInterval = null;
+let particleInterval = null;
+let cursorPosition = { x: 0, y: 0 };
+
+// Initialisation du curseur personnalisé
+function initCustomCursor() {
+    customCursor = document.getElementById('custom-cursor');
+    if (!customCursor) {
+        console.error('❌ Élément custom-cursor non trouvé');
+        return;
+    }
+
+    console.log('🎯 Curseur trouvé:', customCursor);
+
+    // Forcer la visibilité
+    customCursor.style.display = 'block';
+    customCursor.style.visibility = 'visible';
+    customCursor.style.opacity = '1';
+    customCursor.style.zIndex = '999999';
+
+    let isMoving = false;
+    let moveTimeout = null;
+
+    // Suivi de la position de la souris
+    document.addEventListener('mousemove', (e) => {
+        cursorPosition.x = e.clientX;
+        cursorPosition.y = e.clientY;
+
+        if (customCursor) {
+            customCursor.style.left = e.clientX + 'px';
+            customCursor.style.top = e.clientY + 'px';
+            console.log(`📍 Curseur déplacé: ${e.clientX}, ${e.clientY}`);
+        }
+
+        // Détecter le mouvement pour les effets
+        if (!isMoving) {
+            isMoving = true;
+            startCursorEffects();
+        }
+
+        clearTimeout(moveTimeout);
+        moveTimeout = setTimeout(() => {
+            isMoving = false;
+            stopCursorEffects();
+        }, 150);
+
+        // Interaction avec l'arrière-plan IoT
+        if (window.updateCursorInfluence) {
+            window.updateCursorInfluence(e.clientX, e.clientY);
+        }
+    });
+
+    // Effets de clic
+    document.addEventListener('mousedown', () => {
+        if (customCursor) {
+            customCursor.classList.add('click');
+            createClickParticles();
+        }
+    });
+
+    document.addEventListener('mouseup', () => {
+        if (customCursor) {
+            customCursor.classList.remove('click');
+        }
+    });
+
+    // Effets de survol - mise à jour dynamique
+    updateHoverEffects();
+
+    console.log('🎯 Curseur personnalisé initialisé');
+}
+
+// Mise à jour des effets de survol (appelée après chargement du contenu)
+function updateHoverEffects() {
+    const interactiveElements = document.querySelectorAll('a, button, .btn, .card, [onclick], input, textarea, select');
+
+    interactiveElements.forEach(element => {
+        element.addEventListener('mouseenter', () => {
+            if (customCursor) {
+                customCursor.classList.add('hover');
+            }
+        });
+
+        element.addEventListener('mouseleave', () => {
+            if (customCursor) {
+                customCursor.classList.remove('hover');
+            }
+        });
+    });
+
+    // Effet spécial sur le texte
+    const textElements = document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, span, li');
+    textElements.forEach(element => {
+        element.addEventListener('mouseenter', () => {
+            if (customCursor && !element.closest('a, button, .btn')) {
+                customCursor.classList.add('text');
+            }
+        });
+
+        element.addEventListener('mouseleave', () => {
+            if (customCursor) {
+                customCursor.classList.remove('text');
+            }
+        });
+    });
+}
+
+// Effets de traînée et particules
+function startCursorEffects() {
+    // Traînée
+    if (!trailInterval) {
+        trailInterval = setInterval(createTrail, 50);
+    }
+
+    // Particules occasionnelles
+    if (!particleInterval) {
+        particleInterval = setInterval(() => {
+            if (Math.random() < 0.3) {
+                createCursorParticle();
+            }
+        }, 200);
+    }
+}
+
+function stopCursorEffects() {
+    if (trailInterval) {
+        clearInterval(trailInterval);
+        trailInterval = null;
+    }
+
+    if (particleInterval) {
+        clearInterval(particleInterval);
+        particleInterval = null;
+    }
+}
+
+// Créer une traînée
+function createTrail() {
+    const trail = document.createElement('div');
+    trail.className = 'cursor-trail';
+    trail.style.left = cursorPosition.x + 'px';
+    trail.style.top = cursorPosition.y + 'px';
+    document.body.appendChild(trail);
+
+    setTimeout(() => {
+        if (trail.parentNode) {
+            trail.parentNode.removeChild(trail);
+        }
+    }, 800);
+}
+
+// Créer des particules lors du clic
+function createClickParticles() {
+    for (let i = 0; i < 8; i++) {
+        setTimeout(() => {
+            createCursorParticle(true);
+        }, i * 20);
+    }
+}
+
+// Créer une particule flottante
+function createCursorParticle(isClick = false) {
+    const particle = document.createElement('div');
+    particle.className = 'cursor-particle';
+
+    const offsetX = (Math.random() - 0.5) * (isClick ? 40 : 20);
+    const offsetY = (Math.random() - 0.5) * (isClick ? 40 : 20);
+
+    particle.style.left = (cursorPosition.x + offsetX) + 'px';
+    particle.style.top = (cursorPosition.y + offsetY) + 'px';
+
+    if (isClick) {
+        particle.style.background = 'rgba(255, 59, 48, 0.8)';
+        particle.style.width = '6px';
+        particle.style.height = '6px';
+    }
+
+    document.body.appendChild(particle);
+
+    setTimeout(() => {
+        if (particle.parentNode) {
+            particle.parentNode.removeChild(particle);
+        }
+    }, 2000);
+}
+
+// Adapter le curseur au thème actuel
+function updateCursorTheme(themeName) {
+    if (!customCursor) return;
+
+    const themeColors = {
+        'iot': 'rgba(0, 122, 255, 0.8)',
+        'solar': 'rgba(255, 204, 0, 0.8)',
+        'network': 'rgba(175, 82, 222, 0.8)',
+        'electrical': 'rgba(255, 204, 0, 0.8)'
+    };
+
+    const color = themeColors[themeName] || themeColors['iot'];
+    customCursor.style.background = `radial-gradient(circle, ${color} 0%, ${color.replace('0.8', '0.3')} 70%, transparent 100%)`;
+    customCursor.style.boxShadow = `0 0 20px ${color.replace('0.8', '0.4')}`;
+}
+
+// Exposer la fonction pour mise à jour du thème du curseur
+window.updateCursorTheme = updateCursorTheme;
 
 // Chargement du DOM
 document.addEventListener('DOMContentLoaded', function() {
@@ -249,6 +463,13 @@ document.addEventListener('DOMContentLoaded', function() {
     initContactForm();
     initMessaging();
     initCalendlyListeners();
+    initCustomCursor();  // Initialiser le curseur personnalisé
+    initIoTBackground();
+
+    // Mettre à jour les effets de survol après le chargement du contenu
+    setTimeout(() => {
+        updateHoverEffects();
+    }, 500);
 });
 
 // Navigation mobile
@@ -292,6 +513,18 @@ function populateContent() {
     document.getElementById('titre-professionnel').textContent = cvData.titre;
     document.getElementById('localisation').textContent = `📍 ${cvData.localisation}`;
     document.getElementById('resume-text').textContent = cvData.resume;
+
+    // Photo de profil
+    const profilePhoto = document.getElementById('profile-photo');
+    if (profilePhoto && cvData.coordonnees.photo) {
+        profilePhoto.src = cvData.coordonnees.photo;
+        profilePhoto.onerror = function() {
+            // Fallback si l'image ne charge pas
+            this.style.display = 'none';
+            const parent = this.parentElement;
+            parent.innerHTML = '<i class="fas fa-user-tie"></i>';
+        };
+    }
 
     // Statistiques
     document.getElementById('nb-experiences').textContent = cvData.experiences.length;
@@ -1558,6 +1791,25 @@ function openExperienceDetails(experienceIndex) {
 
     console.log('Ouverture des détails pour:', experience.entreprise);
 
+    // Changer le thème d'arrière-plan selon l'expérience
+    const companyThemes = {
+        'JEEDOM': 'iot',
+        'Qotto': 'solar',
+        'Golf Business Company': 'network',
+        'ASEMI SA': 'electrical',
+        'Songhaï Centre': 'electrical'
+    };
+
+    const themeKey = companyThemes[experience.entreprise];
+    console.log(`🔍 Debug: Entreprise=${experience.entreprise}, Thème=${themeKey}, Fonction disponible=${!!window.changeBackgroundTheme}`);
+
+    if (themeKey && window.changeBackgroundTheme) {
+        window.changeBackgroundTheme(themeKey);
+        console.log(`✅ Thème changé vers: ${themeKey} pour ${experience.entreprise}`);
+    } else {
+        console.warn(`❌ Impossible de changer le thème: themeKey=${themeKey}, fonction=${!!window.changeBackgroundTheme}`);
+    }
+
     // Remplir les informations de base
     document.getElementById('detail-company').textContent = experience.entreprise;
     document.getElementById('detail-position').textContent = experience.poste;
@@ -1627,7 +1879,448 @@ function closeExperienceDetails() {
     const modal = document.getElementById('experience-details-modal');
     modal.classList.remove('active');
     document.body.style.overflow = 'auto';
+
+    // Retour au thème IoT par défaut
+    if (window.changeBackgroundTheme) {
+        window.changeBackgroundTheme('iot');
+        console.log('Retour au thème IoT par défaut');
+    }
+}
+
+
+// Système d'arrière-plan thématique adaptatif
+function initIoTBackground() {
+    const canvas = document.getElementById('iot-background');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let animationId;
+    let mouse = { x: 0, y: 0 };
+    let currentTheme = 'iot'; // Thème par défaut
+
+    // Configurations thématiques par expérience
+    const themes = {
+        'iot': {
+            colors: [
+                'rgba(0, 122, 255, ', // Bleu IoT
+                'rgba(88, 86, 214, ', // Violet Zigbee
+                'rgba(255, 149, 0, ', // Orange LoRaWAN
+                'rgba(48, 209, 88, '  // Vert KNX
+            ],
+            particleCount: 1.2,
+            connectionRange: 120,
+            hasDataFlow: true,
+            particleSpeed: 0.5,
+            name: 'IoT/Domotique'
+        },
+        'solar': {
+            colors: [
+                'rgba(255, 204, 0, ',  // Jaune soleil
+                'rgba(255, 149, 0, ',  // Orange énergie
+                'rgba(255, 59, 48, ',  // Rouge production
+                'rgba(48, 209, 88, '   // Vert efficacité
+            ],
+            particleCount: 0.8,
+            connectionRange: 100,
+            hasDataFlow: false,
+            particleSpeed: 0.3,
+            hasPulse: true,
+            name: 'Énergie Solaire'
+        },
+        'network': {
+            colors: [
+                'rgba(0, 122, 255, ',  // Bleu réseau
+                'rgba(175, 82, 222, ', // Violet infrastructure
+                'rgba(255, 45, 85, ',  // Rouge critique
+                'rgba(52, 199, 89, '   // Vert opérationnel
+            ],
+            particleCount: 1.5,
+            connectionRange: 150,
+            hasDataFlow: true,
+            particleSpeed: 0.8,
+            gridPattern: true,
+            name: 'Réseaux/Infrastructure'
+        },
+        'electrical': {
+            colors: [
+                'rgba(255, 204, 0, ',  // Jaune électrique
+                'rgba(0, 122, 255, ',  // Bleu tension
+                'rgba(255, 59, 48, ',  // Rouge haute tension
+                'rgba(52, 199, 89, '   // Vert sécurité
+            ],
+            particleCount: 1.0,
+            connectionRange: 80,
+            hasDataFlow: false,
+            particleSpeed: 0.4,
+            electricField: true,
+            name: 'Électrotechnique'
+        }
+    };
+
+    // Configuration du canvas
+    function resizeCanvas() {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+    }
+
+    // Particule thématique adaptative
+    class ThematicParticle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.vx = (Math.random() - 0.5) * themes[currentTheme].particleSpeed;
+            this.vy = (Math.random() - 0.5) * themes[currentTheme].particleSpeed;
+            this.radius = Math.random() * 3 + 2;
+            this.opacity = Math.random() * 0.5 + 0.3;
+            this.pulseSpeed = Math.random() * 0.02 + 0.01;
+            this.pulsePhase = Math.random() * Math.PI * 2;
+            this.originalRadius = this.radius;
+
+            // Couleurs selon le thème actuel
+            const themeColors = themes[currentTheme].colors;
+            this.color = themeColors[Math.floor(Math.random() * themeColors.length)];
+        }
+
+        update() {
+            // Mouvement fluide adapté au thème
+            this.x += this.vx;
+            this.y += this.vy;
+
+            // Rebond sur les bords
+            if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+
+            // Garder dans les limites
+            this.x = Math.max(0, Math.min(canvas.width, this.x));
+            this.y = Math.max(0, Math.min(canvas.height, this.y));
+
+            // Effets selon le thème
+            this.pulsePhase += this.pulseSpeed;
+
+            if (themes[currentTheme].hasPulse || currentTheme === 'iot') {
+                // Pulse standard pour IoT et solaire
+                this.currentOpacity = this.opacity + Math.sin(this.pulsePhase) * 0.3;
+            } else if (themes[currentTheme].electricField) {
+                // Effet électrique pour électrotechnique
+                this.currentOpacity = this.opacity + Math.sin(this.pulsePhase * 2) * 0.4;
+                this.radius = this.originalRadius + Math.sin(this.pulsePhase * 3) * 0.5;
+            } else {
+                // Effet réseau pour infrastructure
+                this.currentOpacity = this.opacity + Math.sin(this.pulsePhase * 0.5) * 0.2;
+            }
+        }
+
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = this.color + this.currentOpacity + ')';
+            ctx.fill();
+
+            // Cercle extérieur (signal)
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius + 2, 0, Math.PI * 2);
+            ctx.strokeStyle = this.color + (this.currentOpacity * 0.3) + ')';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+    }
+
+    // Créer les particules selon le thème
+    function createParticles() {
+        particles = [];
+        const baseCount = Math.floor((canvas.width * canvas.height) / 15000);
+        const particleCount = Math.floor(baseCount * themes[currentTheme].particleCount);
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new ThematicParticle());
+        }
+    }
+
+    // Dessiner les connexions selon le thème
+    function drawConnections() {
+        const maxDistance = themes[currentTheme].connectionRange;
+        const connectionColor = themes[currentTheme].colors[0]; // Couleur principale
+
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < maxDistance) {
+                    const opacity = (1 - distance / maxDistance) * 0.2;
+
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.strokeStyle = connectionColor + opacity + ')';
+
+                    // Épaisseur selon le thème
+                    if (currentTheme === 'network') {
+                        ctx.lineWidth = 0.8;
+                    } else if (currentTheme === 'electrical') {
+                        ctx.lineWidth = 1.2;
+                    } else {
+                        ctx.lineWidth = 0.5;
+                    }
+
+                    ctx.stroke();
+
+                    // Flux de données selon le thème
+                    if (themes[currentTheme].hasDataFlow && distance < 80 && Math.random() < 0.01) {
+                        const t = Math.random();
+                        const dataX = particles[i].x + dx * t;
+                        const dataY = particles[i].y + dy * t;
+
+                        ctx.beginPath();
+                        ctx.arc(dataX, dataY, 1, 0, Math.PI * 2);
+
+                        // Couleur du flux selon le thème
+                        if (currentTheme === 'network') {
+                            ctx.fillStyle = `rgba(255, 45, 85, ${opacity * 3})`; // Rouge données
+                        } else {
+                            ctx.fillStyle = `rgba(255, 149, 0, ${opacity * 3})`; // Orange IoT
+                        }
+
+                        ctx.fill();
+                    }
+                }
+            }
+        }
+    }
+
+    // Interaction souris renforcée (capteurs réagissent au curseur)
+    function handleMouseInteraction() {
+        particles.forEach(particle => {
+            const dx = mouse.x - particle.x;
+            const dy = mouse.y - particle.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            // Zone d'influence étendue
+            const influenceRadius = 150;
+
+            if (distance < influenceRadius) {
+                const force = (influenceRadius - distance) / influenceRadius;
+
+                // Effet magnétique : attraction vers le curseur
+                if (distance > 30) {
+                    const attractionForce = force * 0.02;
+                    particle.vx += (dx / distance) * attractionForce;
+                    particle.vy += (dy / distance) * attractionForce;
+                }
+
+                // Amplification visuelle
+                particle.radius = Math.max(2, particle.originalRadius + force * 3);
+                particle.currentOpacity = Math.min(1, particle.currentOpacity + force * 0.4);
+
+                // Effet de pulse accéléré près du curseur
+                particle.pulseSpeed = Math.max(0.01, particle.pulseSpeed + force * 0.03);
+            } else {
+                // Retour progressif à la normale
+                particle.radius = Math.max(2, particle.radius - 0.05);
+                particle.pulseSpeed = Math.max(0.01, particle.pulseSpeed - 0.001);
+
+                // Friction pour ralentir les particules éloignées
+                particle.vx *= 0.99;
+                particle.vy *= 0.99;
+            }
+        });
+    }
+
+    // Fonction d'influence du curseur (appelée depuis le système de curseur)
+    function updateCursorInfluence(x, y) {
+        mouse.x = x;
+        mouse.y = y;
+
+        // Créer des particules temporaires autour du curseur lors du mouvement
+        if (Math.random() < 0.1) {
+            createTemporaryCursorParticle(x, y);
+        }
+    }
+
+    // Créer une particule temporaire liée au curseur
+    function createTemporaryCursorParticle(x, y) {
+        const tempParticle = {
+            x: x + (Math.random() - 0.5) * 60,
+            y: y + (Math.random() - 0.5) * 60,
+            vx: (Math.random() - 0.5) * 2,
+            vy: (Math.random() - 0.5) * 2,
+            radius: Math.random() * 2 + 1,
+            opacity: 0.8,
+            life: 1,
+            decay: 0.02,
+            color: themes[currentTheme].colors[Math.floor(Math.random() * themes[currentTheme].colors.length)]
+        };
+
+        // Ajouter temporairement à la liste des particules
+        particles.push(tempParticle);
+
+        // Programmer la suppression
+        setTimeout(() => {
+            const index = particles.indexOf(tempParticle);
+            if (index > -1) {
+                particles.splice(index, 1);
+            }
+        }, 2000);
+    }
+
+    // Boucle d'animation
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Mettre à jour et dessiner les particules
+        particles.forEach(particle => {
+            particle.update();
+            particle.draw();
+        });
+
+        // Dessiner les connexions
+        drawConnections();
+
+        // Interaction souris
+        handleMouseInteraction();
+
+        animationId = requestAnimationFrame(animate);
+    }
+
+    // Gestion de la souris
+    canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+    });
+
+    // Gestion du redimensionnement
+    window.addEventListener('resize', () => {
+        resizeCanvas();
+        createParticles();
+    });
+
+    // Initialisation
+    resizeCanvas();
+    createParticles();
+    animate();
+
+    // Fonction pour changer de thème
+    function changeTheme(newTheme) {
+        if (themes[newTheme] && newTheme !== currentTheme) {
+            currentTheme = newTheme;
+            createParticles(); // Recréer les particules avec le nouveau thème
+
+            // Mettre à jour le curseur selon le thème
+            if (window.updateCursorTheme) {
+                window.updateCursorTheme(newTheme);
+            }
+
+            // Notification visuelle du changement de thème
+            console.log(`Thème changé: ${themes[currentTheme].name}`);
+            showNotification(`🎨 Thème: ${themes[currentTheme].name}`, 'info');
+        }
+    }
+
+    // Exposer les fonctions pour interaction externe
+    window.changeBackgroundTheme = changeTheme;
+    window.updateCursorInfluence = updateCursorInfluence;
+    window.backgroundSystemReady = true;
+    console.log('🎨 Système d\'arrière-plan thématique et interactif initialisé');
+
+    // Nettoyage lors de la destruction
+    return () => {
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+        }
+    };
 }
 
 // Exportation pour utilisation en mode debug
 window.debugPortfolio = debugPortfolio;
+
+// Fonction de test pour les thèmes
+window.testTheme = function(theme) {
+    console.log(`🧪 Test du thème: ${theme}`);
+    if (window.changeBackgroundTheme) {
+        window.changeBackgroundTheme(theme);
+        console.log(`✅ Thème ${theme} appliqué`);
+    } else {
+        console.error('❌ Fonction changeBackgroundTheme non disponible');
+    }
+};
+
+// Fonction pour afficher les thèmes disponibles
+window.showAvailableThemes = function() {
+    console.log('🎨 Thèmes disponibles:');
+    console.log('- iot (IoT/Domotique)');
+    console.log('- solar (Énergie Solaire)');
+    console.log('- network (Réseaux/Infrastructure)');
+    console.log('- electrical (Électrotechnique)');
+    console.log('Usage: testTheme("solar")');
+};
+
+// Fonctions de test pour le curseur
+window.testCursor = function() {
+    console.log('🎯 Tests du curseur interactif:');
+    console.log('- testCursorTrail() : Activer/désactiver la traînée');
+    console.log('- testCursorParticles() : Créer des particules autour du curseur');
+    console.log('- testCursorMagnetism() : Tester l\'effet magnétique');
+    console.log('- resetCursor() : Remettre le curseur à zéro');
+};
+
+window.testCursorTrail = function() {
+    if (trailInterval) {
+        stopCursorEffects();
+        console.log('❌ Traînée du curseur désactivée');
+    } else {
+        startCursorEffects();
+        console.log('✅ Traînée du curseur activée');
+    }
+};
+
+window.testCursorParticles = function() {
+    createClickParticles();
+    console.log('✨ Particules de clic créées');
+};
+
+window.testCursorMagnetism = function() {
+    if (window.updateCursorInfluence) {
+        // Simuler le curseur au centre de l'écran
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        window.updateCursorInfluence(centerX, centerY);
+        console.log('🧲 Effet magnétique testé au centre de l\'écran');
+    } else {
+        console.error('❌ Fonction de magnétisme non disponible');
+    }
+};
+
+window.resetCursor = function() {
+    stopCursorEffects();
+    if (customCursor) {
+        customCursor.className = 'custom-cursor';
+        console.log('🔄 Curseur remis à zéro');
+    }
+};
+
+// Fonction de debug pour vérifier le curseur
+window.debugCursor = function() {
+    const cursor = document.getElementById('custom-cursor');
+    if (cursor) {
+        console.log('🔍 Debug curseur:');
+        console.log('- Élément trouvé:', !!cursor);
+        console.log('- Style display:', cursor.style.display);
+        console.log('- Style visibility:', cursor.style.visibility);
+        console.log('- Style opacity:', cursor.style.opacity);
+        console.log('- Style zIndex:', cursor.style.zIndex);
+        console.log('- Position:', cursor.style.left, cursor.style.top);
+        console.log('- Classes:', cursor.className);
+
+        // Forcer la visibilité pour test
+        cursor.style.background = 'red';
+        cursor.style.width = '30px';
+        cursor.style.height = '30px';
+        cursor.style.left = '100px';
+        cursor.style.top = '100px';
+        console.log('🔴 Curseur forcé en rouge à 100,100');
+    } else {
+        console.error('❌ Curseur non trouvé');
+    }
+};
