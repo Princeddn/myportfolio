@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prince Dieu-Donné NOUKOUNWOUI - Portfolio</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      background: #000;
+      color: #fff;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      line-height: 1.6;
+    }
+
+    /* Navigation fixe */
+    .navbar {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 50px;
+      padding: 10px 20px;
+      z-index: 1000;
+      display: flex;
+      gap: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .nav-link {
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .nav-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Sections */
+    section {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+    }
+
+    /* Hero Section */
+    #hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="0.5" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="0.3" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.4" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+      pointer-events: none;
+    }
+
+    .hero-content {
+      z-index: 2;
+      position: relative;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 8vw, 6rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(45deg, #fff, #e0e0ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 2rem;
+      max-width: 600px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 15px 40px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .cta-button:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Timeline Styles */
+    .timeline-container {
+      max-width: 1000px;
+      margin: 3rem auto;
+      position: relative;
+      padding: 0 2rem;
+    }
+
+    .timeline-container::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: linear-gradient(180deg, #667eea, #764ba2);
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
+
+    .timeline-item {
+      display: flex;
+      margin: 3rem 0;
+      position: relative;
+    }
+
+    .timeline-item:nth-child(odd) {
+      flex-direction: row;
+    }
+
+    .timeline-item:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+
+    .timeline-date {
+      flex: 0 0 200px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #667eea;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(102, 126, 234, 0.1);
+      border-radius: 25px;
+      padding: 10px;
+      margin: 0 2rem;
+      border: 2px solid rgba(102, 126, 234, 0.3);
+      position: relative;
+    }
+
+    .timeline-date::before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #667eea;
+      border-radius: 50%;
+      border: 4px solid #f5f5f7;
+      box-shadow: 0 0 0 4px #667eea;
+    }
+
+    .timeline-item:nth-child(odd) .timeline-date::before {
+      right: -31px;
+    }
+
+    .timeline-item:nth-child(even) .timeline-date::before {
+      left: -31px;
+    }
+
+    .timeline-content {
+      flex: 1;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border-left: 4px solid transparent;
+      background-image: linear-gradient(white, white), linear-gradient(45deg, #667eea, #764ba2);
+      background-origin: border-box;
+      background-clip: content-box, border-box;
+    }
+
+    .timeline-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #1d1d1f;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-subtitle {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 1rem;
+    }
+
+    .timeline-description {
+      font-size: 1rem;
+      color: #515154;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .timeline-project {
+      background: rgba(102, 126, 234, 0.1);
+      padding: 1rem;
+      border-radius: 10px;
+      border-left: 4px solid #667eea;
+      font-size: 0.95rem;
+      color: #1d1d1f;
+      margin-top: 1rem;
+    }
+
+    .timeline-achievements {
+      display: grid;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+
+    .achievement {
+      background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+      padding: 0.8rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: #1d1d1f;
+      border-left: 3px solid #667eea;
+      transition: all 0.3s ease;
+    }
+
+    .achievement:hover {
+      transform: translateX(10px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+    }
+
+    /* Responsive Timeline */
+    @media (max-width: 768px) {
+      .timeline-container::before {
+        left: 20px;
+      }
+
+      .timeline-item {
+        flex-direction: column !important;
+        margin-left: 40px;
+      }
+
+      .timeline-date {
+        flex: none;
+        width: auto;
+        margin: 0 0 1rem 0;
+        align-self: flex-start;
+      }
+
+      .timeline-date::before {
+        left: -51px !important;
+        right: auto !important;
+      }
+
+      .timeline-content {
+        margin: 0;
+      }
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 700;
+      margin-bottom: 2rem;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .about-text {
+      font-size: 1.3rem;
+      max-width: 800px;
+      line-height: 1.8;
+      color: #515154;
+    }
+
+    /* Skills Section */
+    #skills {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+      max-width: 1000px;
+      width: 100%;
+    }
+
+    .skill-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .skill-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .skill-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .skill-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .skill-description {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* Projects Section */
+    #projects {
+      background: #f5f5f7;
+      color: #1d1d1f;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    .project-card {
+      background: #fff;
+      border-radius: 25px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+    }
+
+    .project-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    .project-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .project-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #1d1d1f;
+    }
+
+    .project-description {
+      font-size: 1rem;
+      color: #515154;
+      line-height: 1.6;
+    }
+
+    /* Contact Section */
+    #contact {
+      background: linear-gradient(135deg, #232526 0%, #414345 100%);
+      min-height: 80vh;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .contact-item {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 1.5rem;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .contact-item:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-5px);
+    }
+
+    .contact-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .contact-text {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Animations */
+    .line span {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(60px);
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 8px 15px;
+        gap: 15px;
+      }
+      
+      .nav-link {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+      }
+      
+      section {
+        padding: 2rem 1rem;
+      }
+      
+      .projects-grid,
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      transform-origin: left;
+      transform: scaleX(0);
+      z-index: 1001;
+    }
+  </style>
+</head>
+<body>
+  <!-- Barre de progression -->
+  <div class="scroll-indicator"></div>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <a href="#hero" class="nav-link">Accueil</a>
+    <a href="#about" class="nav-link">À propos</a>
+    <a href="#skills" class="nav-link">Compétences</a>
+    <a href="#projects" class="nav-link">Projets</a>
+    <a href="#contact" class="nav-link">Contact</a>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="hero">
+    <div class="hero-content">
+      <h1 class="hero-title line">Prince Dieu-Donné NOUKOUNWOUI</h1>
+      <p class="hero-subtitle line">Étudiant en Master IDBCI • Futur Ingénieur IoT, GTB & Domotique</p>
+      <a href="#about" class="cta-button line">Découvrir mon parcours</a>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about">
+    <h2 class="section-title line">Mon Parcours</h2>
+    <div class="timeline-container">
+      <!-- Formation actuelle -->
+      <div class="timeline-item fade-in">
+        <div class="timeline-date">2024 - Présent</div>
+        <div class="timeline-content">
+          <h3 class="timeline-title">🎓 Master 1 IDBCI - Université de Rennes 1</h3>
+          <p class="timeline-subtitle">Ingénierie Durable des Bâtiments Intelligents Communicants</p>
+          <p class="timeline-description">
+            Formation spécialisée dans les systèmes de bâtiments intelligents et les solutions d'énergie durable. 
+            Développement d'expertise en IoT, réseaux connectés et gestion intégrée des bâtiments.
+          </p>
+          <div class="timeline-project">
+            <strong>🔧 Projet en cours :</strong> LoRaWAN Plug and Play
+            <br>Développement d'une bibliothèque Python pour le décodage des trames LoRaWAN 
+            et l'intégration automatisée des capteurs IoT.
+          </div>
+        </div>
+      </div>
+
+      <!-- Expérience professionnelle récente -->
+      <div class="timeline-item fade-in">
+        <div class="timeline-date">Nov. 2024 - Présent</div>
+        <div class="timeline-content">
+          <h3 class="timeline-title">💼 Équipier Polyvalent - McDonald's Colombier</h3>
+          <p class="timeline-subtitle">Expérience professionnelle en parallèle des études</p>
+          <p class="timeline-description">
+            Gestion des commandes, supervision des services à table et résolution des réclamations clients. 
+            Développement de compétences en relation client et gestion du stress.
+          </p>
+        </div>
+      </div>
+
+      <!-- Formation précédente -->
+      <div class="timeline-item fade-in">
+        <div class="timeline-date">2023 - 2024</div>
+        <div class="timeline-content">
+          <h3 class="timeline-title">🎓 Licence Ingénierie Électrique - UFR STGI Belfort</h3>
+          <p class="timeline-subtitle">Sciences parcours Ingénierie électrique et Énergie</p>
+          <p class="timeline-description">
+            Spécialisation dans les systèmes électriques, gestion de projets en ingénierie, 
+            prévention des risques industriels et application des normes de sécurité.
+          </p>
+          <div class="timeline-project">
+            <strong>🔬 Projet clé :</strong> Étude de pendules inversés
+            <br>Analyse des systèmes électriques complexes et modélisation mathématique.
+          </div>
+        </div>
+      </div>
+
+      <!-- Expérience internationale -->
+      <div class="timeline-item fade-in">
+        <div class="timeline-date">Avril - Août 2023</div>
+        <div class="timeline-content">
+          <h3 class="timeline-title">🌍 Analyste Junior - QOTTO BENIN</h3>
+          <p class="timeline-subtitle">Stage à Cotonou, Bénin - Systèmes solaires intelligents</p>
+          <p class="timeline-description">
+            Première expérience professionnelle significative dans l'IoT appliqué aux énergies renouvelables. 
+            Gestion et maintenance à distance de systèmes solaires connectés.
+          </p>
+          <div class="timeline-achievements">
+            <div class="achievement">📊 Analyse de données capteurs pour anticiper les pannes</div>
+            <div class="achievement">🔧 Maintenance préventive via réseaux IoT</div>
+            <div class="achievement">📱 Supervision temps réel via tableaux de bord automatisés</div>
+            <div class="achievement">🌐 Coordination des interventions techniques à distance</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills">
+    <h2 class="section-title line">Mes Compétences</h2>
+    <div class="skills-grid">
+      <div class="skill-card fade-in">
+        <div class="skill-icon">🌐</div>
+        <div class="skill-name">Internet des Objets</div>
+        <div class="skill-description">Conception et déploiement de réseaux IoT, protocoles MQTT, LoRaWAN</div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-icon">📡</div>
+        <div class="skill-name">Réseaux LoRaWAN</div>
+        <div class="skill-description">Migration, configuration ChirpStack, gestion de passerelles</div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-icon">🐍</div>
+        <div class="skill-name">Programmation</div>
+        <div class="skill-description">Python, Arduino, C++, développement d'applications IoT</div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-icon">🏠</div>
+        <div class="skill-name">Domotique</div>
+        <div class="skill-description">Jeedom, Home Assistant, automatisation de bâtiments</div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-icon">📊</div>
+        <div class="skill-name">Visualisation</div>
+        <div class="skill-description">ThingsBoard, Grafana, dashboards en temps réel</div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-icon">🔧</div>
+        <div class="skill-name">GTB</div>
+        <div class="skill-description">Gestion Technique du Bâtiment, efficacité énergétique</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects">
+    <h2 class="section-title line">Mes Projets</h2>
+    <div class="projects-grid">
+      <div class="project-card fade-in">
+        <div class="project-icon">🌡️</div>
+        <div class="project-title">Station Météo Connectée</div>
+        <div class="project-description">
+          Développement d'une station météo basée sur Arduino avec capteurs température, humidité et pression. 
+          Transmission des données via LoRaWAN vers une plateforme de visualisation en temps réel.
+        </div>
+      </div>
+      <div class="project-card fade-in">
+        <div class="project-icon">🔄</div>
+        <div class="project-title">Migration ChirpStack V3→V4</div>
+        <div class="project-description">
+          Migration complète d'une infrastructure LoRaWAN de ChirpStack V3 vers V4, incluant la reconfiguration 
+          des passerelles et la migration des données des dispositifs.
+        </div>
+      </div>
+      <div class="project-card fade-in">
+        <div class="project-icon">📈</div>
+        <div class="project-title">Dashboard ThingsBoard</div>
+        <div class="project-description">
+          Création de tableaux de bord interactifs sur ThingsBoard pour la supervision de capteurs IoT, 
+          avec alertes en temps réel et analyse des tendances historiques.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <h2 class="section-title line">Me Contacter</h2>
+    <div class="contact-grid">
+      <div class="contact-item fade-in">
+        <div class="contact-icon">📧</div>
+        <div class="contact-text">noukounwouiprince@gmail.com</div>
+      </div>
+      <div class="contact-item fade-in">
+        <div class="contact-icon">📱</div>
+        <div class="contact-text">06 12 71 99 03</div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Barre de progression de scroll
+    gsap.to('.scroll-indicator', {
+      scaleX: 1,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: 'body',
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: true
+      }
+    });
+
+    // Découpe les textes en mots
+    document.querySelectorAll('.line').forEach(block => {
+      let words = block.innerText.split(" ");
+      block.innerHTML = words.map(w => `<span>${w}</span>`).join(" ");
+    });
+
+    // Animation des mots avec stagger
+    gsap.utils.toArray('.line').forEach((block) => {
+      gsap.to(block.querySelectorAll('span'), {
+        y: 0,
+        opacity: 1,
+        stagger: 0.1,
+        duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: block,
+          start: 'top 85%',
+        }
+      });
+    });
+
+    // Animation des éléments fade-in
+    gsap.utils.toArray('.fade-in').forEach((element) => {
+      gsap.to(element, {
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: element,
+          start: 'top 85%',
+        }
+      });
+    });
+
+    // Animation des cartes au hover
+    document.querySelectorAll('.skill-card, .project-card').forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        gsap.to(card, {duration: 0.3, scale: 1.05, ease: 'power2.out'});
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        gsap.to(card, {duration: 0.3, scale: 1, ease: 'power2.out'});
+      });
+    });
+
+    // Navigation smooth scroll
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          gsap.to(window, {duration: 1.5, scrollTo: target, ease: 'power3.inOut'});
+        }
+      });
+    });
+
+    // Effet parallax sur le hero
+    gsap.to('#hero .hero-content', {
+      yPercent: -50,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#hero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true
+      }
+    });
+  </script>
+</body>
+</html>
