@@ -38,12 +38,37 @@ body {
     background: var(--bg-light);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    cursor: none !important; /* Cacher le curseur par défaut */
 }
 
-/* Assurer que le curseur est caché partout */
-*, *::before, *::after {
-    cursor: none !important;
+/* Cacher le curseur par défaut uniquement sur desktop */
+@media (min-width: 1025px) and (pointer: fine) {
+    body {
+        cursor: none !important;
+    }
+
+    *, *::before, *::after {
+        cursor: none !important;
+    }
+}
+
+/* Restaurer le curseur normal sur mobile et tablette */
+@media (max-width: 1024px), (pointer: coarse) {
+    body {
+        cursor: auto !important;
+    }
+
+    *, *::before, *::after {
+        cursor: auto !important;
+    }
+
+    a, button, .btn, [onclick] {
+        cursor: pointer !important;
+    }
+
+    /* Masquer le curseur personnalisé sur tactile */
+    .custom-cursor {
+        display: none !important;
+    }
 }
 
 /* Curseur personnalisé interactif */

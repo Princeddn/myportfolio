@@ -252,18 +252,67 @@ let customCursor = null;
 let trailInterval = null;
 let particleInterval = null;
 let cursorPosition = { x: 0, y: 0 };
+let isMobile = false;
+let isTablet = false;
+
+// Détection du type d'appareil
+function detectDevice() {
+    const userAgent = navigator.userAgent;
+    const screenWidth = window.innerWidth;
+
+    // Détection mobile
+    isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent) || screenWidth < 768;
+
+    // Détection tablette
+    isTablet = (screenWidth >= 768 && screenWidth <= 1024) && /iPad|Android/i.test(userAgent);
+
+    console.log('📱 Appareil détecté:', {
+        mobile: isMobile,
+        tablet: isTablet,
+        desktop: !isMobile && !isTablet,
+        screenWidth: screenWidth
+    });
+
+    return {
+        mobile: isMobile,
+        tablet: isTablet,
+        desktop: !isMobile && !isTablet
+    };
+}
 
 // Initialisation du curseur personnalisé
 function initCustomCursor() {
+    // Détecter le type d'appareil
+    const device = detectDevice();
+
     customCursor = document.getElementById('custom-cursor');
     if (!customCursor) {
         console.error('❌ Élément custom-cursor non trouvé');
         return;
     }
 
-    console.log('🎯 Curseur trouvé:', customCursor);
+    // Sur mobile et tablette, masquer le curseur personnalisé et activer le feedback tactile
+    if (device.mobile || device.tablet) {
+        console.log('📱 Appareil tactile détecté - Curseur personnalisé désactivé');
+        customCursor.style.display = 'none';
 
-    // Forcer la visibilité
+        // Restaurer le curseur par défaut sur les appareils tactiles
+        document.body.style.cursor = 'auto';
+        document.querySelectorAll('*').forEach(el => {
+            el.style.cursor = '';
+        });
+
+        // Initialiser le feedback tactile pour remplacer le curseur
+        initTouchFeedback();
+        return;
+    }
+
+    console.log('🎯 Desktop détecté - Curseur personnalisé activé');
+
+    // Cette ligne était incorrecte - on initialise le feedback tactile AVANT de return
+    // Le feedback tactile remplace le curseur sur mobile/tablette
+
+    // Forcer la visibilité sur desktop uniquement
     customCursor.style.display = 'block';
     customCursor.style.visibility = 'visible';
     customCursor.style.opacity = '1';
@@ -280,7 +329,6 @@ function initCustomCursor() {
         if (customCursor) {
             customCursor.style.left = e.clientX + 'px';
             customCursor.style.top = e.clientY + 'px';
-            console.log(`📍 Curseur déplacé: ${e.clientX}, ${e.clientY}`);
         }
 
         // Détecter le mouvement pour les effets
@@ -453,6 +501,72 @@ function updateCursorTheme(themeName) {
 
 // Exposer la fonction pour mise à jour du thème du curseur
 window.updateCursorTheme = updateCursorTheme;
+
+// Feedback tactile pour appareils mobiles/tablettes
+function initTouchFeedback() {
+    console.log('👆 Feedback tactile initialisé');
+
+    // Ajouter des effets visuels lors du touch
+    document.addEventListener('touchstart', (e) => {
+        const touch = e.touches[0];
+        if (touch) {
+            createTouchRipple(touch.clientX, touch.clientY);
+        }
+    });
+
+    // Vibration sur les boutons (si supportée)
+    const interactiveElements = document.querySelectorAll('button, .btn, a[href]');
+    interactiveElements.forEach(element => {
+        element.addEventListener('touchstart', () => {
+            if (navigator.vibrate) {
+                navigator.vibrate(50); // Vibration légère de 50ms
+            }
+        });
+    });
+}
+
+// Créer un effet de ripple au touch
+function createTouchRipple(x, y) {
+    const ripple = document.createElement('div');
+    ripple.style.position = 'fixed';
+    ripple.style.left = x + 'px';
+    ripple.style.top = y + 'px';
+    ripple.style.width = '20px';
+    ripple.style.height = '20px';
+    ripple.style.background = 'rgba(0, 122, 255, 0.3)';
+    ripple.style.borderRadius = '50%';
+    ripple.style.transform = 'translate(-50%, -50%)';
+    ripple.style.pointerEvents = 'none';
+    ripple.style.zIndex = '999998';
+    ripple.style.animation = 'touchRipple 0.6s ease-out forwards';
+
+    document.body.appendChild(ripple);
+
+    setTimeout(() => {
+        if (ripple.parentNode) {
+            ripple.parentNode.removeChild(ripple);
+        }
+    }, 600);
+}
+
+// Ajouter l'animation CSS pour le ripple
+if (!document.querySelector('#touch-ripple-styles')) {
+    const style = document.createElement('style');
+    style.id = 'touch-ripple-styles';
+    style.textContent = `
+        @keyframes touchRipple {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(4);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+}
 
 // Chargement du DOM
 document.addEventListener('DOMContentLoaded', function() {
@@ -1791,24 +1905,8 @@ function openExperienceDetails(experienceIndex) {
 
     console.log('Ouverture des détails pour:', experience.entreprise);
 
-    // Changer le thème d'arrière-plan selon l'expérience
-    const companyThemes = {
-        'JEEDOM': 'iot',
-        'Qotto': 'solar',
-        'Golf Business Company': 'network',
-        'ASEMI SA': 'electrical',
-        'Songhaï Centre': 'electrical'
-    };
-
-    const themeKey = companyThemes[experience.entreprise];
-    console.log(`🔍 Debug: Entreprise=${experience.entreprise}, Thème=${themeKey}, Fonction disponible=${!!window.changeBackgroundTheme}`);
-
-    if (themeKey && window.changeBackgroundTheme) {
-        window.changeBackgroundTheme(themeKey);
-        console.log(`✅ Thème changé vers: ${themeKey} pour ${experience.entreprise}`);
-    } else {
-        console.warn(`❌ Impossible de changer le thème: themeKey=${themeKey}, fonction=${!!window.changeBackgroundTheme}`);
-    }
+    // Note: Changement de thème automatique désactivé à la demande de l'utilisateur
+    // Les thèmes peuvent être changés manuellement via testTheme() dans la console
 
     // Remplir les informations de base
     document.getElementById('detail-company').textContent = experience.entreprise;
@@ -1880,11 +1978,8 @@ function closeExperienceDetails() {
     modal.classList.remove('active');
     document.body.style.overflow = 'auto';
 
-    // Retour au thème IoT par défaut
-    if (window.changeBackgroundTheme) {
-        window.changeBackgroundTheme('iot');
-        console.log('Retour au thème IoT par défaut');
-    }
+    // Note: Retour automatique au thème IoT désactivé
+    // Le thème reste inchangé à la fermeture du modal
 }
 
 
@@ -2322,5 +2417,49 @@ window.debugCursor = function() {
         console.log('🔴 Curseur forcé en rouge à 100,100');
     } else {
         console.error('❌ Curseur non trouvé');
+    }
+};
+
+// Fonction de debug pour l'arrière-plan
+window.debugBackground = function() {
+    const canvas = document.getElementById('iot-background');
+    console.log('🎨 Debug arrière-plan:');
+    console.log('- Canvas trouvé:', !!canvas);
+    console.log('- Canvas dimensions:', canvas ? `${canvas.width}x${canvas.height}` : 'N/A');
+    console.log('- backgroundSystemReady:', !!window.backgroundSystemReady);
+    console.log('- changeBackgroundTheme:', !!window.changeBackgroundTheme);
+    console.log('- updateCursorInfluence:', !!window.updateCursorInfluence);
+
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        console.log('- Contexte 2D:', !!ctx);
+
+        // Test simple : dessiner un cercle rouge
+        ctx.fillStyle = 'red';
+        ctx.beginPath();
+        ctx.arc(50, 50, 20, 0, Math.PI * 2);
+        ctx.fill();
+        console.log('🔴 Cercle rouge de test dessiné');
+    }
+};
+
+// Fonction pour relancer l'arrière-plan
+window.Background = function() {
+    console.log('🔄 Relancement de l\'arrière-plan...');
+    const canvas = document.getElementById('iot-background');
+    if (canvas) {
+        // Effacer le canvas
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Relancer l'initialisation
+        try {
+            initIoTBackground();
+            console.log('✅ Arrière-plan relancé avec succès');
+        } catch (error) {
+            console.error('❌ Erreur lors du relancement:', error);
+        }
+    } else {
+        console.error('❌ Canvas non trouvé');
     }
 };
