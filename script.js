@@ -2121,11 +2121,22 @@ function initIoTBackground() {
         }
     }
 
-    // Créer les particules selon le thème
+    // Créer les particules selon le thème et l'appareil
     function createParticles() {
         particles = [];
-        const baseCount = Math.floor((canvas.width * canvas.height) / 15000);
+        let baseCount = Math.floor((canvas.width * canvas.height) / 15000);
+
+        // Réduire le nombre de particules sur mobile pour les performances
+        const device = detectDevice();
+        if (device.mobile) {
+            baseCount = Math.floor(baseCount * 0.3); // 30% des particules sur mobile
+        } else if (device.tablet) {
+            baseCount = Math.floor(baseCount * 0.6); // 60% des particules sur tablette
+        }
+
         const particleCount = Math.floor(baseCount * themes[currentTheme].particleCount);
+        console.log(`🎨 Création de ${particleCount} particules (appareil: ${device.mobile ? 'mobile' : device.tablet ? 'tablette' : 'desktop'})`);
+
         for (let i = 0; i < particleCount; i++) {
             particles.push(new ThematicParticle());
         }
@@ -2285,10 +2296,15 @@ function initIoTBackground() {
         mouse.y = e.clientY - rect.top;
     });
 
-    // Gestion du redimensionnement
+    // Gestion du redimensionnement avec debounce pour les performances
+    let resizeTimeout;
     window.addEventListener('resize', () => {
-        resizeCanvas();
-        createParticles();
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            resizeCanvas();
+            createParticles();
+            console.log('📱 Canvas redimensionné:', canvas.width + 'x' + canvas.height);
+        }, 250); // Attendre 250ms après la fin du resize
     });
 
     // Initialisation
