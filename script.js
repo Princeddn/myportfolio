@@ -502,7 +502,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initDomainNavigation();
     initScrollAnimations();
     initSmoothScrolling();
-    initContactForm();
     initMessaging();
     initCalendlyListeners();
 
@@ -1875,15 +1874,47 @@ function initScrollAnimations() {
     });
 }
 
-// Formulaire de contact
-function initContactForm() {
-    const form = document.getElementById('contact-form');
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            showNotification('Message envoyé avec succès !', 'success');
-            form.reset();
+
+// Fonction pour copier l'email dans le presse-papiers
+function copyEmailToClipboard() {
+    const email = cvData.coordonnees.email;
+
+    if (navigator.clipboard && window.isSecureContext) {
+        // API moderne
+        navigator.clipboard.writeText(email).then(() => {
+            showNotification(`Email copié : ${email}`, 'success');
+        }).catch(err => {
+            console.error('Erreur copie:', err);
+            fallbackCopyEmail(email);
         });
+    } else {
+        // Fallback pour les anciens navigateurs
+        fallbackCopyEmail(email);
+    }
+}
+
+function fallbackCopyEmail(email) {
+    const textArea = document.createElement('textarea');
+    textArea.value = email;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+            showNotification(`Email copié : ${email}`, 'success');
+        } else {
+            showNotification(`Email : ${email}`, 'info');
+        }
+    } catch (err) {
+        console.error('Erreur copie fallback:', err);
+        showNotification(`Email : ${email}`, 'info');
+    } finally {
+        document.body.removeChild(textArea);
     }
 }
 
@@ -2648,4 +2679,5 @@ window.addToCalendar = addToCalendar;
 window.resetBookingForm = resetBookingForm;
 window.openInbox = openInbox;
 window.downloadCV = downloadCV;
+window.copyEmailToClipboard = copyEmailToClipboard;
 window.debugPortfolio = debugPortfolio;
