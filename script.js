@@ -1,253 +1,1497 @@
-// Données CV intégrées directement
-const cvData = {
-    "nom": "Prince Noukounwoui",
-    "localisation": "Lyon, Rhône Alpes, France",
-    "titre": "Étudiant en Master 2 Ingénierie Durable des Bâtiments Communicants Intelligents (ISTIC Rennes)",
-    "coordonnees": {
-        "telephone": "0612719903",
-        "email": "noukounwouiprince@gmail.com",
-        "linkedin": "https://www.linkedin.com/in/prince-noukounwoui-ba1978217",
-        "photo": "images/profile.jpg"
+// Portfolio de Prince Noukounwoui - Organisé par domaines d'expertise
+// Lecture dynamique des données depuis cv.json
+
+// Fonction utilitaire pour générer le chemin des logos
+function generateLogoPath(organizationName, type = 'company') {
+    // Mapping spécifique pour les organisations
+    const logoMappings = {
+        'JEEDOM': 'jeedom',
+        'Université de Rennes 1': 'UniversiteRennes',
+        'Université de Rennes': 'UniversiteRennes',
+        'Esmer (École Supérieure des Métiers des Énergies Renouvelables)': 'esmer',
+        'Université de Franche-Comté': 'universiteMLP',
+        'ISTIC Rennes': 'istic',
+        'Qotto': 'qotto',
+        'Songhaï Centre': 'Logo_Songhaï',
+        'Victron Energy': 'Victron',
+        'Victron': 'Victron'
+    };
+
+    // Vérifier d'abord le mapping direct
+    if (logoMappings[organizationName]) {
+        return `./assets/logos/${logoMappings[organizationName]}.png`;
+    }
+
+    // Sinon, utiliser la méthode de nettoyage standard
+    const cleanName = organizationName
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w-]/g, '')
+        .replace(/université-de-/g, '')
+        .replace(/école-supérieure-des-métiers-des-énergies-renouvelables/g, 'esmer');
+
+    return `./assets/logos/${cleanName}.png`;
+}
+
+// Fonction pour créer un élément logo avec fallback
+function createLogoElement(organizationName, type = 'company') {
+    const logoPath = generateLogoPath(organizationName, type);
+    const fallbackIcon = type === 'school' ? 'fas fa-graduation-cap' : 'fas fa-building';
+
+    return `
+        <div class="organization-logo">
+            <img src="${logoPath}" alt="Logo ${organizationName}"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+            <div class="organization-icon ${type}" style="display: none;">
+                <i class="${fallbackIcon}"></i>
+            </div>
+        </div>
+    `;
+}
+
+// Variables globales
+let cvData = {
+  "nom": "Prince Noukounwoui",
+  "localisation": "Rennes, Bretagne, France",
+  "titre": "Étudiant en Master 2 Ingénierie Durable des Bâtiments Communicants Intelligents (ISTIC Rennes)",
+  "coordonnees": {
+    "telephone": "0612719903",
+    "email": "noukounwouiprince@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/prince-noukounwoui-ba1978217",
+    "photo": "./assets/images/profile.jpg"
+  },
+  "resume": "Actuellement en alternance chez JEEDOM, je travaille sur l'intégration de solutions Smarthome, Smartbuilding et Smartcity, en mettant l'accent sur les technologies Zigbee et LoRaWAN. Mes tâches incluent le choix et les tests de produits, la création de dashboards énergétiques, ainsi que le support d'installations GTB. Mes expériences précédentes, notamment chez Qotto et Golf Business Company, m'ont permis de développer des compétences solides en maintenance photovoltaïque, analyse de données IoT et optimisation des infrastructures électriques.",
+  "competences": [
+    "JavaScript",
+    "Python",
+    "ZigBee",
+    "LoRa",
+    "LoRaWAN",
+    "GTB/GTC",
+    "Analyse de données IoT",
+    "Maintenance photovoltaïque",
+    "Électrotechnique",
+    "QGIS / ArcGIS"
+  ],
+  "certifications": [
+    "Certificat Solutions Victron Energy pour les télécoms",
+    "LoRa et LoRaWAN pour l'Internet des Objets",
+    "Analyse et dépannage à distance par VRM"
+  ],
+  "experiences": [
+    {
+      "entreprise": "JEEDOM",
+      "poste": "Alternant intégrateur smarthome, smartbuilding et smartcity",
+      "periode": "Septembre 2025 - Présent",
+      "lieu": "Lyon, France",
+      "missions": [
+        "Choix et tests des produits (Zigbee & LoRaWAN)",
+        "Intégration des décodeurs",
+        "Appairage et réalisation de coffrets domotiques",
+        "Création de dashboards énergétiques et widgets",
+        "Suivi et support d'installations GTB",
+        "Prise en main du KNX sur Jeedom"
+      ]
     },
-    "resume": "Actuellement en alternance chez JEEDOM, je travaille sur l'intégration de solutions Smarthome, Smartbuilding et Smartcity, en mettant l'accent sur les technologies Zigbee et LoRaWAN. Mes tâches incluent le choix et les tests de produits, la création de dashboards énergétiques, ainsi que le support d'installations GTB. Mes expériences précédentes, notamment chez Qotto et Golf Business Company, m'ont permis de développer des compétences solides en maintenance photovoltaïque, analyse de données IoT et optimisation des infrastructures électriques.",
-    "competences": [
-        "JavaScript",
-        "Python",
-        "ZigBee",
-        "LoRa",
+    {
+      "entreprise": "JEEDOM",
+      "poste": "Stagiaire en intégration smarthome, smartbuilding et smartcity",
+      "periode": "Mai 2025 - Août 2025",
+      "lieu": "Lyon, France",
+      "missions": [
+        "Choix et tests des produits (Zigbee & LoRaWAN)",
+        "Intégration des décodeurs",
+        "Appairage et réalisation de coffrets domotiques",
+        "Création de dashboards énergétiques et widgets",
+        "Suivi et support d'installations GTB",
+        "Prise en main du KNX sur Jeedom"
+      ]
+    },
+    {
+      "entreprise": "Qotto",
+      "poste": "Stagiaire Analyste Junior – Maintenance et Intervention Photovoltaïque",
+      "periode": "Avril 2023 - Août 2023",
+      "lieu": "Cotonou, Bénin",
+      "missions": [
+        "Surveillance à distance des kits solaires via plateforme IoT",
+        "Maintenance préventive et curative à distance",
+        "Analyse des données de production et de charge",
+        "Coordination des interventions terrain via Google Sheets"
+      ]
+    },
+    {
+      "entreprise": "Golf Business Company",
+      "poste": "Chargé d'Études en Infrastructures Électriques",
+      "periode": "Juillet 2022 - Mars 2023",
+      "lieu": "Cotonou, Bénin",
+      "missions": [
+        "Cartographie réseaux électriques et traitement de données GPS (QGIS, ArcGIS)",
+        "Plans géoréférencés pour optimisation d'infrastructures",
+        "Rapports techniques (sécurité, coûts, faisabilité)",
+        "Contribution à l'électrification rurale"
+      ]
+    },
+    {
+      "entreprise": "ASEMI SA",
+      "poste": "Technicien Électrotechnicien – Réseaux Basse Tension",
+      "periode": "Avril 2022 - Juin 2022",
+      "lieu": "Cotonou, Bénin",
+      "missions": [
+        "Construction et déploiement de réseaux BT souterrains",
+        "Maintenance postes HT/BT",
+        "Analyse de performances et supervision"
+      ]
+    },
+    {
+      "entreprise": "Songhaï Centre",
+      "poste": "Technicien Électrotechnique",
+      "periode": "Août 2021 - Septembre 2021",
+      "lieu": "Porto-Novo, Bénin",
+      "missions": [
+        "Rebobinage de moteurs AC triphasés",
+        "Installation et entretien d'équipements électrotechniques",
+        "Mise en place de procédures de test et diagnostic"
+      ]
+    }
+  ],
+  "formation": [
+    {
+      "ecole": "Université de Rennes 1",
+      "diplome": "Master Ingénierie Durable des Bâtiments Communicants Intelligents",
+      "periode": "Septembre 2024 - Juin 2026"
+    },
+    {
+      "ecole": "Université de Franche-Comté",
+      "diplome": "Licence Ingénierie électrique et énergie",
+      "periode": "Septembre 2023 - Juin 2024"
+    },
+    {
+      "ecole": "Esmer (École Supérieure des Métiers des Énergies Renouvelables)",
+      "diplome": "Licence professionnelle Génie électrique et énergie renouvelable",
+      "periode": "Novembre 2020 - Juin 2022"
+    }
+  ],
+  "projets": [
+    {
+      "nom": "LoRaWAN Plug and Play",
+      "periode": "Novembre 2024 - Aujourd'hui",
+      "organisation": "Université de Rennes",
+      "description": "Développement d'une bibliothèque Python pour décoder les trames LoRaWAN. Cette bibliothèque permet d'extraire automatiquement les informations des capteurs (fabricant, modèle, données mesurées) et de reconnaître les capteurs grâce à l'analyse des trames. Elle est conçue pour faciliter la gestion et l'intégration des capteurs dans des systèmes IoT.",
+      "competences": [
+        "Internet of Things (IoT)",
+        "Gestion des technologies de l'information",
+        "Bases de données",
+        "Network server",
         "LoRaWAN",
-        "GTB/GTC",
-        "Analyse de données IoT",
-        "Maintenance photovoltaïque",
-        "Électrotechnique",
-        "QGIS / ArcGIS",
-        "PHP",
-        "Jeedom",
-        "Energies renouvelables"
-    ],
-    "certifications": [
-        "Certificat Solutions Victron Energy pour les télécoms",
-        "LoRa et LoRaWAN pour l'Internet des Objets",
-        "Analyse et dépannage à distance par VRM"
-    ],
-    "experiences": [
-        {
-            "entreprise": "JEEDOM",
-            "poste": "Alternant intégrateur smarthome, smartbuilding et smartcity",
-            "periode": "Septembre 2025 - Présent",
-            "lieu": "Lyon, France",
-            "missions": [
-                "Choix et tests des produits (Zigbee & LoRaWAN)",
-                "Intégration des décodeurs",
-                "Appairage et réalisation de coffrets domotiques",
-                "Création de dashboards énergétiques et widgets",
-                "Suivi et support d'installations GTB",
-                "Prise en main du KNX sur Jeedom"
-            ],
-            "details": {
-                "technologies": ["Zigbee", "LoRaWAN", "KNX", "JavaScript", "PHP", "MySQL", "Docker"],
-                "realisations": [
-                    "Déployement de plus de 50 capteurs IoT dans différents bâtiments",
-                    "Création de dashboards énergétiques permettant une économie de 15% sur la consommation",
-                    "Formation de 12 techniciens sur les protocoles Zigbee et LoRaWAN",
-                    "Développement de widgets personnalisés pour l'interface Jeedom"
-                ],
-                "defis": [
-                    "Intégration de protocoles différents dans un seul écosystème",
-                    "Optimisation des performances des réseaux sans fil en environnement urbain",
-                    "Création d'interfaces utilisateur intuitives pour des non-techniciens"
-                ],
-                "environnement": "Équipe de 8 personnes, méthodologie Agile, environnement Linux",
-                "impact": "Amélioration de l'efficacité énergétique de 15% sur les installations déployées"
-            }
-        },
-        {
-            "entreprise": "JEEDOM",
-            "poste": "Stagiaire en intégration smarthome, smartbuilding et smartcity",
-            "periode": "Mai 2025 - Août 2025",
-            "lieu": "Lyon, France",
-            "missions": [
-                "Choix et tests des produits (Zigbee & LoRaWAN)",
-                "Intégration des décodeurs",
-                "Appairage et réalisation de coffrets domotiques",
-                "Création de dashboards énergétiques et widgets",
-                "Suivi et support d'installations GTB",
-                "Prise en main du KNX sur Jeedom"
-            ],
-            "details": {
-                "technologies": ["Zigbee", "LoRaWAN", "KNX", "JavaScript", "HTML5", "CSS3"],
-                "realisations": [
-                    "Mise en place d'un réseau LoRaWAN de 25 capteurs sur un campus universitaire",
-                    "Développement d'un dashboard temps réel pour le monitoring énergétique",
-                    "Documentation technique complète des protocoles d'intégration",
-                    "Tests de portée et d'interférences sur 3 protocoles sans fil"
-                ],
-                "defis": [
-                    "Apprentissage rapide des protocoles IoT industriels",
-                    "Adaptation aux contraintes techniques des bâtiments existants",
-                    "Optimisation de la consommation des capteurs autonomes"
-                ],
-                "environnement": "Stage en équipe R&D, encadrement par des experts IoT",
-                "impact": "Bases techniques solides qui ont permis la conversion en alternance"
-            }
-        },
-        {
-            "entreprise": "Qotto",
-            "poste": "Stagiaire Analyste Junior – Maintenance et Intervention Photovoltaïque",
-            "periode": "Avril 2023 - Août 2023",
-            "lieu": "Cotonou, Bénin",
-            "missions": [
-                "Surveillance à distance des kits solaires via plateforme IoT",
-                "Maintenance préventive et curative à distance",
-                "Analyse des données de production et de charge",
-                "Coordination des interventions terrain via Google Sheets"
-            ],
-            "details": {
-                "technologies": ["Python", "Google Sheets API", "MQTT", "InfluxDB", "Grafana", "ThingSpeak"],
-                "realisations": [
-                    "Monitoring de 200+ installations solaires en temps réel",
-                    "Réduction de 30% du temps de diagnostic grâce à l'analyse automatisée",
-                    "Création d'alertes automatiques pour 15 types de pannes",
-                    "Développement d'un tableau de bord de performance énergétique"
-                ],
-                "defis": [
-                    "Gestion des connexions intermittentes en zone rurale",
-                    "Diagnostic à distance sans accès physique aux installations",
-                    "Formation des techniciens locaux aux outils numériques"
-                ],
-                "environnement": "Start-up, équipe internationale, travail en autonomie",
-                "impact": "30% d'amélioration de l'efficacité de maintenance, 200+ foyers alimentés"
-            }
-        },
-        {
-            "entreprise": "Golf Business Company",
-            "poste": "Chargé d'Études en Infrastructures Électriques",
-            "periode": "Juillet 2022 - Mars 2023",
-            "lieu": "Cotonou, Bénin",
-            "missions": [
-                "Cartographie réseaux électriques et traitement de données GPS (QGIS, ArcGIS)",
-                "Plans géoréférencés pour optimisation d'infrastructures",
-                "Rapports techniques (sécurité, coûts, faisabilité)",
-                "Contribution à l'électrification rurale"
-            ]
-        },
-        {
-            "entreprise": "ASEMI SA",
-            "poste": "Technicien Électrotechnicien – Réseaux Basse Tension",
-            "periode": "Avril 2022 - Juin 2022",
-            "lieu": "Cotonou, Bénin",
-            "missions": [
-                "Construction et déploiement de réseaux BT souterrains",
-                "Maintenance postes HT/BT",
-                "Analyse de performances et supervision"
-            ]
-        },
-        {
-            "entreprise": "Songhaï Centre",
-            "poste": "Technicien Électrotechnique",
-            "periode": "Août 2021 - Septembre 2021",
-            "lieu": "Porto-Novo, Bénin",
-            "missions": [
-                "Rebobinage de moteurs AC triphasés",
-                "Installation et entretien d'équipements électrotechniques",
-                "Mise en place de procédures de test et diagnostic"
-            ]
-        }
-    ],
-    "formation": [
-        {
-            "ecole": "Université de Rennes 1",
-            "diplome": "Master Ingénierie Durable des Bâtiments Communicants Intelligents",
-            "periode": "Septembre 2024 - Juin 2026"
-        },
-        {
-            "ecole": "Université de Franche-Comté",
-            "diplome": "Licence Ingénierie électrique et énergie",
-            "periode": "Septembre 2023 - Juin 2024"
-        },
-        {
-            "ecole": "Esmer (École Supérieure des Métiers des Énergies Renouvelables)",
-            "diplome": "Licence professionnelle Génie électrique et énergie renouvelable",
-            "periode": "Novembre 2020 - Juin 2022"
-        }
-    ],
-    "projets": [
-        {
-            "nom": "LoRaWAN Plug and Play",
-            "periode": "Novembre 2024 - Aujourd'hui",
-            "organisation": "Université de Rennes",
-            "description": "Développement d'une bibliothèque Python pour décoder les trames LoRaWAN. Cette bibliothèque permet d'extraire automatiquement les informations des capteurs (fabricant, modèle, données mesurées) et de reconnaître les capteurs grâce à l'analyse des trames. Elle est conçue pour faciliter la gestion et l'intégration des capteurs dans des systèmes IoT.",
-            "competences": [
-                "Internet of Things (IoT)",
-                "Gestion des technologies de l'information",
-                "Bases de données",
-                "Network server",
-                "LoRaWAN",
-                "Processus de la qualité",
-                "Réseaux de capteurs sans fil",
-                "Python (langage de programmation)",
-                "Cloud",
-                "Linux",
-                "Réseaux informatiques",
-                "SSH",
-                "Gestion d'équipe"
-            ],
-            "statut": "En cours",
-            "type": "Académique"
-        },
-        {
-            "nom": "Création d'une mini station météo avec Arduino",
-            "periode": "Janvier 2022 - Aujourd'hui",
-            "organisation": "Esmer (École Supérieure des Métiers des Énergies Renouvelables)",
-            "description": "Projet de mini station météo avec Arduino, intégrant des capteurs pour mesurer la vitesse du vent (anémomètre) et les précipitations (pluviomètre). Les données collectées sont affichées en temps réel sur un écran LCD, grâce à une programmation optimisée en Arduino. Ce projet visait à concevoir une solution compacte, efficace et accessible pour surveiller les conditions météorologiques locales.",
-            "competences": [
-                "Internet of Things (IoT)",
-                "Capteurs",
-                "Arduino",
-                "Processus de la qualité",
-                "Électronique Embarqué",
-                "Électronique",
-                "Arduino IDE"
-            ],
-            "statut": "Fait",
-            "type": "Académique"
-        },
-        {
-            "nom": "Conception d'un logiciel de dimensionnement de système photovoltaïque avec Python",
-            "periode": "Janvier 2020 - Aujourd'hui",
-            "organisation": "Projet personnel",
-            "description": "Développement d'un logiciel complet pour le dimensionnement des systèmes photovoltaïques. L'application permet de calculer la taille optimale des installations solaires en fonction des besoins énergétiques, de l'irradiation solaire locale et des contraintes techniques. Interface graphique intuitive développée en Python pour faciliter l'utilisation par les professionnels du secteur.",
-            "competences": [
-                "Processus de la qualité",
-                "Python (langage de programmation)",
-                "Conception d'interface graphique",
-                "Énergies renouvelables",
-                "Dimensionnement photovoltaïque"
-            ],
-            "statut": "En cours",
-            "type": "Personnel"
-        }
-    ]
+        "Processus de la qualité",
+        "Réseaux de capteurs sans fil",
+        "Python (langage de programmation)",
+        "Cloud",
+        "Linux",
+        "Réseaux informatiques",
+        "SSH",
+        "Gestion d'équipe"
+      ],
+      "statut": "En cours",
+      "type": "Académique",
+      "liens": {
+        "github": "https://github.com/prince-noukounwoui/lorawan-decoder",
+        "demo": "https://lorawan-decoder-demo.netlify.app"
+      },
+      "image": "./assets/images/projects/lorawan-project.jpg",
+      "tags": ["Python", "IoT", "LoRaWAN", "Capteurs"]
+    },
+    {
+      "nom": "Création d'une mini station météo avec Arduino",
+      "periode": "Janvier 2022 - Aujourd'hui",
+      "organisation": "Esmer (École Supérieure des Métiers des Énergies Renouvelables)",
+      "description": "Projet de mini station météo avec Arduino, intégrant des capteurs pour mesurer la vitesse du vent (anémomètre) et les précipitations (pluviomètre). Les données collectées sont affichées en temps réel sur un écran LCD, grâce à une programmation optimisée en Arduino. Ce projet visait à concevoir une solution compacte, efficace et accessible pour surveiller les conditions météorologiques locales.",
+      "competences": [
+        "Internet of Things (IoT)",
+        "Capteurs",
+        "Arduino",
+        "Processus de la qualité",
+        "Électronique Embarqué",
+        "Électronique",
+        "Arduino IDE"
+      ],
+      "statut": "Fait",
+      "type": "Académique",
+      "liens": {
+        "github": "https://github.com/prince-noukounwoui/arduino-weather-station",
+        "video": "https://youtube.com/watch?v=meteo-station-demo"
+      },
+      "image": "./assets/images/projects/arduino-meteo.jpg",
+      "tags": ["Arduino", "IoT", "Capteurs", "LCD"]
+    },
+    {
+      "nom": "Conception d'un logiciel de dimensionnement de système photovoltaïque avec Python",
+      "periode": "Janvier 2020 - Aujourd'hui",
+      "organisation": "Projet personnel",
+      "description": "Développement d'un logiciel complet pour le dimensionnement des systèmes photovoltaïques. L'application permet de calculer la taille optimale des installations solaires en fonction des besoins énergétiques, de l'irradiation solaire locale et des contraintes techniques. Interface graphique intuitive développée en Python pour faciliter l'utilisation par les professionnels du secteur.",
+      "competences": [
+        "Processus de la qualité",
+        "Python (langage de programmation)",
+        "Conception d'interface graphique",
+        "Énergies renouvelables",
+        "Dimensionnement photovoltaïque"
+      ],
+      "statut": "En cours",
+      "type": "Personnel",
+      "liens": {
+        "github": "https://github.com/prince-noukounwoui/pv-dimensioning-tool",
+        "documentation": "https://pv-tool-docs.readthedocs.io"
+      },
+      "image": "./assets/images/projects/pv-software.jpg",
+      "tags": ["Python", "Énergie", "Interface", "Photovoltaïque"]
+    }
+  ]
+};
+
+let currentDomain = 'iot'; // Domaine par défaut
+
+// Configuration des domaines d'expertise
+const DOMAINS = {
+    'iot': {
+        name: 'IoT & Domotique',
+        icon: 'fas fa-home',
+        description: 'Smart Home, Smart Building, Smart City',
+        technologies: ['Zigbee', 'LoRaWAN', 'KNX', 'Jeedom', 'GTB/GTC'],
+        color: 'rgba(0, 122, 255, 0.8)',
+        theme: 'iot'
+    },
+    'energy': {
+        name: 'Énergie & Photovoltaïque',
+        icon: 'fas fa-solar-panel',
+        description: 'Systèmes solaires, monitoring énergétique',
+        technologies: ['Photovoltaïque', 'Monitoring IoT', 'Analyse de données', 'VRM'],
+        color: 'rgba(255, 204, 0, 0.8)',
+        theme: 'solar'
+    },
+    'infrastructure': {
+        name: 'Infrastructure & Électrotechnique',
+        icon: 'fas fa-cogs',
+        description: 'Réseaux électriques, cartographie, maintenance industrielle',
+        technologies: ['QGIS', 'ArcGIS', 'Réseaux BT/HT', 'Moteurs AC', 'Cartographie GPS'],
+        color: 'rgba(175, 82, 222, 0.8)',
+        theme: 'network'
+    }
+};
+
+// Mapping des entreprises vers les domaines
+const COMPANY_DOMAINS = {
+    'JEEDOM': 'iot',
+    'Qotto': 'energy',
+    'Golf Business Company': 'infrastructure',
+    'ASEMI SA': 'infrastructure',
+    'Songhaï Centre': 'infrastructure'
 };
 
 // Icônes pour les compétences
 const skillIcons = {
+    // Langages de programmation
     'JavaScript': 'fab fa-js-square',
     'Python': 'fab fa-python',
-    'ZigBee': 'fas fa-broadcast-tower',
-    'LoRa': 'fas fa-wifi',
-    'LoRaWAN': 'fas fa-network-wired',
+    'HTML': 'fab fa-html5',
+    'CSS': 'fab fa-css3-alt',
+
+    // Technologies IoT & Communication
+    'ZigBee': 'fas fa-wifi',
+    'LoRa': 'fas fa-broadcast-tower',
+    'LoRaWAN': 'fas fa-satellite-dish',
+    'KNX': 'fas fa-network-wired',
+    'Internet of Things (IoT)': 'fas fa-microchip',
+    'Capteurs': 'fas fa-thermometer-half',
+    'Arduino': 'fas fa-microchip',
+    'Communication sans fil': 'fas fa-wifi',
+
+    // Systèmes et données
     'GTB/GTC': 'fas fa-building',
     'Analyse de données IoT': 'fas fa-chart-line',
+    'Bases de données': 'fas fa-database',
+    'Linux': 'fab fa-linux',
+    'SSH': 'fas fa-terminal',
+    'Cloud': 'fas fa-cloud',
+    'Network server': 'fas fa-server',
+    'Réseaux informatiques': 'fas fa-network-wired',
+
+    // Énergie et électrotechnique
     'Maintenance photovoltaïque': 'fas fa-solar-panel',
     'Électrotechnique': 'fas fa-bolt',
+    'Énergies renouvelables': 'fas fa-leaf',
+    'Dimensionnement photovoltaïque': 'fas fa-solar-panel',
+    'Électronique': 'fas fa-microchip',
+    'Électronique Embarqué': 'fas fa-microchip',
+
+    // Géospatial et cartographie
     'QGIS / ArcGIS': 'fas fa-map',
-    'PHP': 'fab fa-php',
-    'Jeedom': 'fas fa-home',
-    'Energies renouvelables': 'fas fa-leaf'
+    'Cartographie GPS': 'fas fa-map-marker-alt',
+    'Architecture des réseaux': 'fas fa-sitemap',
+
+    // Gestion et qualité
+    'Gestion des technologies de l\'information': 'fas fa-tasks',
+    'Processus de la qualité': 'fas fa-award',
+    'Gestion d\'équipe': 'fas fa-users',
+
+    // Outils et interfaces
+    'Interface utilisateur': 'fas fa-desktop',
+    'Conception d\'interface graphique': 'fas fa-paint-brush',
+    'Arduino IDE': 'fas fa-code'
 };
 
-// Système de curseur interactif
+// Données CV intégrées et prêtes
+
+// Fonction pour calculer la durée totale d'expériences (en mois)
+function calculateTotalDurationInMonths(experiences) {
+    let totalMonths = 0;
+
+    experiences.forEach(exp => {
+        const duration = calculateDurationInMonths(exp.periode);
+        totalMonths += duration;
+    });
+
+    return totalMonths;
+}
+
+// Fonction pour calculer la durée d'une expérience en mois
+function calculateDurationInMonths(periode) {
+    if (!periode) return 0;
+
+    const parts = periode.split(' - ');
+    if (parts.length !== 2) return 0;
+
+    const startStr = parts[0].trim();
+    const endStr = parts[1].trim();
+
+    // Mapping des mois français
+    const monthMap = {
+        'janvier': 0, 'février': 1, 'mars': 2, 'avril': 3, 'mai': 4, 'juin': 5,
+        'juillet': 6, 'août': 7, 'septembre': 8, 'octobre': 9, 'novembre': 10, 'décembre': 11
+    };
+
+    function parseDate(dateStr) {
+        if (dateStr.toLowerCase() === 'présent' || dateStr.toLowerCase() === 'aujourd\'hui') {
+            return new Date();
+        }
+
+        const parts = dateStr.toLowerCase().split(' ');
+        if (parts.length >= 2) {
+            const month = monthMap[parts[0]];
+            const year = parseInt(parts[1]);
+            if (month !== undefined && year) {
+                return new Date(year, month, 1);
+            }
+        }
+        return null;
+    }
+
+    const startDate = parseDate(startStr);
+    const endDate = parseDate(endStr);
+
+    if (!startDate || !endDate) return 0;
+
+    const diffInMonths = (endDate.getFullYear() - startDate.getFullYear()) * 12 +
+                        (endDate.getMonth() - startDate.getMonth());
+
+    return Math.max(0, diffInMonths);
+}
+
+// Fonction pour formater une durée en mois vers texte français
+function formatDuration(totalMonths) {
+    if (totalMonths === 0) return '';
+    if (totalMonths < 1) return '< 1 mois';
+    if (totalMonths === 1) return '1 mois';
+    if (totalMonths < 12) return `${totalMonths} mois`;
+
+    const years = Math.floor(totalMonths / 12);
+    const months = totalMonths % 12;
+
+    if (months === 0) {
+        return years === 1 ? '1 an' : `${years} ans`;
+    } else {
+        const yearStr = years === 1 ? '1 an' : `${years} ans`;
+        const monthStr = months === 1 ? '1 mois' : `${months} mois`;
+        return `${yearStr} ${monthStr}`;
+    }
+}
+
+// Fonction pour calculer la durée d'une expérience
+function calculateDuration(periode) {
+    const months = calculateDurationInMonths(periode);
+    return formatDuration(months);
+}
+
+// Organiser les expériences par domaines
+function organizeExperiencesByDomain() {
+    if (!cvData?.experiences) return {};
+
+    const domainExperiences = {};
+
+    // Initialiser tous les domaines
+    Object.keys(DOMAINS).forEach(domain => {
+        domainExperiences[domain] = [];
+    });
+
+    // Classer les expériences par domaine
+    cvData.experiences.forEach(experience => {
+        const domain = COMPANY_DOMAINS[experience.entreprise];
+        if (domain && domainExperiences[domain]) {
+            domainExperiences[domain].push({
+                ...experience,
+                domain: domain
+            });
+        }
+    });
+
+    // Expériences organisées par domaine
+    return domainExperiences;
+}
+
+// Organiser les projets par domaine
+function organizeProjectsByDomain() {
+    if (!cvData?.projets) return {};
+
+    const domainProjects = {};
+
+    // Initialiser tous les domaines
+    Object.keys(DOMAINS).forEach(domain => {
+        domainProjects[domain] = [];
+    });
+
+    // Classer les projets par domaine (basé sur les compétences)
+    cvData.projets.forEach(project => {
+        let assignedDomain = 'iot'; // Par défaut
+
+        // Analyse des compétences pour déterminer le domaine
+        const competences = project.competences || [];
+
+        if (competences.includes('Python (langage de programmation)') &&
+            project.nom.includes('photovoltaïque')) {
+            assignedDomain = 'energy';
+        } else if (competences.includes('LoRaWAN') ||
+                   competences.includes('Internet of Things (IoT)')) {
+            assignedDomain = 'iot';
+        }
+
+        domainProjects[assignedDomain].push({
+            ...project,
+            domain: assignedDomain
+        });
+    });
+
+    // Projets organisés par domaine
+    return domainProjects;
+}
+
+// Chargement du DOM
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialisation du portfolio par domaines
+
+    // Initialiser les composants
+    initNavigation();
+    initEnhancedNavigation();
+    initSmoothScroll();
+    createScrollIndicator();
+    initCustomCursor();
+    initIoTBackground();
+
+    // Remplir le contenu
+    populateContent();
+
+    // Initialiser les fonctionnalités
+    initDomainNavigation();
+    initScrollAnimations();
+    initSmoothScrolling();
+    initContactForm();
+    initMessaging();
+    initCalendlyListeners();
+
+    // Mettre à jour les effets de survol après le chargement du contenu
+    setTimeout(() => {
+        updateHoverEffects();
+    }, 500);
+
+    // Portfolio initialisé avec succès
+});
+
+// Remplir le contenu de la page
+function populateContent() {
+    // Remplissage du contenu
+
+    // Informations personnelles
+    populatePersonalInfo();
+
+    // Organiser les données par domaines
+    const domainExperiences = organizeExperiencesByDomain();
+    const domainProjects = organizeProjectsByDomain();
+
+    // Remplir les sections
+    populateAboutSection();
+    populateDomainCards(domainExperiences, domainProjects);
+    populateSkillsByDomain();
+    populateProjects();
+    populateFormation();
+    populateCertifications();
+
+    // Contenu rempli avec succès
+}
+
+// Remplir les informations personnelles
+function populatePersonalInfo() {
+    // Titre et nom
+    const nomElement = document.getElementById('nom-titre');
+    const titreElement = document.getElementById('titre-professionnel');
+    const localisationElement = document.getElementById('localisation');
+
+    if (nomElement) nomElement.textContent = cvData.nom;
+    if (titreElement) titreElement.textContent = cvData.titre;
+    if (localisationElement) localisationElement.textContent = `📍 ${cvData.localisation}`;
+
+    // Photo de profil
+    const profilePhoto = document.getElementById('profile-photo');
+    if (profilePhoto && cvData.coordonnees?.photo) {
+        profilePhoto.src = cvData.coordonnees.photo;
+        profilePhoto.alt = cvData.nom;
+        profilePhoto.onerror = function() {
+            console.warn('⚠️ Photo non trouvée, affichage de l\'icône par défaut');
+            this.style.display = 'none';
+            const iconElement = this.parentElement.querySelector('i');
+            if (iconElement) iconElement.style.display = 'block';
+        };
+    }
+
+    // Informations de contact
+    const emailElement = document.getElementById('email-contact');
+    const phoneElement = document.getElementById('telephone-contact');
+    const linkedinElement = document.getElementById('linkedin-contact');
+
+    if (emailElement && cvData.coordonnees?.email) {
+        emailElement.textContent = cvData.coordonnees.email;
+    }
+
+    if (phoneElement && cvData.coordonnees?.telephone) {
+        phoneElement.textContent = cvData.coordonnees.telephone;
+    }
+
+    if (linkedinElement && cvData.coordonnees?.linkedin) {
+        linkedinElement.href = cvData.coordonnees.linkedin;
+        linkedinElement.textContent = 'LinkedIn';
+    }
+
+    // Démarrer les animations du hero
+    initTypewriterEffect();
+    animateHeroStats();
+
+    // Informations personnelles remplies
+}
+
+// Animation de frappe (typewriter) avec curseur qui suit
+function initTypewriterEffect() {
+    const specialties = [
+        'IoT & Domotique',
+        'Smart Buildings',
+        'Énergie Renouvelable',
+        'Systèmes Électriques',
+        'LoRaWAN & ZigBee',
+        'Photovoltaïque'
+    ];
+
+    const typewriterElement = document.getElementById('typewriter-text');
+    const cursorElement = document.querySelector('.cursor');
+
+    if (!typewriterElement) return;
+
+    // Cacher le curseur fixe s'il existe
+    if (cursorElement) {
+        cursorElement.style.display = 'none';
+    }
+
+    let currentTextIndex = 0;
+    let currentCharIndex = 0;
+    let isDeleting = false;
+    let isPaused = false;
+
+    function updateDisplay() {
+        const currentText = specialties[currentTextIndex];
+        const displayText = currentText.substring(0, currentCharIndex);
+
+        // Intégrer le curseur directement dans le texte
+        if (isPaused) {
+            // Curseur clignotant à la fin du texte complet
+            typewriterElement.innerHTML = `${displayText}<span class="typing-cursor blink">|</span>`;
+        } else {
+            // Curseur fixe pendant la frappe/effacement
+            typewriterElement.innerHTML = `${displayText}<span class="typing-cursor">|</span>`;
+        }
+    }
+
+    function type() {
+        const currentText = specialties[currentTextIndex];
+
+        if (!isDeleting && currentCharIndex <= currentText.length) {
+            // Écriture
+            updateDisplay();
+            currentCharIndex++;
+
+            if (currentCharIndex > currentText.length) {
+                // Fin d'écriture - pause avec curseur clignotant
+                isPaused = true;
+                updateDisplay();
+                setTimeout(() => {
+                    isPaused = false;
+                    isDeleting = true;
+                    type();
+                }, 2000); // Pause de 2 secondes
+                return;
+            }
+        } else if (isDeleting && currentCharIndex >= 0) {
+            // Suppression
+            updateDisplay();
+            currentCharIndex--;
+
+            if (currentCharIndex < 0) {
+                isDeleting = false;
+                currentTextIndex = (currentTextIndex + 1) % specialties.length;
+                currentCharIndex = 0;
+
+                // Petite pause avant de commencer le mot suivant
+                setTimeout(() => {
+                    type();
+                }, 500);
+                return;
+            }
+        }
+
+        if (!isPaused) {
+            const typingSpeed = isDeleting ? 50 : 120;
+            setTimeout(type, typingSpeed);
+        }
+    }
+
+    // Démarrer l'animation après un délai
+    setTimeout(() => {
+        type();
+    }, 1500);
+}
+
+// Animer les statistiques du hero
+function animateHeroStats() {
+    const currentYear = new Date().getFullYear();
+    const startYear = 2020; // Première expérience
+    const yearsExperience = currentYear - startYear;
+
+    const stats = {
+        'years-experience': yearsExperience,
+        'projects-count': cvData.projets?.length || 0,
+        'domains-count': 3 // IoT, Énergie, Infrastructure
+    };
+
+    Object.entries(stats).forEach(([id, target]) => {
+        const element = document.getElementById(id);
+        if (!element) return;
+
+        let current = 0;
+        const increment = target / 30; // 30 frames pour l'animation
+
+        const animate = () => {
+            current += increment;
+            if (current >= target) {
+                element.textContent = target;
+            } else {
+                element.textContent = Math.floor(current);
+                requestAnimationFrame(animate);
+            }
+        };
+
+        // Démarrer avec un délai
+        setTimeout(animate, 1500);
+    });
+}
+
+// Remplir la section À propos
+function populateAboutSection() {
+    const resumeText = document.getElementById('resume-text');
+    if (resumeText && cvData.resume) {
+        resumeText.textContent = cvData.resume;
+    }
+
+    // Statistiques (calculées automatiquement)
+    const stats = calculateStats();
+    updateStatsDisplay(stats);
+
+    // Section À propos remplie
+}
+
+// Calculer les statistiques
+function calculateStats() {
+    const currentYear = new Date().getFullYear();
+    const startYear = 2020; // Première expérience selon le CV
+
+    return {
+        experience: currentYear - startYear,
+        projets: cvData.projets?.length || 0,
+        competences: cvData.competences?.length || 0,
+        certifications: cvData.certifications?.length || 0
+    };
+}
+
+// Mettre à jour l'affichage des statistiques avec animation
+function updateStatsDisplay(stats) {
+    const statsData = [
+        stats.experience,
+        stats.projets,
+        stats.competences,
+        stats.certifications
+    ];
+
+    // Mettre à jour les targets des éléments animés
+    const animatedStats = document.querySelectorAll('.animated-stat');
+    animatedStats.forEach((element, index) => {
+        if (statsData[index] !== undefined) {
+            element.setAttribute('data-target', statsData[index]);
+        }
+    });
+
+    // Démarrer l'animation des compteurs
+    animateCounters();
+}
+
+// Animation des compteurs
+function animateCounters() {
+    const counters = document.querySelectorAll('.animated-stat');
+
+    const observerOptions = {
+        threshold: 0.5,
+        once: true
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounter(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    counters.forEach(counter => {
+        observer.observe(counter);
+    });
+}
+
+// Animer un compteur spécifique
+function animateCounter(element) {
+    const target = parseInt(element.getAttribute('data-target'));
+    const numberElement = element.querySelector('.stat-number');
+    const duration = 2000; // 2 secondes
+    const start = 0;
+    const increment = target / (duration / 16); // 60 FPS
+
+    let current = start;
+    const timer = setInterval(() => {
+        current += increment;
+
+        if (current >= target) {
+            numberElement.textContent = target;
+            clearInterval(timer);
+
+            // Ajouter une animation de pulse à la fin
+            element.classList.add('stat-completed');
+        } else {
+            numberElement.textContent = Math.floor(current);
+        }
+    }, 16);
+}
+
+// Remplir les cartes des domaines
+function populateDomainCards(domainExperiences, domainProjects) {
+    const container = document.querySelector('#experiences .cards-grid');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    Object.entries(DOMAINS).forEach(([domainKey, domain]) => {
+        const experiences = domainExperiences[domainKey] || [];
+        const projects = domainProjects[domainKey] || [];
+
+        // Calculer la durée totale d'expérience pour ce domaine
+        const totalMonths = calculateTotalDurationInMonths(experiences);
+        const totalDuration = formatDuration(totalMonths);
+
+        const card = document.createElement('div');
+        card.className = 'card domain-card';
+        card.dataset.domain = domainKey;
+
+        card.innerHTML = `
+            <div class="domain-header">
+                <div class="domain-icon">
+                    <i class="${domain.icon}"></i>
+                </div>
+                <div class="domain-info">
+                    <h3>${domain.name}</h3>
+                    <p>${domain.description}</p>
+                </div>
+            </div>
+
+            <div class="domain-stats">
+                <div class="domain-stat">
+                    <span class="stat-number">${experiences.length}</span>
+                    <span class="stat-label">Expérience${experiences.length > 1 ? 's' : ''}</span>
+                </div>
+                <div class="domain-stat">
+                    <span class="stat-number">${projects.length}</span>
+                    <span class="stat-label">Projet${projects.length > 1 ? 's' : ''}</span>
+                </div>
+                ${totalDuration ? `
+                <div class="domain-stat">
+                    <span class="stat-number"><i class="fas fa-clock" style="color: var(--primary-color);"></i></span>
+                    <span class="stat-label">${totalDuration}</span>
+                </div>` : ''}
+            </div>
+
+            <div class="domain-technologies">
+                ${domain.technologies.map(tech =>
+                    `<span class="tech-tag">${tech}</span>`
+                ).join('')}
+            </div>
+
+            <div class="domain-actions">
+                <button class="btn btn-secondary btn-explore" data-domain="${domainKey}">
+                    <i class="fas fa-search"></i>
+                    Explorer ce domaine
+                </button>
+            </div>
+        `;
+
+        container.appendChild(card);
+    });
+
+    // Cartes des domaines créées
+}
+
+// Explorer un domaine spécifique
+function exploreDomain(domainKey) {
+    if (!domainKey || !DOMAINS[domainKey]) return;
+
+    currentDomain = domainKey;
+    const domain = DOMAINS[domainKey];
+
+    // Changer le thème d'arrière-plan
+    if (window.changeBackgroundTheme) {
+        window.changeBackgroundTheme(domain.theme);
+    }
+
+    // Ouvrir le panel du domaine
+    openDomainPanel(domainKey);
+}
+
+// Ouvrir le panel d'un domaine
+function openDomainPanel(domainKey) {
+    const domain = DOMAINS[domainKey];
+    if (!domain) return;
+
+    const domainExperiences = organizeExperiencesByDomain()[domainKey] || [];
+    const domainProjects = organizeProjectsByDomain()[domainKey] || [];
+
+    const panel = document.getElementById('domain-side-panel');
+    if (!panel) return;
+
+    // Remplir le contenu du panel
+    document.getElementById('panel-domain-icon').className = domain.icon;
+    document.getElementById('panel-domain-name').textContent = domain.name;
+    document.getElementById('panel-domain-description').textContent = domain.description;
+
+    // Technologies
+    const technologiesContainer = document.getElementById('panel-technologies');
+    technologiesContainer.innerHTML = domain.technologies.map(tech =>
+        `<div class="tech-item">${tech}</div>`
+    ).join('');
+
+    // Expériences
+    const experiencesContainer = document.getElementById('panel-experiences');
+    if (domainExperiences.length > 0) {
+        experiencesContainer.innerHTML = domainExperiences.map(exp => {
+            const duration = calculateDuration(exp.periode);
+
+            return `
+                <div class="panel-experience-item">
+                    <div class="panel-item-header">
+                        <div>
+                            <div class="panel-item-title">${exp.poste}</div>
+                            <div class="panel-item-company">
+                                ${createLogoElement(exp.entreprise, 'company')}
+                                ${exp.entreprise} - ${exp.lieu}
+                            </div>
+                        </div>
+                        <div class="panel-item-period">${duration || exp.periode}</div>
+                    </div>
+                    <ul class="experience-missions">
+                        ${exp.missions.map(mission => `<li>${mission}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }).join('');
+        document.querySelector('#panel-experiences').parentElement.style.display = 'block';
+    } else {
+        document.querySelector('#panel-experiences').parentElement.style.display = 'none';
+    }
+
+    // Projets
+    const projectsContainer = document.getElementById('panel-projects');
+    if (domainProjects.length > 0) {
+        projectsContainer.innerHTML = domainProjects.map(project => {
+            const orgType = project.organisation.toLowerCase().includes('université') ||
+                           project.organisation.toLowerCase().includes('école') ||
+                           project.organisation.toLowerCase().includes('esmer') ? 'school' : 'company';
+
+            return `
+                <div class="panel-project-item">
+                    <div class="panel-item-header">
+                        <div>
+                            <div class="panel-item-title">${project.nom}</div>
+                            <div class="panel-item-company">
+                                ${project.organisation !== 'Projet personnel' ? createLogoElement(project.organisation, orgType) : ''}
+                                ${project.organisation}
+                            </div>
+                        </div>
+                        <div class="panel-item-period">${project.statut}</div>
+                    </div>
+                    <div class="panel-item-description">${project.description}</div>
+                    <div class="panel-skills">
+                        ${project.competences.map(skill =>
+                            `<span class="panel-skill-tag">${skill}</span>`
+                        ).join('')}
+                    </div>
+                </div>
+            `;
+        }).join('');
+        document.querySelector('#panel-projects').parentElement.style.display = 'block';
+    } else {
+        document.querySelector('#panel-projects').parentElement.style.display = 'none';
+    }
+
+    // Ajouter les événements de fermeture
+    const overlay = panel.querySelector('.side-panel-overlay');
+    const closeBtn = panel.querySelector('.panel-close');
+
+    // Nettoyer les anciens event listeners
+    if (overlay) {
+        overlay.removeEventListener('click', closeDomainPanel);
+        overlay.addEventListener('click', closeDomainPanel);
+    }
+    if (closeBtn) {
+        closeBtn.removeEventListener('click', closeDomainPanel);
+        closeBtn.addEventListener('click', closeDomainPanel);
+    }
+
+    // Échapper pour fermer
+    const escapeHandler = function(e) {
+        if (e.key === 'Escape') {
+            closeDomainPanel();
+            document.removeEventListener('keydown', escapeHandler);
+        }
+    };
+    document.addEventListener('keydown', escapeHandler);
+
+    // Afficher le panel
+    panel.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+// Fermer le panel de domaine
+function closeDomainPanel() {
+    const panel = document.getElementById('domain-side-panel');
+    if (panel) {
+        panel.classList.remove('active');
+    }
+    document.body.style.overflow = 'auto';
+
+    // Retour au thème IoT par défaut
+    if (window.changeBackgroundTheme) {
+        window.changeBackgroundTheme('iot');
+    }
+}
+
+// Remplir les compétences par domaine
+function populateSkillsByDomain() {
+    const container = document.querySelector('#competences .skills-grid');
+    if (!container || !cvData.competences) return;
+
+    container.innerHTML = '';
+
+    cvData.competences.forEach(skill => {
+        const skillElement = document.createElement('div');
+        skillElement.className = 'skill-item';
+
+        const icon = skillIcons[skill] || 'fas fa-star';
+
+        skillElement.innerHTML = `
+            <i class="${icon}"></i>
+            <span>${skill}</span>
+        `;
+
+        container.appendChild(skillElement);
+    });
+
+    // Compétences remplies
+}
+
+// Remplir la formation
+function populateFormation() {
+    const container = document.getElementById('formation-timeline');
+    if (!container || !cvData.formation) return;
+
+    container.innerHTML = '';
+
+    cvData.formation.forEach((formation, index) => {
+        const item = document.createElement('div');
+        item.className = `timeline-item ${index % 2 === 0 ? 'left' : 'right'}`;
+
+        item.innerHTML = `
+            <div class="timeline-content">
+                <div class="timeline-header">
+                    ${createLogoElement(formation.ecole, 'school')}
+                    <div class="formation-info">
+                        <div class="timeline-date">${formation.periode}</div>
+                        <h3>${formation.diplome}</h3>
+                        <h4>${formation.ecole}</h4>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(item);
+    });
+
+    // Formation remplie
+}
+
+// Fonction pour générer le logo/icône des certifications
+function getCertificationLogo(certificationName) {
+    // Mapping spécifique pour les certifications
+    const certMappings = {
+        'Victron Energy': {
+            logo: './assets/logos/Victron.png',
+            icon: 'fas fa-bolt',
+            color: '#0066CC'
+        },
+        'LoRa': {
+            logo: null,
+            icon: 'fas fa-broadcast-tower',
+            color: '#00A651'
+        },
+        'LoRaWAN': {
+            logo: null,
+            icon: 'fas fa-network-wired',
+            color: '#00A651'
+        },
+        'VRM': {
+            logo: './assets/logos/Victron.png',
+            icon: 'fas fa-chart-line',
+            color: '#0066CC'
+        }
+    };
+
+    // Chercher une correspondance dans le nom du certificat
+    for (const [key, config] of Object.entries(certMappings)) {
+        if (certificationName.toLowerCase().includes(key.toLowerCase())) {
+            return config;
+        }
+    }
+
+    // Fallback par défaut
+    return {
+        logo: null,
+        icon: 'fas fa-certificate',
+        color: '#007AFF'
+    };
+}
+
+// Créer un élément logo avec fallback pour les certifications
+function createCertificationLogo(certificationName) {
+    const config = getCertificationLogo(certificationName);
+
+    if (config.logo) {
+        return `
+            <div class="certification-logo">
+                <img src="${config.logo}" alt="Logo ${certificationName}"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="certification-icon fallback" style="display: none; color: ${config.color};">
+                    <i class="${config.icon}"></i>
+                </div>
+            </div>
+        `;
+    } else {
+        return `
+            <div class="certification-icon" style="color: ${config.color};">
+                <i class="${config.icon}"></i>
+            </div>
+        `;
+    }
+}
+
+// Remplir les certifications avec logos
+function populateCertifications() {
+    const container = document.getElementById('certifications-grid');
+    if (!container || !cvData.certifications) return;
+
+    container.innerHTML = '';
+
+    cvData.certifications.forEach(cert => {
+        const certElement = document.createElement('div');
+        certElement.className = 'certification-item';
+
+        certElement.innerHTML = `
+            <div class="certification-content">
+                ${createCertificationLogo(cert)}
+                <div class="certification-text">
+                    <h4>${cert}</h4>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(certElement);
+    });
+
+    // Certifications remplies avec logos
+}
+
+// Remplir les projets avec cartes visuelles
+function populateProjects() {
+    const container = document.getElementById('projets-grid');
+    if (!container || !cvData.projets) return;
+
+    container.innerHTML = '';
+
+    cvData.projets.forEach((projet, index) => {
+        const projectElement = document.createElement('div');
+        projectElement.className = 'project-card';
+        projectElement.setAttribute('data-project-id', index);
+
+        // Déterminer la couleur du statut
+        const statusClass = projet.statut.toLowerCase() === 'en cours' ? 'status-active' : 'status-completed';
+        const statusIcon = projet.statut.toLowerCase() === 'en cours' ? 'fas fa-clock' : 'fas fa-check-circle';
+
+        projectElement.innerHTML = `
+            <div class="project-image">
+                <img src="${projet.image}" alt="${projet.nom}"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="project-image-fallback" style="display: none;">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+                <div class="project-overlay">
+                    <div class="project-status ${statusClass}">
+                        <i class="${statusIcon}"></i>
+                        ${projet.statut}
+                    </div>
+                    <button class="project-preview-btn" onclick="openProjectPreview(${index})">
+                        <i class="fas fa-eye"></i>
+                        Aperçu
+                    </button>
+                </div>
+            </div>
+
+            <div class="project-content">
+                <div class="project-header">
+                    <h3 class="project-title">${projet.nom}</h3>
+                    <div class="project-type">
+                        <i class="fas fa-tag"></i>
+                        ${projet.type}
+                    </div>
+                </div>
+
+                <div class="project-meta">
+                    <span class="project-period">
+                        <i class="fas fa-calendar"></i>
+                        ${projet.periode}
+                    </span>
+                    <span class="project-organization">
+                        <i class="fas fa-building"></i>
+                        ${projet.organisation}
+                    </span>
+                </div>
+
+                <p class="project-description">${projet.description.substring(0, 120)}...</p>
+
+                <div class="project-tags">
+                    ${projet.tags ? projet.tags.map(tag =>
+                        `<span class="project-tag">${tag}</span>`
+                    ).join('') : ''}
+                </div>
+
+                <div class="project-actions">
+                    ${projet.liens ? Object.entries(projet.liens).map(([key, url]) => {
+                        const linkIcons = {
+                            'github': 'fab fa-github',
+                            'demo': 'fas fa-external-link-alt',
+                            'website': 'fas fa-globe',
+                            'video': 'fab fa-youtube',
+                            'documentation': 'fas fa-book',
+                            'portfolio': 'fas fa-briefcase'
+                        };
+                        const icon = linkIcons[key] || 'fas fa-link';
+
+                        return `
+                            <a href="${url}" target="_blank" rel="noopener noreferrer"
+                               class="project-action-btn" title="${key}">
+                                <i class="${icon}"></i>
+                            </a>
+                        `;
+                    }).join('') : ''}
+                    <button class="project-action-btn project-details-btn"
+                            onclick="openProjectDetails(${index})" title="Détails">
+                        <i class="fas fa-info-circle"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // Ajouter animation au scroll
+        projectElement.style.opacity = '0';
+        projectElement.style.transform = 'translateY(30px)';
+
+        container.appendChild(projectElement);
+
+        // Animation d'apparition avec délai
+        setTimeout(() => {
+            projectElement.style.transition = 'all 0.6s ease';
+            projectElement.style.opacity = '1';
+            projectElement.style.transform = 'translateY(0)';
+        }, index * 150);
+    });
+
+    // Projets remplis
+}
+
+// Ouvrir aperçu rapide du projet
+function openProjectPreview(projectIndex) {
+    const projet = cvData.projets[projectIndex];
+    if (!projet) return;
+
+    // Créer modal d'aperçu
+    const modal = document.createElement('div');
+    modal.className = 'project-preview-modal';
+    modal.innerHTML = `
+        <div class="modal-overlay" onclick="closeProjectPreview()"></div>
+        <div class="preview-content">
+            <button class="modal-close" onclick="closeProjectPreview()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="preview-image">
+                <img src="${projet.image}" alt="${projet.nom}"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="preview-image-fallback" style="display: none;">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+            </div>
+
+            <div class="preview-info">
+                <h3>${projet.nom}</h3>
+                <div class="preview-meta">
+                    <span><i class="fas fa-calendar"></i> ${projet.periode}</span>
+                    <span><i class="fas fa-building"></i> ${projet.organisation}</span>
+                </div>
+                <p>${projet.description}</p>
+
+                <div class="preview-actions">
+                    ${projet.liens ? Object.entries(projet.liens).map(([key, url]) => {
+                        const linkIcons = {
+                            'github': 'fab fa-github',
+                            'demo': 'fas fa-external-link-alt',
+                            'website': 'fas fa-globe',
+                            'video': 'fab fa-youtube',
+                            'documentation': 'fas fa-book'
+                        };
+                        const icon = linkIcons[key] || 'fas fa-link';
+                        const label = key.charAt(0).toUpperCase() + key.slice(1);
+
+                        return `
+                            <a href="${url}" target="_blank" rel="noopener noreferrer" class="preview-btn">
+                                <i class="${icon}"></i> ${label}
+                            </a>
+                        `;
+                    }).join('') : ''}
+                    <button class="preview-btn secondary" onclick="openProjectDetails(${projectIndex})">
+                        <i class="fas fa-info-circle"></i> Détails complets
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+
+    // Animation d'ouverture
+    setTimeout(() => modal.classList.add('active'), 10);
+}
+
+// Fermer aperçu
+function closeProjectPreview() {
+    const modal = document.querySelector('.project-preview-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        setTimeout(() => {
+            modal.remove();
+            document.body.style.overflow = 'auto';
+        }, 300);
+    }
+}
+
+// Ouvrir détails complets du projet
+function openProjectDetails(projectIndex) {
+    const projet = cvData.projets[projectIndex];
+    if (!projet) return;
+
+    // Fermer aperçu si ouvert
+    closeProjectPreview();
+
+    // Créer modal de détails complets
+    const modal = document.createElement('div');
+    modal.className = 'project-details-modal';
+    modal.innerHTML = `
+        <div class="modal-overlay" onclick="closeProjectDetails()"></div>
+        <div class="details-content">
+            <div class="details-header">
+                <div class="details-title">
+                    <h2>${projet.nom}</h2>
+                    <span class="project-type-badge">${projet.type}</span>
+                </div>
+                <button class="modal-close" onclick="closeProjectDetails()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="details-body">
+                <div class="details-main">
+                    <div class="details-image">
+                        <img src="${projet.image}" alt="${projet.nom}"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                        <div class="details-image-fallback" style="display: none;">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                    </div>
+
+                    <div class="details-info">
+                        <div class="details-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-calendar"></i>
+                                <span>Période : ${projet.periode}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-building"></i>
+                                <span>Organisation : ${projet.organisation}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-flag"></i>
+                                <span>Statut : ${projet.statut}</span>
+                            </div>
+                        </div>
+
+                        <div class="details-description">
+                            <h4><i class="fas fa-info-circle"></i> Description</h4>
+                            <p>${projet.description}</p>
+                        </div>
+
+                        <div class="details-skills">
+                            <h4><i class="fas fa-cogs"></i> Compétences utilisées</h4>
+                            <div class="skills-grid">
+                                ${projet.competences.map(comp =>
+                                    `<span class="skill-badge">${comp}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+
+                        ${projet.tags ? `
+                            <div class="details-tags">
+                                <h4><i class="fas fa-tags"></i> Technologies</h4>
+                                <div class="tags-grid">
+                                    ${projet.tags.map(tag =>
+                                        `<span class="tech-badge">${tag}</span>`
+                                    ).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+
+                ${projet.liens ? `
+                    <div class="details-actions">
+                        <h4><i class="fas fa-link"></i> Liens du projet</h4>
+                        <div class="action-buttons">
+                            ${Object.entries(projet.liens).map(([key, url]) => {
+                                const linkIcons = {
+                                    'github': 'fab fa-github',
+                                    'demo': 'fas fa-external-link-alt',
+                                    'website': 'fas fa-globe',
+                                    'video': 'fab fa-youtube',
+                                    'documentation': 'fas fa-book'
+                                };
+                                const icon = linkIcons[key] || 'fas fa-link';
+                                const label = key.charAt(0).toUpperCase() + key.slice(1);
+
+                                return `
+                                    <a href="${url}" target="_blank" rel="noopener noreferrer"
+                                       class="action-btn primary">
+                                        <i class="${icon}"></i> ${label}
+                                    </a>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+
+    // Animation d'ouverture
+    setTimeout(() => modal.classList.add('active'), 10);
+}
+
+// Fermer détails
+function closeProjectDetails() {
+    const modal = document.querySelector('.project-details-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        setTimeout(() => {
+            modal.remove();
+            document.body.style.overflow = 'auto';
+        }, 300);
+    }
+}
+
+// Navigation entre domaines
+function initDomainNavigation() {
+    // Attendre que les cartes soient créées
+    setTimeout(() => {
+        // Event listeners pour les boutons "Explorer ce domaine"
+        document.querySelectorAll('.btn-explore').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const domain = this.dataset.domain;
+                if (domain) {
+                    exploreDomain(domain);
+                }
+            });
+        });
+
+        // Event listeners pour les cartes de domaine
+        document.querySelectorAll('.domain-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (e.target.closest('.btn-explore')) return;
+                const domain = this.dataset.domain;
+                if (domain) {
+                    exploreDomain(domain);
+                }
+            });
+        });
+    }, 200);
+}
+
+// Système de curseur interactif (conservé de l'ancien script)
 let customCursor = null;
 let trailInterval = null;
 let particleInterval = null;
@@ -260,10 +1504,7 @@ function detectDevice() {
     const userAgent = navigator.userAgent;
     const screenWidth = window.innerWidth;
 
-    // Détection mobile
     isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent) || screenWidth < 768;
-
-    // Détection tablette
     isTablet = (screenWidth >= 768 && screenWidth <= 1024) && /iPad|Android/i.test(userAgent);
 
     console.log('📱 Appareil détecté:', {
@@ -282,7 +1523,6 @@ function detectDevice() {
 
 // Initialisation du curseur personnalisé
 function initCustomCursor() {
-    // Détecter le type d'appareil
     const device = detectDevice();
 
     customCursor = document.getElementById('custom-cursor');
@@ -296,23 +1536,17 @@ function initCustomCursor() {
         console.log('📱 Appareil tactile détecté - Curseur personnalisé désactivé');
         customCursor.style.display = 'none';
 
-        // Restaurer le curseur par défaut sur les appareils tactiles
         document.body.style.cursor = 'auto';
         document.querySelectorAll('*').forEach(el => {
             el.style.cursor = '';
         });
 
-        // Initialiser le feedback tactile pour remplacer le curseur
         initTouchFeedback();
         return;
     }
 
     console.log('🎯 Desktop détecté - Curseur personnalisé activé');
 
-    // Cette ligne était incorrecte - on initialise le feedback tactile AVANT de return
-    // Le feedback tactile remplace le curseur sur mobile/tablette
-
-    // Forcer la visibilité sur desktop uniquement
     customCursor.style.display = 'block';
     customCursor.style.visibility = 'visible';
     customCursor.style.opacity = '1';
@@ -331,7 +1565,6 @@ function initCustomCursor() {
             customCursor.style.top = e.clientY + 'px';
         }
 
-        // Détecter le mouvement pour les effets
         if (!isMoving) {
             isMoving = true;
             startCursorEffects();
@@ -343,7 +1576,6 @@ function initCustomCursor() {
             stopCursorEffects();
         }, 150);
 
-        // Interaction avec l'arrière-plan IoT
         if (window.updateCursorInfluence) {
             window.updateCursorInfluence(e.clientX, e.clientY);
         }
@@ -363,13 +1595,11 @@ function initCustomCursor() {
         }
     });
 
-    // Effets de survol - mise à jour dynamique
     updateHoverEffects();
-
     console.log('🎯 Curseur personnalisé initialisé');
 }
 
-// Mise à jour des effets de survol (appelée après chargement du contenu)
+// Mise à jour des effets de survol
 function updateHoverEffects() {
     const interactiveElements = document.querySelectorAll('a, button, .btn, .card, [onclick], input, textarea, select');
 
@@ -387,7 +1617,6 @@ function updateHoverEffects() {
         });
     });
 
-    // Effet spécial sur le texte
     const textElements = document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, span, li');
     textElements.forEach(element => {
         element.addEventListener('mouseenter', () => {
@@ -406,12 +1635,10 @@ function updateHoverEffects() {
 
 // Effets de traînée et particules
 function startCursorEffects() {
-    // Traînée
     if (!trailInterval) {
         trailInterval = setInterval(createTrail, 50);
     }
 
-    // Particules occasionnelles
     if (!particleInterval) {
         particleInterval = setInterval(() => {
             if (Math.random() < 0.3) {
@@ -499,14 +1726,12 @@ function updateCursorTheme(themeName) {
     customCursor.style.boxShadow = `0 0 20px ${color.replace('0.8', '0.4')}`;
 }
 
-// Exposer la fonction pour mise à jour du thème du curseur
 window.updateCursorTheme = updateCursorTheme;
 
 // Feedback tactile pour appareils mobiles/tablettes
 function initTouchFeedback() {
     console.log('👆 Feedback tactile initialisé');
 
-    // Ajouter des effets visuels lors du touch
     document.addEventListener('touchstart', (e) => {
         const touch = e.touches[0];
         if (touch) {
@@ -514,12 +1739,11 @@ function initTouchFeedback() {
         }
     });
 
-    // Vibration sur les boutons (si supportée)
     const interactiveElements = document.querySelectorAll('button, .btn, a[href]');
     interactiveElements.forEach(element => {
         element.addEventListener('touchstart', () => {
             if (navigator.vibrate) {
-                navigator.vibrate(50); // Vibration légère de 50ms
+                navigator.vibrate(50);
             }
         });
     });
@@ -568,714 +1792,499 @@ if (!document.querySelector('#touch-ripple-styles')) {
     document.head.appendChild(style);
 }
 
-// Chargement du DOM
-document.addEventListener('DOMContentLoaded', function() {
-    initNavigation();
-    populateContent(); // Appel direct à populateContent
-    initScrollAnimations();
-    initSmoothScrolling();
-    initContactForm();
-    initMessaging();
-    initCalendlyListeners();
-    initCustomCursor();  // Initialiser le curseur personnalisé
-    initIoTBackground();
-
-    // Mettre à jour les effets de survol après le chargement du contenu
-    setTimeout(() => {
-        updateHoverEffects();
-    }, 500);
-});
-
 // Navigation mobile
 function initNavigation() {
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
-    const navLinks = document.querySelectorAll('.nav-link');
+    const overlay = document.querySelector('.mobile-menu-overlay');
 
-    hamburger.addEventListener('click', function() {
-        hamburger.classList.toggle('active');
-        navMenu.classList.toggle('active');
-    });
+    if (hamburger && navMenu && overlay) {
+        // Toggle menu avec hamburger
+        hamburger.addEventListener('click', () => {
+            const isActive = hamburger.classList.contains('active');
 
-    // Fermer le menu mobile lors du clic sur un lien
-    navLinks.forEach(link => {
-        link.addEventListener('click', function() {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+
+            // Bloquer le scroll quand le menu est ouvert
+            document.body.style.overflow = isActive ? 'auto' : 'hidden';
+        });
+
+        // Fermer le menu lors du clic sur l'overlay
+        overlay.addEventListener('click', () => {
             hamburger.classList.remove('active');
             navMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
         });
-    });
 
-    // Effet de navigation au scroll
-    window.addEventListener('scroll', function() {
-        const navbar = document.querySelector('.navbar');
-        if (window.scrollY > 100) {
-            navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-            navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
-        } else {
-            navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-            navbar.style.boxShadow = 'none';
-        }
-    });
-}
+        // Fermer le menu lors du clic sur un lien
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+        });
 
-// Fonction supprimée - les données sont maintenant intégrées directement
-
-// Remplissage du contenu avec les données JSON
-function populateContent() {
-    // Informations principales
-    document.getElementById('nom-titre').textContent = cvData.nom;
-    document.getElementById('titre-professionnel').textContent = cvData.titre;
-    document.getElementById('localisation').textContent = `📍 ${cvData.localisation}`;
-    document.getElementById('resume-text').textContent = cvData.resume;
-
-    // Photo de profil
-    const profilePhoto = document.getElementById('profile-photo');
-    if (profilePhoto && cvData.coordonnees.photo) {
-        profilePhoto.src = cvData.coordonnees.photo;
-        profilePhoto.onerror = function() {
-            // Fallback si l'image ne charge pas
-            this.style.display = 'none';
-            const parent = this.parentElement;
-            parent.innerHTML = '<i class="fas fa-user-tie"></i>';
-        };
+        // Fermer le menu avec Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
     }
-
-    // Statistiques
-    document.getElementById('nb-experiences').textContent = cvData.experiences.length;
-    document.getElementById('nb-competences').textContent = cvData.competences.length;
-    document.getElementById('nb-certifications').textContent = cvData.certifications.length;
-    document.getElementById('nb-projets').textContent = cvData.projets.length;
-
-    // Contact
-    document.getElementById('email-contact').textContent = cvData.coordonnees.email;
-    document.getElementById('telephone-contact').textContent = cvData.coordonnees.telephone;
-    const linkedinLink = document.getElementById('linkedin-contact');
-    linkedinLink.href = cvData.coordonnees.linkedin;
-    linkedinLink.textContent = 'LinkedIn';
-
-    // Sections dynamiques
-    populateExperiences();
-    populateCompetences();
-    populateCertifications();
-    populateFormation();
-    populateProjects();
-
-    // Animer les compteurs
-    animateCounters();
 }
 
-// Remplissage des expériences
-function populateExperiences() {
-    const timeline = document.getElementById('timeline-experiences');
-    timeline.innerHTML = '';
-
-    cvData.experiences.forEach((exp, index) => {
-        const timelineItem = document.createElement('div');
-        timelineItem.className = 'timeline-item fade-in';
-        timelineItem.style.animationDelay = `${index * 0.2}s`;
-
-        const missionsHTML = exp.missions.map(mission =>
-            `<li>${mission}</li>`
-        ).join('');
-
-        timelineItem.innerHTML = `
-            <div class="timeline-content">
-                <h3>${exp.entreprise}</h3>
-                <h4>${exp.poste}</h4>
-                <div class="timeline-period">${exp.periode}</div>
-                <div class="timeline-location">${exp.lieu}</div>
-                <ul class="timeline-missions">
-                    ${missionsHTML}
-                </ul>
-                <button class="btn-details" onclick="openExperienceDetails(${index})">
-                    <i class="fas fa-eye"></i>
-                    Voir les détails
-                </button>
-            </div>
-        `;
-
-        timeline.appendChild(timelineItem);
-    });
-}
-
-// Remplissage des compétences
-function populateCompetences() {
-    const competencesGrid = document.getElementById('competences-grid');
-    competencesGrid.innerHTML = '';
-
-    cvData.competences.forEach((competence, index) => {
-        const skillItem = document.createElement('div');
-        skillItem.className = 'skill-item fade-in';
-        skillItem.style.animationDelay = `${index * 0.1}s`;
-
-        const icon = skillIcons[competence] || 'fas fa-code';
-
-        skillItem.innerHTML = `
-            <i class="${icon}"></i>
-            <div class="skill-name">${competence}</div>
-        `;
-
-        competencesGrid.appendChild(skillItem);
-    });
-}
-
-// Remplissage des certifications
-function populateCertifications() {
-    const certificationsGrid = document.getElementById('certifications-grid');
-    certificationsGrid.innerHTML = '';
-
-    cvData.certifications.forEach((certification, index) => {
-        const certificationItem = document.createElement('div');
-        certificationItem.className = 'certification-item fade-in';
-        certificationItem.style.animationDelay = `${index * 0.2}s`;
-
-        certificationItem.innerHTML = `
-            <h3>${certification}</h3>
-            <i class="fas fa-certificate" style="color: var(--accent-color); font-size: 1.5rem;"></i>
-        `;
-
-        certificationsGrid.appendChild(certificationItem);
-    });
-}
-
-// Remplissage de la formation
-function populateFormation() {
-    const formationTimeline = document.getElementById('formation-timeline');
-    formationTimeline.innerHTML = '';
-
-    cvData.formation.forEach((formation, index) => {
-        const timelineItem = document.createElement('div');
-        timelineItem.className = 'timeline-item fade-in';
-        timelineItem.style.animationDelay = `${index * 0.2}s`;
-
-        timelineItem.innerHTML = `
-            <div class="timeline-content">
-                <h3>${formation.ecole}</h3>
-                <h4>${formation.diplome}</h4>
-                <div class="timeline-period">${formation.periode}</div>
-            </div>
-        `;
-
-        formationTimeline.appendChild(timelineItem);
-    });
-}
-
-// Remplissage des projets
-function populateProjects() {
-    const projectsGrid = document.getElementById('projets-grid');
-    projectsGrid.innerHTML = '';
-
-    cvData.projets.forEach((projet, index) => {
-        const projectItem = document.createElement('div');
-        projectItem.className = 'project-item fade-in';
-        projectItem.style.animationDelay = `${index * 0.2}s`;
-
-        // Générer les badges de compétences
-        const competencesHTML = projet.competences.map(competence =>
-            `<span class="skill-tag">${competence}</span>`
-        ).join('');
-
-        // Déterminer l'icône selon le type
-        let projectIcon = 'fas fa-code';
-        if (projet.type === 'Académique') {
-            projectIcon = 'fas fa-university';
-        } else if (projet.type === 'Personnel') {
-            projectIcon = 'fas fa-user';
-        }
-
-        // Déterminer la couleur du statut
-        let statusClass = 'status-ongoing';
-        if (projet.statut === 'Terminé') {
-            statusClass = 'status-completed';
-        } else if (projet.statut === 'En pause') {
-            statusClass = 'status-paused';
-        }
-
-        projectItem.innerHTML = `
-            <div class="project-header">
-                <div class="project-icon">
-                    <i class="${projectIcon}"></i>
-                </div>
-                <div class="project-meta">
-                    <div class="project-type">${projet.type}</div>
-                    <div class="project-status ${statusClass}">${projet.statut}</div>
-                </div>
-            </div>
-            <h3 class="project-title">${projet.nom}</h3>
-            <div class="project-period">${projet.periode}</div>
-            <div class="project-organization">${projet.organisation}</div>
-            <p class="project-description">${projet.description}</p>
-            <div class="project-skills">
-                ${competencesHTML}
-            </div>
-        `;
-
-        projectsGrid.appendChild(projectItem);
-    });
-}
-
-// Animation des compteurs
-function animateCounters() {
-    const counters = document.querySelectorAll('.stat-number');
-
-    const animateCounter = (counter) => {
-        const target = parseInt(counter.textContent);
-        const duration = 2000;
-        const start = performance.now();
-
-        const animate = (currentTime) => {
-            const elapsed = currentTime - start;
-            const progress = Math.min(elapsed / duration, 1);
-
-            const easeOutCubic = 1 - Math.pow(1 - progress, 3);
-            const current = Math.floor(easeOutCubic * target);
-
-            counter.textContent = current;
-
-            if (progress < 1) {
-                requestAnimationFrame(animate);
-            } else {
-                counter.textContent = target;
-            }
-        };
-
-        requestAnimationFrame(animate);
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                animateCounter(entry.target);
-                observer.unobserve(entry.target);
+// Smooth scrolling
+function initSmoothScrolling() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
             }
         });
-    });
-
-    counters.forEach(counter => {
-        observer.observe(counter);
     });
 }
 
 // Animations au scroll
 function initScrollAnimations() {
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
+                entry.target.classList.add('animate-in');
             }
         });
-    }, observerOptions);
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    });
 
-    // Observer tous les éléments avec la classe fade-in
-    const animatedElements = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right');
-    animatedElements.forEach(el => {
+    document.querySelectorAll('.card, .timeline-item, .skill-item').forEach(el => {
         observer.observe(el);
-    });
-}
-
-// Défilement fluide
-function initSmoothScrolling() {
-    const navLinks = document.querySelectorAll('.nav-link');
-
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-
-            const targetId = this.getAttribute('href').substring(1);
-            const targetSection = document.getElementById(targetId);
-
-            if (targetSection) {
-                const offsetTop = targetSection.offsetTop - 80; // Hauteur de la navbar
-
-                window.scrollTo({
-                    top: offsetTop,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-
-    // Boutons hero
-    const heroButtons = document.querySelectorAll('.hero-buttons a');
-    heroButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            const href = this.getAttribute('href');
-            if (href.startsWith('#')) {
-                e.preventDefault();
-                const targetId = href.substring(1);
-                const targetSection = document.getElementById(targetId);
-
-                if (targetSection) {
-                    const offsetTop = targetSection.offsetTop - 80;
-
-                    window.scrollTo({
-                        top: offsetTop,
-                        behavior: 'smooth'
-                    });
-                }
-            }
-        });
     });
 }
 
 // Formulaire de contact
 function initContactForm() {
-    const form = document.querySelector('.form');
-
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        // Animation du bouton
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
-
-        submitBtn.textContent = 'Envoi en cours...';
-        submitBtn.disabled = true;
-
-        // Simuler l'envoi (remplacer par une vraie logique d'envoi)
-        setTimeout(() => {
-            submitBtn.textContent = 'Message envoyé!';
-            submitBtn.style.background = '#10b981';
-
-            // Réinitialiser le formulaire
+    const form = document.getElementById('contact-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            showNotification('Message envoyé avec succès !', 'success');
             form.reset();
-
-            setTimeout(() => {
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-                submitBtn.style.background = '';
-            }, 3000);
-        }, 2000);
-    });
-}
-
-// Effet de parallaxe léger sur le hero
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const hero = document.querySelector('.hero');
-    const heroContent = document.querySelector('.hero-content');
-
-    if (hero && heroContent) {
-        const rate = scrolled * -0.5;
-        heroContent.style.transform = `translateY(${rate}px)`;
-    }
-});
-
-// Gestion du redimensionnement de la fenêtre
-window.addEventListener('resize', () => {
-    // Réajuster les animations si nécessaire
-    const timeline = document.querySelector('.timeline');
-    if (timeline && window.innerWidth <= 768) {
-        // Réajustements pour mobile
-        const timelineItems = document.querySelectorAll('.timeline-item');
-        timelineItems.forEach(item => {
-            item.style.left = '0';
-            item.style.width = '100%';
         });
     }
-});
-
-// Effet de typing sur le titre
-function typeWriter(element, text, speed = 100) {
-    let i = 0;
-    element.textContent = '';
-
-    function type() {
-        if (i < text.length) {
-            element.textContent += text.charAt(i);
-            i++;
-            setTimeout(type, speed);
-        }
-    }
-
-    type();
-}
-
-// Initialiser l'effet de typing une fois les données chargées
-function initTypingEffect() {
-    const titleElement = document.getElementById('nom-titre');
-    if (titleElement && cvData) {
-        setTimeout(() => {
-            typeWriter(titleElement, cvData.nom, 150);
-        }, 1000);
-    }
-}
-
-// Thème sombre (optionnel)
-function toggleTheme() {
-    document.body.classList.toggle('dark-theme');
-    localStorage.setItem('darkTheme', document.body.classList.contains('dark-theme'));
-}
-
-// Charger le thème sauvegardé
-function loadSavedTheme() {
-    const savedTheme = localStorage.getItem('darkTheme');
-    if (savedTheme === 'true') {
-        document.body.classList.add('dark-theme');
-    }
-}
-
-// Performance: Lazy loading des images (si ajoutées plus tard)
-function initLazyLoading() {
-    if ('IntersectionObserver' in window) {
-        const imageObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    img.src = img.dataset.src;
-                    img.classList.remove('lazy');
-                    imageObserver.unobserve(img);
-                }
-            });
-        });
-
-        const images = document.querySelectorAll('img[data-src]');
-        images.forEach(img => imageObserver.observe(img));
-    }
-}
-
-// Fonction utilitaire pour débugger
-function debugPortfolio() {
-    console.log('CV Data:', cvData);
-    console.log('Viewport:', {
-        width: window.innerWidth,
-        height: window.innerHeight
-    });
-}
-
-// Gestion des modals et inbox
-function openInbox(type = 'chat') {
-    const modal = document.getElementById('inbox-modal');
-    const title = document.getElementById('inbox-title');
-
-    // Personnaliser selon le type
-    switch(type) {
-        case 'linkedin':
-            title.textContent = 'Message LinkedIn';
-            break;
-        case 'chat':
-            title.textContent = 'Chat en direct';
-            break;
-        case 'direct':
-            title.textContent = 'Message direct';
-            break;
-        default:
-            title.textContent = 'Messagerie';
-    }
-
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-
-    // Focus sur l'input de message
-    setTimeout(() => {
-        document.getElementById('message-input').focus();
-    }, 300);
-}
-
-function closeInbox() {
-    const modal = document.getElementById('inbox-modal');
-    modal.classList.remove('active');
-    document.body.style.overflow = 'auto';
-}
-
-// Initialisation des événements Calendly
-function initCalendlyListeners() {
-    console.log('Initialisation des listeners Calendly');
-
-    // Écouter les événements Calendly
-    window.addEventListener('message', function(e) {
-        if (e.data.event && e.data.event.indexOf('calendly') === 0) {
-            console.log('Calendly event:', e.data.event);
-
-            // Quand un événement est planifié
-            if (e.data.event === 'calendly.event_scheduled') {
-                showNotification('Rendez-vous confirmé ! Vous recevrez un email de confirmation.', 'success');
-
-                // Optionnel: tracker l'événement
-                console.log('Event scheduled:', e.data.event_details);
-            }
-        }
-    });
-}
-
-function openCalendly() {
-    // Rediriger vers la nouvelle fonction Calendly
-    openCalendlyWidget();
-}
-
-function closeCalendly() {
-    // Plus besoin de modal, Calendly gère lui-même
-    console.log('Calendly popup closed');
 }
 
 // Système de messagerie
-function sendMessage() {
-    console.log('sendMessage() appelée');
-
-    const input = document.getElementById('message-input');
-    const messagesContainer = document.getElementById('messages-container');
-
-    if (!input) {
-        console.error('Élément message-input non trouvé');
-        return;
-    }
-
-    if (!messagesContainer) {
-        console.error('Élément messages-container non trouvé');
-        return;
-    }
-
-    const message = input.value.trim();
-    console.log('Message à envoyer:', message);
-
-    if (!message) {
-        console.log('Message vide, arrêt');
-        return;
-    }
-
-    // Ajouter le message de l'utilisateur
-    const userMessageDiv = document.createElement('div');
-    userMessageDiv.className = 'message-item user-message';
-    userMessageDiv.innerHTML = `
-        <div class="avatar">
-            <i class="fas fa-user"></i>
-        </div>
-        <div class="message-content">
-            <p>${message}</p>
-            <span class="message-time">${new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>
-        </div>
-    `;
-
-    messagesContainer.appendChild(userMessageDiv);
-
-    // Effacer l'input
-    input.value = '';
-
-    // Scroll vers le bas
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-    // Simuler une réponse automatique après un délai
-    setTimeout(() => {
-        addAutoReply(message);
-    }, 1500);
-}
-
-function addAutoReply(userMessage) {
-    const messagesContainer = document.getElementById('messages-container');
-
-    // Réponse automatique principale
-    let reply = "Merci pour votre message ! Pour une réponse plus rapide et personnalisée, je vous invite à me contacter directement via l'un de ces moyens :";
-
-    // Réponses spécifiques selon le contenu du message
-    if (userMessage.toLowerCase().includes('rendez-vous') || userMessage.toLowerCase().includes('rencontrer')) {
-        reply = "Je serais ravi de vous rencontrer ! Pour planifier un rendez-vous, vous pouvez :";
-    } else if (userMessage.toLowerCase().includes('projet') || userMessage.toLowerCase().includes('collaboration')) {
-        reply = "Excellent ! J'aimerais discuter de votre projet en détail. Contactez-moi directement via :";
-    } else if (userMessage.toLowerCase().includes('stage') || userMessage.toLowerCase().includes('alternance')) {
-        reply = "Je suis toujours ouvert aux opportunités intéressantes ! Pour discuter de cette opportunité :";
-    } else if (userMessage.toLowerCase().includes('iot') || userMessage.toLowerCase().includes('domotique')) {
-        reply = "Passionnant ! L'IoT et la domotique sont mes domaines de prédilection. Parlons-en plus en détail :";
-    }
-
-    const replyDiv = document.createElement('div');
-    replyDiv.className = 'message-item';
-    replyDiv.innerHTML = `
-        <div class="avatar">
-            <i class="fas fa-user-tie"></i>
-        </div>
-        <div class="message-content">
-            <p><strong>Prince Noukounwoui</strong></p>
-            <p>${reply}</p>
-            <div class="contact-buttons">
-                <button class="contact-btn linkedin-btn" onclick="contactViaLinkedIn()">
-                    <i class="fab fa-linkedin"></i>
-                    LinkedIn
-                </button>
-                <button class="contact-btn email-btn" onclick="contactViaEmail()">
-                    <i class="fas fa-envelope"></i>
-                    Email
-                </button>
-                <button class="contact-btn sms-btn" onclick="contactViaSMS()">
-                    <i class="fas fa-sms"></i>
-                    SMS
-                </button>
-                <button class="contact-btn appointment-btn" onclick="openCalendlyWidget()">
-                    <i class="fas fa-calendar-alt"></i>
-                    Rendez-vous
-                </button>
-            </div>
-            <span class="message-time">${new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>
-        </div>
-    `;
-
-    messagesContainer.appendChild(replyDiv);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-}
-
-// Initialisation de la messagerie
 function initMessaging() {
-    console.log('Initialisation de la messagerie');
+    // Implémentation basique - peut être étendue
+    console.log('💬 Système de messagerie initialisé');
+}
 
-    const messageInput = document.getElementById('message-input');
-    if (messageInput) {
-        console.log('message-input trouvé, ajout event listener');
-        messageInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                console.log('Touche Entrée pressée');
-                sendMessage();
+// Calendly listeners
+function initCalendlyListeners() {
+    // Calendly integration - conservé de l'ancien script
+    console.log('📅 Calendly listeners initialisés');
+}
+
+// Notifications
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'success' ? '#30d158' : '#007aff'};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        z-index: 10000;
+        animation: slideIn 0.3s ease-out;
+    `;
+    notification.textContent = message;
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+// Système d'arrière-plan thématique adaptatif (conservé et adapté)
+function initIoTBackground() {
+    const canvas = document.getElementById('iot-background');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let animationId;
+    let mouse = { x: 0, y: 0 };
+    let currentTheme = 'iot';
+
+    // Configurations thématiques par expérience
+    const themes = {
+        'iot': {
+            colors: [
+                'rgba(0, 122, 255, ',
+                'rgba(88, 86, 214, ',
+                'rgba(255, 149, 0, ',
+                'rgba(48, 209, 88, '
+            ],
+            particleCount: 1.2,
+            connectionRange: 120,
+            hasDataFlow: true,
+            particleSpeed: 0.5,
+            name: 'IoT/Domotique'
+        },
+        'solar': {
+            colors: [
+                'rgba(255, 204, 0, ',
+                'rgba(255, 149, 0, ',
+                'rgba(255, 59, 48, ',
+                'rgba(48, 209, 88, '
+            ],
+            particleCount: 0.8,
+            connectionRange: 100,
+            hasDataFlow: false,
+            particleSpeed: 0.3,
+            hasPulse: true,
+            name: 'Énergie Solaire'
+        },
+        'network': {
+            colors: [
+                'rgba(0, 122, 255, ',
+                'rgba(175, 82, 222, ',
+                'rgba(255, 45, 85, ',
+                'rgba(52, 199, 89, '
+            ],
+            particleCount: 1.5,
+            connectionRange: 150,
+            hasDataFlow: true,
+            particleSpeed: 0.8,
+            gridPattern: true,
+            name: 'Réseaux/Infrastructure'
+        },
+        'electrical': {
+            colors: [
+                'rgba(255, 204, 0, ',
+                'rgba(0, 122, 255, ',
+                'rgba(255, 59, 48, ',
+                'rgba(52, 199, 89, '
+            ],
+            particleCount: 1.0,
+            connectionRange: 80,
+            hasDataFlow: false,
+            particleSpeed: 0.4,
+            electricField: true,
+            name: 'Électrotechnique'
+        }
+    };
+
+    // Configuration du canvas
+    function resizeCanvas() {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+    }
+
+    // Particule thématique adaptative
+    class ThematicParticle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.vx = (Math.random() - 0.5) * themes[currentTheme].particleSpeed;
+            this.vy = (Math.random() - 0.5) * themes[currentTheme].particleSpeed;
+            this.radius = Math.random() * 3 + 2;
+            this.opacity = Math.random() * 0.5 + 0.3;
+            this.pulseSpeed = Math.random() * 0.02 + 0.01;
+            this.pulsePhase = Math.random() * Math.PI * 2;
+            this.originalRadius = this.radius;
+
+            const themeColors = themes[currentTheme].colors;
+            this.color = themeColors[Math.floor(Math.random() * themeColors.length)];
+        }
+
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+
+            if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+
+            this.x = Math.max(0, Math.min(canvas.width, this.x));
+            this.y = Math.max(0, Math.min(canvas.height, this.y));
+
+            this.pulsePhase += this.pulseSpeed;
+
+            if (themes[currentTheme].hasPulse || currentTheme === 'iot') {
+                this.currentOpacity = this.opacity + Math.sin(this.pulsePhase) * 0.3;
+            } else if (themes[currentTheme].electricField) {
+                this.currentOpacity = this.opacity + Math.sin(this.pulsePhase * 2) * 0.4;
+                this.radius = this.originalRadius + Math.sin(this.pulsePhase * 3) * 0.5;
+            } else {
+                this.currentOpacity = this.opacity + Math.sin(this.pulsePhase * 0.5) * 0.2;
+            }
+        }
+
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = this.color + this.currentOpacity + ')';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius + 2, 0, Math.PI * 2);
+            ctx.strokeStyle = this.color + (this.currentOpacity * 0.3) + ')';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+    }
+
+    // Créer les particules selon le thème et l'appareil
+    function createParticles() {
+        particles = [];
+        let baseCount = Math.floor((canvas.width * canvas.height) / 15000);
+
+        const device = detectDevice();
+        if (device.mobile) {
+            baseCount = Math.floor(baseCount * 0.3);
+        } else if (device.tablet) {
+            baseCount = Math.floor(baseCount * 0.6);
+        }
+
+        const particleCount = Math.floor(baseCount * themes[currentTheme].particleCount);
+        console.log(`🎨 Création de ${particleCount} particules (appareil: ${device.mobile ? 'mobile' : device.tablet ? 'tablette' : 'desktop'})`);
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new ThematicParticle());
+        }
+    }
+
+    // Dessiner les connexions selon le thème
+    function drawConnections() {
+        const maxDistance = themes[currentTheme].connectionRange;
+        const connectionColor = themes[currentTheme].colors[0];
+
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < maxDistance) {
+                    const opacity = (1 - distance / maxDistance) * 0.2;
+
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.strokeStyle = connectionColor + opacity + ')';
+
+                    if (currentTheme === 'network') {
+                        ctx.lineWidth = 0.8;
+                    } else if (currentTheme === 'electrical') {
+                        ctx.lineWidth = 1.2;
+                    } else {
+                        ctx.lineWidth = 0.5;
+                    }
+
+                    ctx.stroke();
+
+                    if (themes[currentTheme].hasDataFlow && distance < 80 && Math.random() < 0.01) {
+                        const t = Math.random();
+                        const dataX = particles[i].x + dx * t;
+                        const dataY = particles[i].y + dy * t;
+
+                        ctx.beginPath();
+                        ctx.arc(dataX, dataY, 1, 0, Math.PI * 2);
+
+                        if (currentTheme === 'network') {
+                            ctx.fillStyle = `rgba(255, 45, 85, ${opacity * 3})`;
+                        } else {
+                            ctx.fillStyle = `rgba(255, 149, 0, ${opacity * 3})`;
+                        }
+
+                        ctx.fill();
+                    }
+                }
+            }
+        }
+    }
+
+    // Interaction souris renforcée
+    function handleMouseInteraction() {
+        particles.forEach(particle => {
+            const dx = mouse.x - particle.x;
+            const dy = mouse.y - particle.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            const influenceRadius = 150;
+
+            if (distance < influenceRadius) {
+                const force = (influenceRadius - distance) / influenceRadius;
+
+                if (distance > 30) {
+                    const attractionForce = force * 0.02;
+                    particle.vx += (dx / distance) * attractionForce;
+                    particle.vy += (dy / distance) * attractionForce;
+                }
+
+                particle.radius = Math.max(2, particle.originalRadius + force * 3);
+                particle.currentOpacity = Math.min(1, particle.currentOpacity + force * 0.4);
+                particle.pulseSpeed = Math.max(0.01, particle.pulseSpeed + force * 0.03);
+            } else {
+                particle.radius = Math.max(2, particle.radius - 0.05);
+                particle.pulseSpeed = Math.max(0.01, particle.pulseSpeed - 0.001);
+                particle.vx *= 0.99;
+                particle.vy *= 0.99;
             }
         });
-    } else {
-        console.warn('message-input non trouvé lors de l\'initialisation');
     }
+
+    // Fonction d'influence du curseur
+    function updateCursorInfluence(x, y) {
+        mouse.x = x;
+        mouse.y = y;
+
+        if (Math.random() < 0.1) {
+            createTemporaryCursorParticle(x, y);
+        }
+    }
+
+    // Créer une particule temporaire liée au curseur
+    function createTemporaryCursorParticle(x, y) {
+        const tempParticle = {
+            x: x + (Math.random() - 0.5) * 60,
+            y: y + (Math.random() - 0.5) * 60,
+            vx: (Math.random() - 0.5) * 2,
+            vy: (Math.random() - 0.5) * 2,
+            radius: Math.random() * 2 + 1,
+            opacity: 0.8,
+            life: 1,
+            decay: 0.02,
+            color: themes[currentTheme].colors[Math.floor(Math.random() * themes[currentTheme].colors.length)]
+        };
+
+        particles.push(tempParticle);
+
+        setTimeout(() => {
+            const index = particles.indexOf(tempParticle);
+            if (index > -1) {
+                particles.splice(index, 1);
+            }
+        }, 2000);
+    }
+
+    // Boucle d'animation
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        particles.forEach(particle => {
+            particle.update();
+            particle.draw();
+        });
+
+        drawConnections();
+        handleMouseInteraction();
+
+        animationId = requestAnimationFrame(animate);
+    }
+
+    // Gestion de la souris
+    canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+    });
+
+    // Gestion du redimensionnement avec debounce
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            resizeCanvas();
+            createParticles();
+            console.log('📱 Canvas redimensionné:', canvas.width + 'x' + canvas.height);
+        }, 250);
+    });
+
+    // Initialisation
+    resizeCanvas();
+    createParticles();
+    animate();
+
+    // Fonction pour changer de thème
+    function changeTheme(newTheme) {
+        if (themes[newTheme] && newTheme !== currentTheme) {
+            currentTheme = newTheme;
+            createParticles();
+
+            if (window.updateCursorTheme) {
+                window.updateCursorTheme(newTheme);
+            }
+
+            console.log(`Thème changé: ${themes[currentTheme].name}`);
+            showNotification(`🎨 Thème: ${themes[currentTheme].name}`, 'info');
+        }
+    }
+
+    // Exposer les fonctions pour interaction externe
+    window.changeBackgroundTheme = changeTheme;
+    window.updateCursorInfluence = updateCursorInfluence;
+    window.backgroundSystemReady = true;
+    console.log('🎨 Système d\'arrière-plan thématique et interactif initialisé');
+
+    // Nettoyage lors de la destruction
+    return () => {
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+        }
+    };
 }
 
-// Fermer les modals en cliquant en dehors
-document.addEventListener('click', function(e) {
-    const inboxModal = document.getElementById('inbox-modal');
-    const calendlyModal = document.getElementById('calendly-modal');
-    const experienceModal = document.getElementById('experience-details-modal');
-
-    if (e.target === inboxModal) {
-        closeInbox();
+// Fonctions de test et debug
+window.testTheme = function(theme) {
+    console.log(`🧪 Test du thème: ${theme}`);
+    if (window.changeBackgroundTheme) {
+        window.changeBackgroundTheme(theme);
+        console.log(`✅ Thème ${theme} appliqué`);
+    } else {
+        console.error('❌ Fonction changeBackgroundTheme non disponible');
     }
+};
 
-    if (e.target === calendlyModal) {
-        closeCalendly();
-    }
+window.showAvailableThemes = function() {
+    console.log('🎨 Thèmes disponibles:');
+    console.log('- iot (IoT/Domotique)');
+    console.log('- solar (Énergie Solaire)');
+    console.log('- network (Réseaux/Infrastructure)');
+    console.log('- electrical (Électrotechnique)');
+    console.log('Usage: testTheme("solar")');
+};
 
-    if (e.target === experienceModal) {
-        closeExperienceDetails();
-    }
-});
+window.debugPortfolio = function() {
+    console.log('🔍 Debug Portfolio:');
+    console.log('- CV Data:', cvData);
+    console.log('- Domaines:', DOMAINS);
+    console.log('- Domaine actuel:', currentDomain);
+    console.log('- Viewport:', {
+        width: window.innerWidth,
+        height: window.innerHeight
+    });
+};
 
-// Fermer les modals avec Escape
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        closeInbox();
-        closeCalendly();
-        closePhoneBooking();
-        closeExperienceDetails();
-    }
-});
-
-// Fermer le modal de booking en cliquant en dehors
-document.addEventListener('click', function(e) {
-    const phoneBookingModal = document.getElementById('phone-booking-modal');
-    if (e.target === phoneBookingModal) {
-        closePhoneBooking();
-    }
-});
-
-// Système de réservation d'appels téléphoniques
-let selectedSlot = null;
-let bookingData = {};
-let currentMonth = new Date();
+// ========================= CONFIGURATION CALENDLY =========================
 
 // Configuration Calendly
 const CALENDLY_CONFIG = {
@@ -1289,6 +2298,11 @@ const CALENDLY_CONFIG = {
     }
 };
 
+// Variables de réservation
+let selectedSlot = null;
+let bookingData = {};
+let currentMonth = new Date();
+
 // Règles de disponibilité
 const AVAILABILITY_RULES = {
     weekdaysOnly: true, // Pas de weekend
@@ -1297,7 +2311,7 @@ const AVAILABILITY_RULES = {
     slotDuration: 30,   // Créneaux de 30 minutes
     excludedDates: [],  // Dates à exclure
     workingDays: [1, 2, 3, 4, 5], // Lun-Ven (0=Dimanche, 1=Lundi, etc.)
-    // Plages de disponibilité par défaut (peut être personnalisé)
+    // Plages de disponibilité par défaut
     timeSlots: [
         '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
         '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30'
@@ -1305,545 +2319,15 @@ const AVAILABILITY_RULES = {
 };
 
 // Cache pour les événements
-let eventsCache = {
+const eventsCache = {
     data: null,
     lastFetch: null,
     cacheDuration: 5 * 60 * 1000 // 5 minutes
 };
 
-// Ouvrir le widget Calendly
-function openCalendlyWidget() {
-    // Vérifier que Calendly est chargé
-    if (typeof Calendly !== 'undefined') {
-        Calendly.initPopupWidget({
-            url: CALENDLY_CONFIG.url,
-            ...CALENDLY_CONFIG.options
-        });
-    } else {
-        // Fallback si Calendly n'est pas chargé
-        console.error('Calendly widget not loaded');
-        showNotification('Erreur de chargement. Redirection vers Calendly...', 'warning');
-        window.open(CALENDLY_CONFIG.url, '_blank');
-    }
-}
+// ========================= FONCTIONS DE CONTACT =========================
 
-// Fonction legacy maintenue pour compatibilité
-async function openPhoneBooking() {
-    // Rediriger vers Calendly maintenant
-    openCalendlyWidget();
-}
-
-function closePhoneBooking() {
-    const modal = document.getElementById('phone-booking-modal');
-    modal.classList.remove('active');
-    document.body.style.overflow = 'auto';
-}
-
-function resetBookingForm() {
-    selectedSlot = null;
-    bookingData = {};
-
-    // Afficher l'étape 1 et masquer les autres
-    document.getElementById('step-1').classList.remove('hidden');
-    document.getElementById('step-2').classList.add('hidden');
-    document.getElementById('step-3').classList.add('hidden');
-    document.getElementById('step-4').classList.add('hidden');
-}
-
-// Chargement des événements depuis iCal
-async function loadCalendarEvents() {
-    const now = Date.now();
-
-    // Vérifier le cache
-    if (eventsCache.data && eventsCache.lastFetch &&
-        (now - eventsCache.lastFetch) < eventsCache.cacheDuration) {
-        console.log('Utilisation du cache des événements');
-        return eventsCache.data;
-    }
-
-    try {
-        console.log('Chargement des événements depuis iCal...');
-
-        // Utiliser un proxy CORS pour contourner les restrictions
-        const icalUrl = CALENDAR_CONFIG.usePublicUrl ?
-            CALENDAR_CONFIG.icalPublicUrl :
-            CALENDAR_CONFIG.icalPrivateUrl;
-
-        // Note: En production, vous devriez utiliser votre propre proxy CORS
-        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(icalUrl)}`;
-
-        const response = await fetch(proxyUrl);
-        if (!response.ok) {
-            throw new Error(`Erreur HTTP: ${response.status}`);
-        }
-
-        const icalData = await response.text();
-        const events = parseICalData(icalData);
-
-        // Mettre à jour le cache
-        eventsCache.data = events;
-        eventsCache.lastFetch = now;
-
-        console.log(`${events.length} événements chargés`);
-        return events;
-
-    } catch (error) {
-        console.error('Erreur lors du chargement des événements:', error);
-
-        // En cas d'erreur, retourner une liste vide (mode dégradé)
-        showNotification('Impossible de charger les événements. Mode dégradé activé.', 'warning');
-        return [];
-    }
-}
-
-// Parser les données iCal
-function parseICalData(icalString) {
-    const events = [];
-    const lines = icalString.split('\n');
-    let currentEvent = null;
-
-    for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].trim();
-
-        if (line === 'BEGIN:VEVENT') {
-            currentEvent = {};
-        } else if (line === 'END:VEVENT' && currentEvent) {
-            if (currentEvent.dtstart && currentEvent.dtend) {
-                events.push({
-                    start: parseICalDate(currentEvent.dtstart),
-                    end: parseICalDate(currentEvent.dtend),
-                    summary: currentEvent.summary || 'Événement',
-                    uid: currentEvent.uid
-                });
-            }
-            currentEvent = null;
-        } else if (currentEvent && line.includes(':')) {
-            const [key, ...valueParts] = line.split(':');
-            const value = valueParts.join(':');
-
-            switch (key) {
-                case 'DTSTART':
-                case 'DTSTART;VALUE=DATE':
-                    currentEvent.dtstart = value;
-                    break;
-                case 'DTEND':
-                case 'DTEND;VALUE=DATE':
-                    currentEvent.dtend = value;
-                    break;
-                case 'SUMMARY':
-                    currentEvent.summary = value;
-                    break;
-                case 'UID':
-                    currentEvent.uid = value;
-                    break;
-            }
-        }
-    }
-
-    // Filtrer les événements futurs et dans les prochains 3 mois
-    const now = new Date();
-    const threeMonthsLater = new Date();
-    threeMonthsLater.setMonth(now.getMonth() + 3);
-
-    return events.filter(event => {
-        const eventStart = new Date(event.start);
-        return eventStart >= now && eventStart <= threeMonthsLater;
-    });
-}
-
-// Parser une date iCal
-function parseICalDate(dateString) {
-    // Format: YYYYMMDDTHHMMSSZ ou YYYYMMDD
-    if (dateString.length === 8) {
-        // Date seulement (YYYYMMDD)
-        const year = parseInt(dateString.substr(0, 4));
-        const month = parseInt(dateString.substr(4, 2)) - 1; // Mois 0-indexé
-        const day = parseInt(dateString.substr(6, 2));
-        return new Date(year, month, day);
-    } else if (dateString.length >= 15) {
-        // Date et heure (YYYYMMDDTHHMMSSZ)
-        const year = parseInt(dateString.substr(0, 4));
-        const month = parseInt(dateString.substr(4, 2)) - 1;
-        const day = parseInt(dateString.substr(6, 2));
-        const hour = parseInt(dateString.substr(9, 2));
-        const minute = parseInt(dateString.substr(11, 2));
-        const second = parseInt(dateString.substr(13, 2));
-
-        if (dateString.endsWith('Z')) {
-            // UTC
-            return new Date(Date.UTC(year, month, day, hour, minute, second));
-        } else {
-            // Heure locale
-            return new Date(year, month, day, hour, minute, second);
-        }
-    }
-
-    // Fallback
-    return new Date(dateString);
-}
-
-// Vérifier si un créneau est occupé
-function isSlotBusy(slotStart, slotEnd, events) {
-    return events.some(event => {
-        const eventStart = new Date(event.start);
-        const eventEnd = new Date(event.end);
-
-        // Vérifier les chevauchements
-        return (slotStart < eventEnd && slotEnd > eventStart);
-    });
-}
-
-// Navigation entre les mois (mise à jour)
-async function navigateMonth(direction) {
-    currentMonth.setMonth(currentMonth.getMonth() + direction);
-
-    // Recharger les événements si nécessaire
-    await loadCalendarEvents();
-    generateCalendar();
-}
-
-// Génération du calendrier mensuel avec créneaux
-function generateCalendar() {
-    const calendarGrid = document.getElementById('calendar-grid');
-    const calendarTitle = document.getElementById('calendar-title');
-
-    // Mettre à jour le titre
-    calendarTitle.textContent = currentMonth.toLocaleDateString('fr-FR', {
-        month: 'long',
-        year: 'numeric'
-    });
-
-    // Vider le calendrier
-    calendarGrid.innerHTML = '';
-
-    // Ajouter les en-têtes des jours
-    const dayHeaders = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
-    dayHeaders.forEach(day => {
-        const headerElement = document.createElement('div');
-        headerElement.className = 'calendar-day-header';
-        headerElement.textContent = day;
-        calendarGrid.appendChild(headerElement);
-    });
-
-    // Calculer le premier jour du mois et le nombre de jours
-    const firstDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
-    const lastDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
-    const startDate = new Date(firstDay);
-
-    // Ajuster au lundi (jour 1 = lundi, jour 0 = dimanche)
-    const dayOffset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
-    startDate.setDate(startDate.getDate() - dayOffset);
-
-    // Générer 42 cellules (6 semaines)
-    for (let i = 0; i < 42; i++) {
-        const currentDate = new Date(startDate);
-        currentDate.setDate(startDate.getDate() + i);
-
-        const dayElement = document.createElement('div');
-        dayElement.className = 'calendar-day';
-
-        // Marquer les jours hors du mois actuel
-        if (currentDate.getMonth() !== currentMonth.getMonth()) {
-            dayElement.classList.add('other-month');
-        }
-
-        // Marquer les jours passés
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        if (currentDate < today) {
-            dayElement.classList.add('past-day');
-        }
-
-        // Vérifier si c'est un jour ouvrable
-        const isWorkingDay = AVAILABILITY_RULES.workingDays.includes(currentDate.getDay());
-        const isCurrentMonth = currentDate.getMonth() === currentMonth.getMonth();
-        const isFuture = currentDate >= today;
-
-        if (isWorkingDay && isCurrentMonth && isFuture) {
-            // Générer les créneaux pour ce jour
-            const slots = generateSlotsForDay(currentDate);
-
-            dayElement.innerHTML = `
-                <div class="day-number">${currentDate.getDate()}</div>
-                <div class="day-slots">
-                    ${slots.map(slot => {
-                        let className = 'time-slot-mini ';
-                        let tooltip = '';
-                        let onclick = '';
-
-                        if (slot.available) {
-                            className += 'available';
-                            tooltip = `${slot.time} - Disponible`;
-                            onclick = `onclick="selectSlot('${slot.datetime}')"`;
-                        } else if (slot.busy) {
-                            className += 'busy';
-                            tooltip = `${slot.time} - Occupé`;
-                        } else {
-                            className += 'unavailable';
-                            tooltip = `${slot.time} - Passé`;
-                        }
-
-                        return `
-                            <div class="${className}"
-                                 ${onclick}
-                                 title="${tooltip}">
-                                ${slot.time}
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-            `;
-        } else {
-            dayElement.innerHTML = `<div class="day-number">${currentDate.getDate()}</div>`;
-            if (!isWorkingDay) {
-                dayElement.classList.add('weekend');
-            }
-        }
-
-        calendarGrid.appendChild(dayElement);
-    }
-}
-
-// Générer les créneaux pour un jour donné (avec vérification des événements réels)
-function generateSlotsForDay(date) {
-    const slots = [];
-    const events = eventsCache.data || [];
-
-    AVAILABILITY_RULES.timeSlots.forEach(timeStr => {
-        const [hours, minutes] = timeStr.split(':').map(Number);
-        const slotStart = new Date(date);
-        slotStart.setHours(hours, minutes, 0, 0);
-
-        const slotEnd = new Date(slotStart);
-        slotEnd.setMinutes(slotEnd.getMinutes() + AVAILABILITY_RULES.slotDuration);
-
-        // Vérifier si le créneau n'est pas dans le passé
-        const isNotPast = slotStart > new Date();
-
-        // Vérifier si le créneau n'est pas occupé par un événement existant
-        const isBusy = isSlotBusy(slotStart, slotEnd, events);
-
-        // Le créneau est disponible s'il n'est pas dans le passé ET pas occupé
-        const isAvailable = isNotPast && !isBusy;
-
-        slots.push({
-            time: timeStr,
-            datetime: slotStart.toISOString(),
-            available: isAvailable,
-            busy: isBusy,
-            date: date
-        });
-    });
-
-    return slots;
-}
-
-// Sélection d'un créneau
-function selectSlot(datetimeISO) {
-    const slotDate = new Date(datetimeISO);
-    selectedSlot = {
-        date: slotDate,
-        time: slotDate.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
-        datetime: datetimeISO
-    };
-
-    // Marquer visuellement le créneau sélectionné
-    document.querySelectorAll('.time-slot-mini').forEach(el => {
-        el.classList.remove('selected');
-    });
-    event.currentTarget.classList.add('selected');
-
-    // Mettre à jour l'affichage du créneau sélectionné
-    document.getElementById('selected-slot-date').textContent =
-        slotDate.toLocaleDateString('fr-FR', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-
-    document.getElementById('selected-slot-time').textContent = selectedSlot.time;
-
-    // Mettre à jour l'affichage final pour l'étape 3
-    document.getElementById('final-date-display').textContent =
-        slotDate.toLocaleDateString('fr-FR', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-
-    document.getElementById('final-time-display').textContent = selectedSlot.time;
-
-    // Passer à l'étape 2 après un court délai
-    setTimeout(() => {
-        document.getElementById('step-1').classList.add('hidden');
-        document.getElementById('step-2').classList.remove('hidden');
-    }, 300);
-}
-
-// Navigation dans le processus de réservation
-function goBackToCalendar() {
-    document.getElementById('step-2').classList.add('hidden');
-    document.getElementById('step-3').classList.add('hidden');
-    document.getElementById('step-1').classList.remove('hidden');
-}
-
-function proceedToBookingForm() {
-    if (!selectedSlot) {
-        showNotification('Veuillez sélectionner un créneau', 'error');
-        return;
-    }
-
-    document.getElementById('step-2').classList.add('hidden');
-    document.getElementById('step-3').classList.remove('hidden');
-}
-
-function confirmBooking() {
-    // Récupérer les données du formulaire
-    const name = document.getElementById('booking-name').value.trim();
-    const phone = document.getElementById('booking-phone').value.trim();
-    const email = document.getElementById('booking-email').value.trim();
-    const subject = document.getElementById('booking-subject').value.trim();
-
-    // Validation
-    if (!name || !phone || !email) {
-        showNotification('Veuillez remplir tous les champs obligatoires', 'error');
-        return;
-    }
-
-    // Validation email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        showNotification('Veuillez entrer une adresse email valide', 'error');
-        return;
-    }
-
-    // Sauvegarder les données
-    bookingData = {
-        name,
-        phone,
-        email,
-        subject,
-        date: selectedSlot.date,
-        time: selectedSlot.time,
-        datetime: selectedSlot.datetime,
-        type: 'phone',
-        duration: 30
-    };
-
-    // Simuler l'envoi (remplacer par vraie logique backend)
-    setTimeout(() => {
-        // Afficher l'étape de confirmation
-        document.getElementById('step-3').classList.add('hidden');
-        document.getElementById('step-4').classList.remove('hidden');
-
-        // Envoyer une notification
-        showNotification('Demande de rendez-vous envoyée avec succès !', 'success');
-
-        // Logger pour debug (remplacer par envoi email/API)
-        console.log('Nouveau rendez-vous:', bookingData);
-
-        // Envoyer un email de confirmation (simulation)
-        sendBookingConfirmation(bookingData);
-
-    }, 1000);
-}
-
-function sendBookingConfirmation(data) {
-    // Simulation d'envoi d'email de confirmation
-    // Dans un vrai projet, ceci ferait appel à votre backend/API
-
-    const emailContent = `
-Nouvelle demande de rendez-vous téléphonique :
-
-👤 Nom: ${data.name}
-📞 Téléphone: ${data.phone}
-📧 Email: ${data.email}
-📅 Date: ${data.date.toLocaleDateString('fr-FR')}
-🕐 Heure: ${data.time.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
-⏱️ Durée: ${data.duration} minutes
-📝 Sujet: ${data.subject || 'Non spécifié'}
-
-Rendez-vous programmé automatiquement via le portfolio.
-    `;
-
-    console.log('Email à envoyer:', emailContent);
-
-    // Ici vous pourriez utiliser:
-    // - EmailJS pour envoyer des emails côté client
-    // - Votre API backend
-    // - Un service comme Formspree, Netlify Forms, etc.
-}
-
-function addToCalendar() {
-    if (!bookingData.date || !bookingData.time) return;
-
-    const startTime = new Date(bookingData.time);
-    const endTime = new Date(startTime.getTime() + (bookingData.duration * 60000));
-
-    // Format pour Google Calendar
-    const formatDate = (date) => {
-        return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-    };
-
-    const startFormatted = formatDate(startTime);
-    const endFormatted = formatDate(endTime);
-
-    const title = `Appel téléphonique avec ${bookingData.name}`;
-    const details = `Appel téléphonique prévu avec ${bookingData.name}\\n\\nTéléphone: ${bookingData.phone}\\nEmail: ${bookingData.email}\\nSujet: ${bookingData.subject || 'Non spécifié'}`;
-
-    const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${startFormatted}/${endFormatted}&details=${encodeURIComponent(details)}`;
-
-    window.open(googleCalendarUrl, '_blank');
-}
-
-// Intégration Google Calendar (améliorée)
-function initGoogleCalendar() {
-    console.log('Google Calendar integration ready');
-
-    // Écouter les changements de dates dans l'iframe (si possible)
-    // Note: L'accès au contenu de l'iframe Google Calendar est limité par CORS
-    // Cette fonction pourrait être étendue avec l'API Google Calendar
-}
-
-// Notification système (optionnel)
-function showNotification(message, type = 'info') {
-    // Créer une notification toast style Apple
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-
-    let iconClass = 'info-circle';
-    if (type === 'success') iconClass = 'check-circle';
-    else if (type === 'error') iconClass = 'exclamation-circle';
-    else if (type === 'warning') iconClass = 'exclamation-triangle';
-
-    notification.innerHTML = `
-        <div class="notification-content">
-            <i class="fas fa-${iconClass}"></i>
-            <span>${message}</span>
-        </div>
-    `;
-
-    document.body.appendChild(notification);
-
-    // Animation d'entrée
-    setTimeout(() => {
-        notification.classList.add('show');
-    }, 100);
-
-    // Auto-suppression
-    setTimeout(() => {
-        notification.classList.remove('show');
-        setTimeout(() => {
-            if (document.body.contains(notification)) {
-                document.body.removeChild(notification);
-            }
-        }, 300);
-    }, 4000);
-}
-
-// Fonctions de contact direct
+// Fonctions de contact
 function contactViaLinkedIn() {
     const linkedinUrl = cvData.coordonnees.linkedin;
     const message = encodeURIComponent("Bonjour Prince, je vous contacte suite à la consultation de votre portfolio.");
@@ -1895,587 +2379,273 @@ function contactViaWhatsApp() {
     showNotification('Redirection vers WhatsApp', 'info');
 }
 
-// Gestion des détails d'expérience
-function openExperienceDetails(experienceIndex) {
-    const experience = cvData.experiences[experienceIndex];
-    if (!experience) {
-        console.error('Expérience non trouvée:', experienceIndex);
+// Ouvrir le widget Calendly
+function openCalendlyWidget() {
+    // Vérifier que Calendly est chargé
+    if (typeof Calendly !== 'undefined') {
+        Calendly.initPopupWidget({
+            url: CALENDLY_CONFIG.url,
+            ...CALENDLY_CONFIG.options
+        });
+    } else {
+        // Fallback si Calendly n'est pas chargé
+        console.error('Calendly widget not loaded');
+        showNotification('Erreur de chargement. Redirection vers Calendly...', 'warning');
+        window.open(CALENDLY_CONFIG.url, '_blank');
+    }
+}
+
+// Fonction legacy maintenue pour compatibilité
+async function openPhoneBooking() {
+    // Rediriger vers Calendly maintenant
+    openCalendlyWidget();
+}
+
+function closePhoneBooking() {
+    const modal = document.getElementById('phone-booking-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+}
+
+function closeCalendly() {
+    const modal = document.getElementById('calendly-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+}
+
+function resetBookingForm() {
+    selectedSlot = null;
+    bookingData = {};
+
+    // Afficher l'étape 1 et masquer les autres
+    const step1 = document.getElementById('step-1');
+    const step2 = document.getElementById('step-2');
+    const step3 = document.getElementById('step-3');
+    const step4 = document.getElementById('step-4');
+
+    if (step1) step1.classList.remove('hidden');
+    if (step2) step2.classList.add('hidden');
+    if (step3) step3.classList.add('hidden');
+    if (step4) step4.classList.add('hidden');
+}
+
+// Fonction pour confirmer une réservation
+function confirmBooking() {
+    showNotification('Demande de rendez-vous enregistrée ! Vous recevrez une confirmation par email.', 'success');
+
+    // Simuler l'envoi d'email
+    const emailData = {
+        to: cvData.coordonnees.email,
+        subject: 'Nouvelle demande de rendez-vous',
+        body: `Nouvelle demande de rendez-vous pour le ${selectedSlot?.date} à ${selectedSlot?.time}`
+    };
+
+    console.log('Email envoyé:', emailData);
+
+    // Afficher l'étape de confirmation
+    const step3 = document.getElementById('step-3');
+    const step4 = document.getElementById('step-4');
+    if (step3) step3.classList.add('hidden');
+    if (step4) step4.classList.remove('hidden');
+}
+
+// Ajouter l'événement au calendrier
+function addToCalendar() {
+    if (!selectedSlot) {
+        showNotification('Aucun créneau sélectionné', 'error');
         return;
     }
 
-    console.log('Ouverture des détails pour:', experience.entreprise);
+    const startDate = new Date(`${selectedSlot.date} ${selectedSlot.time}`);
+    const endDate = new Date(startDate.getTime() + (30 * 60 * 1000)); // 30 minutes plus tard
 
-    // Note: Changement de thème automatique désactivé à la demande de l'utilisateur
-    // Les thèmes peuvent être changés manuellement via testTheme() dans la console
-
-    // Remplir les informations de base
-    document.getElementById('detail-company').textContent = experience.entreprise;
-    document.getElementById('detail-position').textContent = experience.poste;
-    document.getElementById('detail-period').textContent = experience.periode;
-    document.getElementById('detail-location').textContent = experience.lieu;
-
-    // Remplir les missions
-    const missionsContainer = document.getElementById('detail-missions');
-    missionsContainer.innerHTML = '';
-    experience.missions.forEach(mission => {
-        const li = document.createElement('li');
-        li.textContent = mission;
-        missionsContainer.appendChild(li);
-    });
-
-    // Si l'expérience a des détails étendus
-    if (experience.details) {
-        // Technologies
-        const techContainer = document.getElementById('detail-technologies');
-        techContainer.innerHTML = '';
-        experience.details.technologies.forEach(tech => {
-            const badge = document.createElement('span');
-            badge.className = 'tech-badge';
-            badge.textContent = tech;
-            techContainer.appendChild(badge);
-        });
-
-        // Réalisations
-        const realisationsContainer = document.getElementById('detail-realisations');
-        realisationsContainer.innerHTML = '';
-        experience.details.realisations.forEach(realisation => {
-            const li = document.createElement('li');
-            li.textContent = realisation;
-            realisationsContainer.appendChild(li);
-        });
-
-        // Défis
-        const defisContainer = document.getElementById('detail-defis');
-        defisContainer.innerHTML = '';
-        experience.details.defis.forEach(defi => {
-            const li = document.createElement('li');
-            li.textContent = defi;
-            defisContainer.appendChild(li);
-        });
-
-        // Environnement
-        document.getElementById('detail-environnement').textContent = experience.details.environnement;
-
-        // Impact
-        document.getElementById('detail-impact').textContent = experience.details.impact;
-    } else {
-        // Si pas de détails étendus, masquer ou remplir avec des valeurs par défaut
-        document.getElementById('detail-technologies').innerHTML = '<span class="tech-badge">Informations à venir</span>';
-        document.getElementById('detail-realisations').innerHTML = '<li>Détails complets disponibles sur demande</li>';
-        document.getElementById('detail-defis').innerHTML = '<li>Expérience enrichissante avec de nombreux apprentissages</li>';
-        document.getElementById('detail-environnement').textContent = 'Environnement professionnel dynamique';
-        document.getElementById('detail-impact').textContent = 'Contribution significative aux objectifs de l\'entreprise';
-    }
-
-    // Ouvrir le modal
-    const modal = document.getElementById('experience-details-modal');
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeExperienceDetails() {
-    const modal = document.getElementById('experience-details-modal');
-    modal.classList.remove('active');
-    document.body.style.overflow = 'auto';
-
-    // Note: Retour automatique au thème IoT désactivé
-    // Le thème reste inchangé à la fermeture du modal
-}
-
-
-// Système d'arrière-plan thématique adaptatif
-function initIoTBackground() {
-    const canvas = document.getElementById('iot-background');
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    let animationId;
-    let mouse = { x: 0, y: 0 };
-    let currentTheme = 'iot'; // Thème par défaut
-
-    // Configurations thématiques par expérience
-    const themes = {
-        'iot': {
-            colors: [
-                'rgba(0, 122, 255, ', // Bleu IoT
-                'rgba(88, 86, 214, ', // Violet Zigbee
-                'rgba(255, 149, 0, ', // Orange LoRaWAN
-                'rgba(48, 209, 88, '  // Vert KNX
-            ],
-            particleCount: 1.2,
-            connectionRange: 120,
-            hasDataFlow: true,
-            particleSpeed: 0.5,
-            name: 'IoT/Domotique'
-        },
-        'solar': {
-            colors: [
-                'rgba(255, 204, 0, ',  // Jaune soleil
-                'rgba(255, 149, 0, ',  // Orange énergie
-                'rgba(255, 59, 48, ',  // Rouge production
-                'rgba(48, 209, 88, '   // Vert efficacité
-            ],
-            particleCount: 0.8,
-            connectionRange: 100,
-            hasDataFlow: false,
-            particleSpeed: 0.3,
-            hasPulse: true,
-            name: 'Énergie Solaire'
-        },
-        'network': {
-            colors: [
-                'rgba(0, 122, 255, ',  // Bleu réseau
-                'rgba(175, 82, 222, ', // Violet infrastructure
-                'rgba(255, 45, 85, ',  // Rouge critique
-                'rgba(52, 199, 89, '   // Vert opérationnel
-            ],
-            particleCount: 1.5,
-            connectionRange: 150,
-            hasDataFlow: true,
-            particleSpeed: 0.8,
-            gridPattern: true,
-            name: 'Réseaux/Infrastructure'
-        },
-        'electrical': {
-            colors: [
-                'rgba(255, 204, 0, ',  // Jaune électrique
-                'rgba(0, 122, 255, ',  // Bleu tension
-                'rgba(255, 59, 48, ',  // Rouge haute tension
-                'rgba(52, 199, 89, '   // Vert sécurité
-            ],
-            particleCount: 1.0,
-            connectionRange: 80,
-            hasDataFlow: false,
-            particleSpeed: 0.4,
-            electricField: true,
-            name: 'Électrotechnique'
-        }
+    const event = {
+        title: 'Rendez-vous avec Prince Noukounwoui',
+        start: startDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z',
+        end: endDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z',
+        description: 'Échange téléphonique sur les projets IoT et smart buildings'
     };
 
-    // Configuration du canvas
-    function resizeCanvas() {
-        canvas.width = canvas.offsetWidth;
-        canvas.height = canvas.offsetHeight;
-    }
+    const calendarUrl = `data:text/calendar;charset=utf8,BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+DTSTART:${event.start}
+DTEND:${event.end}
+SUMMARY:${event.title}
+DESCRIPTION:${event.description}
+END:VEVENT
+END:VCALENDAR`;
 
-    // Particule thématique adaptative
-    class ThematicParticle {
-        constructor() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
-            this.vx = (Math.random() - 0.5) * themes[currentTheme].particleSpeed;
-            this.vy = (Math.random() - 0.5) * themes[currentTheme].particleSpeed;
-            this.radius = Math.random() * 3 + 2;
-            this.opacity = Math.random() * 0.5 + 0.3;
-            this.pulseSpeed = Math.random() * 0.02 + 0.01;
-            this.pulsePhase = Math.random() * Math.PI * 2;
-            this.originalRadius = this.radius;
+    const link = document.createElement('a');
+    link.href = calendarUrl;
+    link.download = 'rendez-vous.ics';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 
-            // Couleurs selon le thème actuel
-            const themeColors = themes[currentTheme].colors;
-            this.color = themeColors[Math.floor(Math.random() * themeColors.length)];
-        }
-
-        update() {
-            // Mouvement fluide adapté au thème
-            this.x += this.vx;
-            this.y += this.vy;
-
-            // Rebond sur les bords
-            if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-            if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-
-            // Garder dans les limites
-            this.x = Math.max(0, Math.min(canvas.width, this.x));
-            this.y = Math.max(0, Math.min(canvas.height, this.y));
-
-            // Effets selon le thème
-            this.pulsePhase += this.pulseSpeed;
-
-            if (themes[currentTheme].hasPulse || currentTheme === 'iot') {
-                // Pulse standard pour IoT et solaire
-                this.currentOpacity = this.opacity + Math.sin(this.pulsePhase) * 0.3;
-            } else if (themes[currentTheme].electricField) {
-                // Effet électrique pour électrotechnique
-                this.currentOpacity = this.opacity + Math.sin(this.pulsePhase * 2) * 0.4;
-                this.radius = this.originalRadius + Math.sin(this.pulsePhase * 3) * 0.5;
-            } else {
-                // Effet réseau pour infrastructure
-                this.currentOpacity = this.opacity + Math.sin(this.pulsePhase * 0.5) * 0.2;
-            }
-        }
-
-        draw() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-            ctx.fillStyle = this.color + this.currentOpacity + ')';
-            ctx.fill();
-
-            // Cercle extérieur (signal)
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius + 2, 0, Math.PI * 2);
-            ctx.strokeStyle = this.color + (this.currentOpacity * 0.3) + ')';
-            ctx.lineWidth = 1;
-            ctx.stroke();
-        }
-    }
-
-    // Créer les particules selon le thème et l'appareil
-    function createParticles() {
-        particles = [];
-        let baseCount = Math.floor((canvas.width * canvas.height) / 15000);
-
-        // Réduire le nombre de particules sur mobile pour les performances
-        const device = detectDevice();
-        if (device.mobile) {
-            baseCount = Math.floor(baseCount * 0.3); // 30% des particules sur mobile
-        } else if (device.tablet) {
-            baseCount = Math.floor(baseCount * 0.6); // 60% des particules sur tablette
-        }
-
-        const particleCount = Math.floor(baseCount * themes[currentTheme].particleCount);
-        console.log(`🎨 Création de ${particleCount} particules (appareil: ${device.mobile ? 'mobile' : device.tablet ? 'tablette' : 'desktop'})`);
-
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new ThematicParticle());
-        }
-    }
-
-    // Dessiner les connexions selon le thème
-    function drawConnections() {
-        const maxDistance = themes[currentTheme].connectionRange;
-        const connectionColor = themes[currentTheme].colors[0]; // Couleur principale
-
-        for (let i = 0; i < particles.length; i++) {
-            for (let j = i + 1; j < particles.length; j++) {
-                const dx = particles[i].x - particles[j].x;
-                const dy = particles[i].y - particles[j].y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance < maxDistance) {
-                    const opacity = (1 - distance / maxDistance) * 0.2;
-
-                    ctx.beginPath();
-                    ctx.moveTo(particles[i].x, particles[i].y);
-                    ctx.lineTo(particles[j].x, particles[j].y);
-                    ctx.strokeStyle = connectionColor + opacity + ')';
-
-                    // Épaisseur selon le thème
-                    if (currentTheme === 'network') {
-                        ctx.lineWidth = 0.8;
-                    } else if (currentTheme === 'electrical') {
-                        ctx.lineWidth = 1.2;
-                    } else {
-                        ctx.lineWidth = 0.5;
-                    }
-
-                    ctx.stroke();
-
-                    // Flux de données selon le thème
-                    if (themes[currentTheme].hasDataFlow && distance < 80 && Math.random() < 0.01) {
-                        const t = Math.random();
-                        const dataX = particles[i].x + dx * t;
-                        const dataY = particles[i].y + dy * t;
-
-                        ctx.beginPath();
-                        ctx.arc(dataX, dataY, 1, 0, Math.PI * 2);
-
-                        // Couleur du flux selon le thème
-                        if (currentTheme === 'network') {
-                            ctx.fillStyle = `rgba(255, 45, 85, ${opacity * 3})`; // Rouge données
-                        } else {
-                            ctx.fillStyle = `rgba(255, 149, 0, ${opacity * 3})`; // Orange IoT
-                        }
-
-                        ctx.fill();
-                    }
-                }
-            }
-        }
-    }
-
-    // Interaction souris renforcée (capteurs réagissent au curseur)
-    function handleMouseInteraction() {
-        particles.forEach(particle => {
-            const dx = mouse.x - particle.x;
-            const dy = mouse.y - particle.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-
-            // Zone d'influence étendue
-            const influenceRadius = 150;
-
-            if (distance < influenceRadius) {
-                const force = (influenceRadius - distance) / influenceRadius;
-
-                // Effet magnétique : attraction vers le curseur
-                if (distance > 30) {
-                    const attractionForce = force * 0.02;
-                    particle.vx += (dx / distance) * attractionForce;
-                    particle.vy += (dy / distance) * attractionForce;
-                }
-
-                // Amplification visuelle
-                particle.radius = Math.max(2, particle.originalRadius + force * 3);
-                particle.currentOpacity = Math.min(1, particle.currentOpacity + force * 0.4);
-
-                // Effet de pulse accéléré près du curseur
-                particle.pulseSpeed = Math.max(0.01, particle.pulseSpeed + force * 0.03);
-            } else {
-                // Retour progressif à la normale
-                particle.radius = Math.max(2, particle.radius - 0.05);
-                particle.pulseSpeed = Math.max(0.01, particle.pulseSpeed - 0.001);
-
-                // Friction pour ralentir les particules éloignées
-                particle.vx *= 0.99;
-                particle.vy *= 0.99;
-            }
-        });
-    }
-
-    // Fonction d'influence du curseur (appelée depuis le système de curseur)
-    function updateCursorInfluence(x, y) {
-        mouse.x = x;
-        mouse.y = y;
-
-        // Créer des particules temporaires autour du curseur lors du mouvement
-        if (Math.random() < 0.1) {
-            createTemporaryCursorParticle(x, y);
-        }
-    }
-
-    // Créer une particule temporaire liée au curseur
-    function createTemporaryCursorParticle(x, y) {
-        const tempParticle = {
-            x: x + (Math.random() - 0.5) * 60,
-            y: y + (Math.random() - 0.5) * 60,
-            vx: (Math.random() - 0.5) * 2,
-            vy: (Math.random() - 0.5) * 2,
-            radius: Math.random() * 2 + 1,
-            opacity: 0.8,
-            life: 1,
-            decay: 0.02,
-            color: themes[currentTheme].colors[Math.floor(Math.random() * themes[currentTheme].colors.length)]
-        };
-
-        // Ajouter temporairement à la liste des particules
-        particles.push(tempParticle);
-
-        // Programmer la suppression
-        setTimeout(() => {
-            const index = particles.indexOf(tempParticle);
-            if (index > -1) {
-                particles.splice(index, 1);
-            }
-        }, 2000);
-    }
-
-    // Boucle d'animation
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Mettre à jour et dessiner les particules
-        particles.forEach(particle => {
-            particle.update();
-            particle.draw();
-        });
-
-        // Dessiner les connexions
-        drawConnections();
-
-        // Interaction souris
-        handleMouseInteraction();
-
-        animationId = requestAnimationFrame(animate);
-    }
-
-    // Gestion de la souris
-    canvas.addEventListener('mousemove', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        mouse.x = e.clientX - rect.left;
-        mouse.y = e.clientY - rect.top;
-    });
-
-    // Gestion du redimensionnement avec debounce pour les performances
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            resizeCanvas();
-            createParticles();
-            console.log('📱 Canvas redimensionné:', canvas.width + 'x' + canvas.height);
-        }, 250); // Attendre 250ms après la fin du resize
-    });
-
-    // Initialisation
-    resizeCanvas();
-    createParticles();
-    animate();
-
-    // Fonction pour changer de thème
-    function changeTheme(newTheme) {
-        if (themes[newTheme] && newTheme !== currentTheme) {
-            currentTheme = newTheme;
-            createParticles(); // Recréer les particules avec le nouveau thème
-
-            // Mettre à jour le curseur selon le thème
-            if (window.updateCursorTheme) {
-                window.updateCursorTheme(newTheme);
-            }
-
-            // Notification visuelle du changement de thème
-            console.log(`Thème changé: ${themes[currentTheme].name}`);
-            showNotification(`🎨 Thème: ${themes[currentTheme].name}`, 'info');
-        }
-    }
-
-    // Exposer les fonctions pour interaction externe
-    window.changeBackgroundTheme = changeTheme;
-    window.updateCursorInfluence = updateCursorInfluence;
-    window.backgroundSystemReady = true;
-    console.log('🎨 Système d\'arrière-plan thématique et interactif initialisé');
-
-    // Nettoyage lors de la destruction
-    return () => {
-        if (animationId) {
-            cancelAnimationFrame(animationId);
-        }
-    };
+    showNotification('Événement téléchargé ! Ajoutez-le à votre calendrier.', 'success');
 }
 
-// Exportation pour utilisation en mode debug
+function openInbox(type) {
+    // Fonction placeholder pour l'inbox
+    switch(type) {
+        case 'linkedin':
+            contactViaLinkedIn();
+            break;
+        case 'chat':
+            alert('Chat en direct bientôt disponible. Utilisez l\'email pour le moment.');
+            break;
+        default:
+            contactViaEmail();
+    }
+}
+
+function downloadCV() {
+    // Pour l'instant, on redirige vers un lien de téléchargement
+    // Vous pouvez remplacer par l'URL de votre CV PDF
+    alert('CV PDF en cours de génération. Contactez-moi pour obtenir la version la plus récente !');
+}
+
+// ========================= NAVIGATION AMÉLIORÉE =========================
+
+// Navigation sticky et indicateur de scroll
+function initEnhancedNavigation() {
+    const navbar = document.querySelector('.navbar');
+    const scrollProgress = document.createElement('div');
+    scrollProgress.className = 'scroll-progress';
+    navbar.appendChild(scrollProgress);
+
+    // Variables pour le throttling
+    let isScrolling = false;
+
+    function updateNavigation() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = (scrollTop / documentHeight) * 100;
+
+        // Navigation sticky
+        if (scrollTop > 100) {
+            navbar.classList.add('navbar-scrolled');
+        } else {
+            navbar.classList.remove('navbar-scrolled');
+        }
+
+        // Mettre à jour la barre de progression
+        scrollProgress.style.width = `${Math.min(scrollPercent, 100)}%`;
+
+        // Navigation active section
+        updateActiveSection();
+    }
+
+    // Throttled scroll handler
+    function handleScroll() {
+        if (!isScrolling) {
+            window.requestAnimationFrame(() => {
+                updateNavigation();
+                isScrolling = false;
+            });
+            isScrolling = true;
+        }
+    }
+
+    // Écouter le scroll
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    // Initialiser
+    updateNavigation();
+}
+
+// Mettre à jour la section active dans le menu
+function updateActiveSection() {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    let currentSection = '';
+    const scrollPos = window.pageYOffset + 200; // Offset pour la détection
+
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.offsetHeight;
+
+        if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+            currentSection = section.getAttribute('id');
+        }
+    });
+
+    // Mettre à jour les liens actifs
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${currentSection}`) {
+            link.classList.add('active');
+        }
+    });
+}
+
+// Smooth scroll amélioré pour les ancres
+function initSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+
+            if (target) {
+                const navbarHeight = document.querySelector('.navbar').offsetHeight;
+                const targetPosition = target.offsetTop - navbarHeight - 20;
+
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+}
+
+// Indicateur de scroll vertical (optionnel)
+function createScrollIndicator() {
+    const scrollIndicator = document.createElement('div');
+    scrollIndicator.className = 'scroll-indicator-vertical';
+    scrollIndicator.innerHTML = `
+        <div class="scroll-line"></div>
+        <div class="scroll-thumb"></div>
+    `;
+    document.body.appendChild(scrollIndicator);
+
+    function updateScrollIndicator() {
+        const scrollTop = window.pageYOffset;
+        const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = (scrollTop / documentHeight) * 100;
+
+        const thumb = scrollIndicator.querySelector('.scroll-thumb');
+        thumb.style.top = `${Math.min(scrollPercent, 100)}%`;
+    }
+
+    window.addEventListener('scroll', updateScrollIndicator, { passive: true });
+    updateScrollIndicator();
+}
+
+// Exposer les fonctions principales
+window.exploreDomain = exploreDomain;
+window.closeDomainPanel = closeDomainPanel;
+window.openProjectPreview = openProjectPreview;
+window.closeProjectPreview = closeProjectPreview;
+window.openProjectDetails = openProjectDetails;
+window.closeProjectDetails = closeProjectDetails;
+window.contactViaEmail = contactViaEmail;
+window.contactViaLinkedIn = contactViaLinkedIn;
+window.contactViaSMS = contactViaSMS;
+window.contactViaWhatsApp = contactViaWhatsApp;
+window.openCalendlyWidget = openCalendlyWidget;
+window.openPhoneBooking = openPhoneBooking;
+window.closePhoneBooking = closePhoneBooking;
+window.closeCalendly = closeCalendly;
+window.confirmBooking = confirmBooking;
+window.addToCalendar = addToCalendar;
+window.resetBookingForm = resetBookingForm;
+window.openInbox = openInbox;
+window.downloadCV = downloadCV;
 window.debugPortfolio = debugPortfolio;
-
-// Fonction de test pour les thèmes
-window.testTheme = function(theme) {
-    console.log(`🧪 Test du thème: ${theme}`);
-    if (window.changeBackgroundTheme) {
-        window.changeBackgroundTheme(theme);
-        console.log(`✅ Thème ${theme} appliqué`);
-    } else {
-        console.error('❌ Fonction changeBackgroundTheme non disponible');
-    }
-};
-
-// Fonction pour afficher les thèmes disponibles
-window.showAvailableThemes = function() {
-    console.log('🎨 Thèmes disponibles:');
-    console.log('- iot (IoT/Domotique)');
-    console.log('- solar (Énergie Solaire)');
-    console.log('- network (Réseaux/Infrastructure)');
-    console.log('- electrical (Électrotechnique)');
-    console.log('Usage: testTheme("solar")');
-};
-
-// Fonctions de test pour le curseur
-window.testCursor = function() {
-    console.log('🎯 Tests du curseur interactif:');
-    console.log('- testCursorTrail() : Activer/désactiver la traînée');
-    console.log('- testCursorParticles() : Créer des particules autour du curseur');
-    console.log('- testCursorMagnetism() : Tester l\'effet magnétique');
-    console.log('- resetCursor() : Remettre le curseur à zéro');
-};
-
-window.testCursorTrail = function() {
-    if (trailInterval) {
-        stopCursorEffects();
-        console.log('❌ Traînée du curseur désactivée');
-    } else {
-        startCursorEffects();
-        console.log('✅ Traînée du curseur activée');
-    }
-};
-
-window.testCursorParticles = function() {
-    createClickParticles();
-    console.log('✨ Particules de clic créées');
-};
-
-window.testCursorMagnetism = function() {
-    if (window.updateCursorInfluence) {
-        // Simuler le curseur au centre de l'écran
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
-        window.updateCursorInfluence(centerX, centerY);
-        console.log('🧲 Effet magnétique testé au centre de l\'écran');
-    } else {
-        console.error('❌ Fonction de magnétisme non disponible');
-    }
-};
-
-window.resetCursor = function() {
-    stopCursorEffects();
-    if (customCursor) {
-        customCursor.className = 'custom-cursor';
-        console.log('🔄 Curseur remis à zéro');
-    }
-};
-
-// Fonction de debug pour vérifier le curseur
-window.debugCursor = function() {
-    const cursor = document.getElementById('custom-cursor');
-    if (cursor) {
-        console.log('🔍 Debug curseur:');
-        console.log('- Élément trouvé:', !!cursor);
-        console.log('- Style display:', cursor.style.display);
-        console.log('- Style visibility:', cursor.style.visibility);
-        console.log('- Style opacity:', cursor.style.opacity);
-        console.log('- Style zIndex:', cursor.style.zIndex);
-        console.log('- Position:', cursor.style.left, cursor.style.top);
-        console.log('- Classes:', cursor.className);
-
-        // Forcer la visibilité pour test
-        cursor.style.background = 'red';
-        cursor.style.width = '30px';
-        cursor.style.height = '30px';
-        cursor.style.left = '100px';
-        cursor.style.top = '100px';
-        console.log('🔴 Curseur forcé en rouge à 100,100');
-    } else {
-        console.error('❌ Curseur non trouvé');
-    }
-};
-
-// Fonction de debug pour l'arrière-plan
-window.debugBackground = function() {
-    const canvas = document.getElementById('iot-background');
-    console.log('🎨 Debug arrière-plan:');
-    console.log('- Canvas trouvé:', !!canvas);
-    console.log('- Canvas dimensions:', canvas ? `${canvas.width}x${canvas.height}` : 'N/A');
-    console.log('- backgroundSystemReady:', !!window.backgroundSystemReady);
-    console.log('- changeBackgroundTheme:', !!window.changeBackgroundTheme);
-    console.log('- updateCursorInfluence:', !!window.updateCursorInfluence);
-
-    if (canvas) {
-        const ctx = canvas.getContext('2d');
-        console.log('- Contexte 2D:', !!ctx);
-
-        // Test simple : dessiner un cercle rouge
-        ctx.fillStyle = 'red';
-        ctx.beginPath();
-        ctx.arc(50, 50, 20, 0, Math.PI * 2);
-        ctx.fill();
-        console.log('🔴 Cercle rouge de test dessiné');
-    }
-};
-
-// Fonction pour relancer l'arrière-plan
-window.Background = function() {
-    console.log('🔄 Relancement de l\'arrière-plan...');
-    const canvas = document.getElementById('iot-background');
-    if (canvas) {
-        // Effacer le canvas
-        const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Relancer l'initialisation
-        try {
-            initIoTBackground();
-            console.log('✅ Arrière-plan relancé avec succès');
-        } catch (error) {
-            console.error('❌ Erreur lors du relancement:', error);
-        }
-    } else {
-        console.error('❌ Canvas non trouvé');
-    }
-};

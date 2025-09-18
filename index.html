@@ -20,14 +20,14 @@
                 <span class="logo-text">PN</span>
             </div>
             <ul class="nav-menu">
-                <li><a href="#accueil" class="nav-link">Accueil</a></li>
-                <li><a href="#apropos" class="nav-link">À propos</a></li>
-                <li><a href="#experiences" class="nav-link">Expériences</a></li>
-                <li><a href="#competences" class="nav-link">Compétences</a></li>
-                <li><a href="#projets" class="nav-link">Projets</a></li>
-                <li><a href="#formation" class="nav-link">Formation</a></li>
-                <li><a href="#rendezvous" class="nav-link">Rendez-vous</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li><a href="#accueil" class="nav-link"><i class="fas fa-home"></i> Accueil</a></li>
+                <li><a href="#apropos" class="nav-link"><i class="fas fa-user"></i> À propos</a></li>
+                <li><a href="#experiences" class="nav-link"><i class="fas fa-briefcase"></i> Expériences</a></li>
+                <li><a href="#competences" class="nav-link"><i class="fas fa-cogs"></i> Compétences</a></li>
+                <li><a href="#projets" class="nav-link"><i class="fas fa-rocket"></i> Projets</a></li>
+                <li><a href="#formation" class="nav-link"><i class="fas fa-graduation-cap"></i> Formation</a></li>
+                <li><a href="#rendezvous" class="nav-link"><i class="fas fa-calendar-alt"></i> Rendez-vous</a></li>
+                <li><a href="#contact" class="nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
             </ul>
             <div class="hamburger">
                 <span></span>
@@ -37,22 +37,56 @@
         </div>
     </nav>
 
+    <!-- Mobile menu overlay -->
+    <div class="mobile-menu-overlay"></div>
+
     <!-- Hero Section -->
     <section id="accueil" class="hero">
         <canvas id="iot-background" class="iot-canvas"></canvas>
         <div class="hero-content">
             <div class="hero-text">
-                <h1 class="hero-title" id="nom-titre">Prince Noukounwoui</h1>
-                <p class="hero-subtitle" id="titre-professionnel">Étudiant en Master 2 Ingénierie Durable des Bâtiments Communicants Intelligents</p>
+                <div class="hero-greeting">
+                    <span class="greeting-text">Bonjour, je suis</span>
+                </div>
+                <h1 class="hero-title" id="nom-titre">
+                    <span class="name-part">Prince Noukounwoui</span>
+                </h1>
+                <div class="hero-dynamic-subtitle">
+                    <span class="subtitle-prefix">Spécialisé en</span>
+                    <span id="typewriter-text" class="typewriter"></span>
+                    <span class="cursor">|</span>
+                </div>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <span class="stat-number" id="years-experience">0</span>
+                        <span class="stat-label">ans d'expérience</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="stat-number" id="projects-count">0</span>
+                        <span class="stat-label">projets réalisés</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="stat-number" id="domains-count">0</span>
+                        <span class="stat-label">domaines maîtrisés</span>
+                    </div>
+                </div>
                 <p class="hero-location" id="localisation">📍 Rennes, Bretagne, France</p>
                 <div class="hero-buttons">
-                    <a href="#contact" class="btn btn-primary">Me contacter</a>
-                    <a href="#experiences" class="btn btn-secondary">Voir mes expériences</a>
+                    <a href="#" onclick="downloadCV()" class="btn btn-primary">
+                        <i class="fas fa-download"></i> Télécharger CV
+                    </a>
+                    <a href="#contact" class="btn btn-secondary">
+                        <i class="fas fa-envelope"></i> Me contacter
+                    </a>
+                    <a href="#experiences" class="btn btn-outline">
+                        <i class="fas fa-briefcase"></i> Voir mes expériences
+                    </a>
                 </div>
             </div>
             <div class="hero-image">
                 <div class="profile-circle">
                     <img id="profile-photo" src="" alt="Prince Noukounwoui" loading="eager">
+                    <i class="fas fa-user" style="display: none; font-size: 4rem; color: #007AFF;"></i>
                 </div>
             </div>
         </div>
@@ -62,41 +96,76 @@
     </section>
 
     <!-- À propos -->
-    <section id="apropos" class="section">
+    <section id="apropos" class="section bg-light">
         <div class="container">
-            <h2 class="section-title">À propos de moi</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <p id="resume-text" class="about-description"></p>
-                </div>
-                <div class="about-stats">
-                    <div class="stat-item">
-                        <div class="stat-number" id="nb-experiences">0</div>
-                        <div class="stat-label">Expériences</div>
+            <h2 class="section-title"><i class="fas fa-user"></i> À propos de moi</h2>
+            <div class="about-hero">
+                <div class="about-content">
+                    <div class="about-text">
+                        <div class="about-intro">
+                            <span class="about-badge">💡 Innovation</span>
+                            <span class="about-badge">⚡ Énergie</span>
+                            <span class="about-badge">📡 IoT</span>
+                        </div>
+                        <p id="resume-text" class="about-description"></p>
+
+                        <div class="about-highlights">
+                            <div class="highlight-item">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span>Master en Bâtiments Intelligents</span>
+                            </div>
+                            <div class="highlight-item">
+                                <i class="fas fa-briefcase"></i>
+                                <span>Alternant chez JEEDOM</span>
+                            </div>
+                            <div class="highlight-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Rennes, Bretagne</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-number" id="nb-projets">0</div>
-                        <div class="stat-label">Projets</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" id="nb-competences">0</div>
-                        <div class="stat-label">Compétences</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" id="nb-certifications">0</div>
-                        <div class="stat-label">Certifications</div>
+
+                    <div class="stats-showcase">
+                        <div class="stats-grid">
+                            <div class="stat-item animated-stat" data-target="6">
+                                <div class="stat-icon">💼</div>
+                                <div class="stat-number" id="nb-experiences">0</div>
+                                <div class="stat-label">Expériences</div>
+                                <div class="stat-description">professionnelles</div>
+                            </div>
+                            <div class="stat-item animated-stat" data-target="3">
+                                <div class="stat-icon">🚀</div>
+                                <div class="stat-number" id="nb-projets">0</div>
+                                <div class="stat-label">Projets</div>
+                                <div class="stat-description">réalisés</div>
+                            </div>
+                            <div class="stat-item animated-stat" data-target="10">
+                                <div class="stat-icon">🛠️</div>
+                                <div class="stat-number" id="nb-competences">0</div>
+                                <div class="stat-label">Compétences</div>
+                                <div class="stat-description">techniques</div>
+                            </div>
+                            <div class="stat-item animated-stat" data-target="3">
+                                <div class="stat-icon">📜</div>
+                                <div class="stat-number" id="nb-certifications">0</div>
+                                <div class="stat-label">Certifications</div>
+                                <div class="stat-description">obtenues</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Expériences -->
+    <!-- Domaines d'expertise -->
     <section id="experiences" class="section bg-light">
         <div class="container">
-            <h2 class="section-title">Expériences professionnelles</h2>
-            <div class="timeline" id="timeline-experiences">
-                <!-- Les expériences seront ajoutées dynamiquement -->
+            <h2 class="section-title"><i class="fas fa-briefcase"></i> Domaines d'expertise</h2>
+            <p class="section-subtitle">Découvrez mes expériences organisées par domaine de compétence</p>
+
+            <div class="cards-grid">
+                <!-- Les cartes de domaines seront ajoutées dynamiquement -->
             </div>
         </div>
     </section>
@@ -104,7 +173,7 @@
     <!-- Compétences -->
     <section id="competences" class="section">
         <div class="container">
-            <h2 class="section-title">Compétences</h2>
+            <h2 class="section-title"><i class="fas fa-cogs"></i> Compétences</h2>
             <div class="skills-grid" id="competences-grid">
                 <!-- Les compétences seront ajoutées dynamiquement -->
             </div>
@@ -114,7 +183,7 @@
     <!-- Projets -->
     <section id="projets" class="section bg-light">
         <div class="container">
-            <h2 class="section-title">Projets</h2>
+            <h2 class="section-title"><i class="fas fa-rocket"></i> Projets</h2>
             <div class="projects-grid" id="projets-grid">
                 <!-- Les projets seront ajoutés dynamiquement -->
             </div>
@@ -124,7 +193,7 @@
     <!-- Certifications -->
     <section id="certifications" class="section">
         <div class="container">
-            <h2 class="section-title">Certifications</h2>
+            <h2 class="section-title"><i class="fas fa-award"></i> Certifications</h2>
             <div class="certifications-grid" id="certifications-grid">
                 <!-- Les certifications seront ajoutées dynamiquement -->
             </div>
@@ -134,7 +203,7 @@
     <!-- Formation -->
     <section id="formation" class="section">
         <div class="container">
-            <h2 class="section-title">Formation</h2>
+            <h2 class="section-title"><i class="fas fa-graduation-cap"></i> Formation</h2>
             <div class="education-timeline" id="formation-timeline">
                 <!-- La formation sera ajoutée dynamiquement -->
             </div>
@@ -144,7 +213,7 @@
     <!-- Prendre Rendez-vous -->
     <section id="rendezvous" class="section bg-light">
         <div class="container">
-            <h2 class="section-title">Prendre Rendez-vous</h2>
+            <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Prendre Rendez-vous</h2>
             <div class="appointment-content">
                 <div class="appointment-intro">
                     <h3>Discutons de vos projets</h3>
@@ -216,17 +285,6 @@
                                 </button>
                             </div>
 
-                            <div class="contact-option" onclick="openInbox('chat')">
-                                <div class="contact-icon chat">
-                                    <i class="fas fa-comments"></i>
-                                </div>
-                                <h5>Chat direct</h5>
-                                <p>Discussion en temps réel</p>
-                                <button class="btn btn-chat">
-                                    <i class="fas fa-comments"></i>
-                                    Chater maintenant
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -237,7 +295,7 @@
     <!-- Contact -->
     <section id="contact" class="section bg-dark">
         <div class="container">
-            <h2 class="section-title text-white">Contact</h2>
+            <h2 class="section-title text-white"><i class="fas fa-envelope"></i> Contact</h2>
             <div class="contact-content">
                 <div class="contact-info">
                     <div class="contact-item">
@@ -251,10 +309,6 @@
                     <div class="contact-item">
                         <i class="fab fa-linkedin"></i>
                         <a href="#" id="linkedin-contact" onclick="openInbox('linkedin')">LinkedIn</a>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-comments"></i>
-                        <button class="contact-btn" onclick="openInbox('chat')">Chat en direct</button>
                     </div>
                 </div>
                 <div class="contact-form">
@@ -282,37 +336,6 @@
         </div>
     </footer>
 
-    <!-- Inbox Modal -->
-    <div id="inbox-modal" class="modal-overlay">
-        <div class="modal-content inbox-container">
-            <div class="inbox-header">
-                <h3 id="inbox-title">Messagerie</h3>
-                <button class="close-btn" onclick="closeInbox()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="inbox-body">
-                <div class="messages-container" id="messages-container">
-                    <div class="welcome-message">
-                        <div class="avatar">
-                            <i class="fas fa-user-tie"></i>
-                        </div>
-                        <div class="message-content">
-                            <p><strong>Prince Noukounwoui</strong></p>
-                            <p>Bonjour ! Je suis disponible pour discuter de vos projets. N'hésitez pas à me poser vos questions !</p>
-                            <span class="message-time">Maintenant</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="message-input-container">
-                    <input type="text" id="message-input" placeholder="Tapez votre message..." />
-                    <button class="send-btn" onclick="sendMessage()">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Phone Booking Modal -->
     <div id="phone-booking-modal" class="modal-overlay">
@@ -477,11 +500,6 @@
                         <h5>Rencontre physique</h5>
                         <p>Rencontrons-nous à Rennes ou dans les environs</p>
                     </div>
-                    <div class="meeting-type" onclick="openInbox('direct')">
-                        <i class="fas fa-comments"></i>
-                        <h5>Échange par message</h5>
-                        <p>Discutons d'abord par chat pour définir vos besoins</p>
-                    </div>
                 </div>
                 <div class="calendly-placeholder">
                     <p>Pour d'autres types de rendez-vous, contactez-moi directement pour que nous organisions une rencontre personnalisée.</p>
@@ -553,6 +571,55 @@
                             <div id="detail-impact" class="impact-text">
                                 <!-- Impact dynamique -->
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Domain Side Panel -->
+    <div id="domain-side-panel" class="side-panel">
+        <div class="side-panel-overlay"></div>
+        <div class="side-panel-content">
+            <div class="side-panel-header">
+                <div class="domain-panel-header">
+                    <div class="domain-icon large">
+                        <i id="panel-domain-icon" class="fas fa-home"></i>
+                    </div>
+                    <div class="domain-info">
+                        <h2 id="panel-domain-name">Domaine</h2>
+                        <p id="panel-domain-description">Description</p>
+                    </div>
+                </div>
+                <button class="panel-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="side-panel-body">
+                <div class="domain-content">
+                    <!-- Technologies -->
+                    <div class="domain-section">
+                        <h3><i class="fas fa-cogs"></i> Technologies utilisées</h3>
+                        <div id="panel-technologies" class="technologies-grid">
+                            <!-- Technologies dynamiques -->
+                        </div>
+                    </div>
+
+                    <!-- Expériences -->
+                    <div class="domain-section">
+                        <h3><i class="fas fa-briefcase"></i> Expériences professionnelles</h3>
+                        <div id="panel-experiences" class="experiences-list">
+                            <!-- Expériences dynamiques -->
+                        </div>
+                    </div>
+
+                    <!-- Projets -->
+                    <div class="domain-section">
+                        <h3><i class="fas fa-rocket"></i> Projets réalisés</h3>
+                        <div id="panel-projects" class="projects-list">
+                            <!-- Projets dynamiques -->
                         </div>
                     </div>
                 </div>

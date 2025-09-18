@@ -3,7 +3,13 @@
     "allow": [
       "Bash(cat:*)",
       "Bash(python:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(start index.html)",
+      "Bash(start test-domain-system.html)",
+      "Bash(del test-domain-system.html)",
+      "Bash(grep:*)",
+      "Bash(dir:*)",
+      "Bash(findstr:*)"
     ],
     "deny": [],
     "ask": []
