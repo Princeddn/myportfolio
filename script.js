@@ -174,7 +174,7 @@ let cvData = {
   "projets": [
     {
       "nom": "LoRaWAN Plug and Play",
-      "periode": "Novembre 2024 - Aujourd'hui",
+      "periode": "Novembre 2024 - Avril 2025",
       "organisation": "Université de Rennes",
       "description": "Développement d'une bibliothèque Python pour décoder les trames LoRaWAN. Cette bibliothèque permet d'extraire automatiquement les informations des capteurs (fabricant, modèle, données mesurées) et de reconnaître les capteurs grâce à l'analyse des trames. Elle est conçue pour faciliter la gestion et l'intégration des capteurs dans des systèmes IoT.",
       "competences": [
@@ -192,14 +192,14 @@ let cvData = {
         "SSH",
         "Gestion d'équipe"
       ],
-      "statut": "En cours",
+      "statut": "Fait",
       "type": "Académique",
       "liens": {
-        "github": "https://github.com/prince-noukounwoui/lorawan-decoder",
-        "demo": "https://lorawan-decoder-demo.netlify.app"
+        "github": "https://princeddn.github.io/chirp-api/",
+        "documentation": "https://www.canva.com/design/DAGky2L7_84/lE3B8_EZERy5ZF2FewYPlw/edit?utm_content=DAGky2L7_84&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
       },
       "image": "./assets/images/projects/lorawan-project.jpg",
-      "tags": ["Python", "IoT", "LoRaWAN", "Capteurs"]
+      "tags": ["Python", "IoT", "LoRaWAN", "Capteurs", "Chirpstack"]
     },
     {
       "nom": "Création d'une mini station météo avec Arduino",
@@ -218,14 +218,33 @@ let cvData = {
       "statut": "Fait",
       "type": "Académique",
       "liens": {
-        "github": "https://github.com/prince-noukounwoui/arduino-weather-station",
-        "video": "https://youtube.com/watch?v=meteo-station-demo"
       },
       "image": "./assets/images/projects/arduino-meteo.jpg",
       "tags": ["Arduino", "IoT", "Capteurs", "LCD"]
     },
     {
       "nom": "Conception d'un logiciel de dimensionnement de système photovoltaïque avec Python",
+      "periode": "Janvier 2020 - Aujourd'hui",
+      "organisation": "Projet personnel",
+      "description": "Développement d'un logiciel complet pour le dimensionnement des systèmes photovoltaïques. L'application permet de calculer la taille optimale des installations solaires en fonction des besoins énergétiques, de l'irradiation solaire locale et des contraintes techniques. Interface graphique intuitive développée en Python pour faciliter l'utilisation par les professionnels du secteur.",
+      "competences": [
+        "Processus de la qualité",
+        "Python (langage de programmation)",
+        "Conception d'interface graphique",
+        "Énergies renouvelables",
+        "Dimensionnement photovoltaïque"
+      ],
+      "statut": "En cours",
+      "type": "Personnel",
+      "liens": {
+        "github": "https://github.com/prince-noukounwoui/pv-dimensioning-tool",
+        "documentation": "https://pv-tool-docs.readthedocs.io"
+      },
+      "image": "./assets/images/projects/pv-software.jpg",
+      "tags": ["Python", "Énergie", "Interface", "Photovoltaïque"]
+    },
+    {
+      "nom": "Conception d'un progiciel de dimensionnement de réseau électrique Basse Tension",
       "periode": "Janvier 2020 - Aujourd'hui",
       "organisation": "Projet personnel",
       "description": "Développement d'un logiciel complet pour le dimensionnement des systèmes photovoltaïques. L'application permet de calculer la taille optimale des installations solaires en fonction des besoins énergétiques, de l'irradiation solaire locale et des contraintes techniques. Interface graphique intuitive développée en Python pour faciliter l'utilisation par les professionnels du secteur.",
@@ -675,9 +694,9 @@ function initTypewriterEffect() {
 
 // Animer les statistiques du hero
 function animateHeroStats() {
-    const currentYear = new Date().getFullYear();
-    const startYear = 2020; // Première expérience
-    const yearsExperience = currentYear - startYear;
+    // Calculer les années d'expérience basées sur le cumul des expériences
+    const totalMonths = calculateTotalDurationInMonths(cvData.experiences || []);
+    const yearsExperience = Math.round(totalMonths / 12 * 10) / 10; // Arrondi à 1 décimale
 
     const stats = {
         'years-experience': yearsExperience,
@@ -723,11 +742,12 @@ function populateAboutSection() {
 
 // Calculer les statistiques
 function calculateStats() {
-    const currentYear = new Date().getFullYear();
-    const startYear = 2020; // Première expérience selon le CV
+    // Calculer les années d'expérience basées sur le cumul des expériences
+    const totalMonths = calculateTotalDurationInMonths(cvData.experiences || []);
+    const yearsExperience = Math.round(totalMonths / 12 * 10) / 10; // Arrondi à 1 décimale
 
     return {
-        experience: currentYear - startYear,
+        experience: yearsExperience,
         projets: cvData.projets?.length || 0,
         competences: cvData.competences?.length || 0,
         certifications: cvData.certifications?.length || 0
