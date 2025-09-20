@@ -145,7 +145,7 @@ let cvData = {
     {
       "entreprise": "Songhaï Centre",
       "poste": "Technicien Électrotechnique",
-      "periode": "Août 2021 - Septembre 2021",
+      "periode": "Juillet 2021 - Septembre 2021",
       "lieu": "Porto-Novo, Bénin",
       "missions": [
         "Rebobinage de moteurs AC triphasés",
@@ -696,7 +696,7 @@ function initTypewriterEffect() {
 function animateHeroStats() {
     // Calculer les années d'expérience basées sur le cumul des expériences
     const totalMonths = calculateTotalDurationInMonths(cvData.experiences || []);
-    const yearsExperience = Math.round(totalMonths / 12 * 10) / 10; // Arrondi à 1 décimale
+    const yearsExperience = Math.ceil(totalMonths / 12); // Arrondi à la valeur supérieure
 
     const stats = {
         'years-experience': yearsExperience,
@@ -744,7 +744,7 @@ function populateAboutSection() {
 function calculateStats() {
     // Calculer les années d'expérience basées sur le cumul des expériences
     const totalMonths = calculateTotalDurationInMonths(cvData.experiences || []);
-    const yearsExperience = Math.round(totalMonths / 12 * 10) / 10; // Arrondi à 1 décimale
+    const yearsExperience = Math.ceil(totalMonths / 12); // Arrondi à la valeur supérieure
 
     return {
         experience: yearsExperience,
