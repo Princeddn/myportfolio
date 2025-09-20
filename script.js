@@ -287,8 +287,8 @@ const DOMAINS = {
         color: 'rgba(255, 204, 0, 0.8)',
         theme: 'solar'
     },
-    'infrastructure': {
-        name: 'Infrastructure & Électrotechnique',
+    'electricité': {
+        name: 'Réseau électrique & Électrotechnique',
         icon: 'fas fa-cogs',
         description: 'Réseaux électriques, cartographie, maintenance industrielle',
         technologies: ['QGIS', 'ArcGIS', 'Réseaux BT/HT', 'Moteurs AC', 'Cartographie GPS'],
@@ -301,9 +301,9 @@ const DOMAINS = {
 const COMPANY_DOMAINS = {
     'JEEDOM': 'iot',
     'Qotto': 'energy',
-    'Golf Business Company': 'infrastructure',
-    'ASEMI SA': 'infrastructure',
-    'Songhaï Centre': 'infrastructure'
+    'Golf Business Company': 'electricité',
+    'ASEMI SA': 'electricité',
+    'Songhaï Centre': 'electricité'
 };
 
 // Icônes pour les compétences
@@ -701,7 +701,7 @@ function animateHeroStats() {
     const stats = {
         'years-experience': yearsExperience,
         'projects-count': cvData.projets?.length || 0,
-        'domains-count': 3 // IoT, Énergie, Infrastructure
+        'domains-count': 3 // IoT, Énergie, electricité
     };
 
     Object.entries(stats).forEach(([id, target]) => {
@@ -2026,7 +2026,7 @@ function initIoTBackground() {
             hasDataFlow: true,
             particleSpeed: 0.8,
             gridPattern: true,
-            name: 'Réseaux/Infrastructure'
+            name: 'Réseaux/electricité'
         },
         'electrical': {
             colors: [
@@ -2319,7 +2319,7 @@ window.showAvailableThemes = function() {
     console.log('🎨 Thèmes disponibles:');
     console.log('- iot (IoT/Domotique)');
     console.log('- solar (Énergie Solaire)');
-    console.log('- network (Réseaux/Infrastructure)');
+    console.log('- network (Réseaux/electricité)');
     console.log('- electrical (Électrotechnique)');
     console.log('Usage: testTheme("solar")');
 };
