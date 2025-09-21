@@ -245,6 +245,27 @@ let cvData = {
     },
     {
       "nom": "Conception d'un progiciel de dimensionnement de réseau électrique Basse Tension",
+      "periode": "Fevrier 2022 - Juillet 2022",
+      "organisation": "Projet personnel",
+      "description": "Développement d'un logiciel complet pour le dimensionnement des systèmes photovoltaïques. L'application permet de calculer la taille optimale des installations solaires en fonction des besoins énergétiques, de l'irradiation solaire locale et des contraintes techniques. Interface graphique intuitive développée en Python pour faciliter l'utilisation par les professionnels du secteur.",
+      "competences": [
+        "Processus de la qualité",
+        "VBA Excel",
+        "Conception d'interface graphique",
+        "Réseau électrique Basse tension",
+        "Dimensionnement réseau électrique"
+      ],
+      "statut": "Fait",
+      "type": "Académique",
+      "liens": {
+        "github": "https://github.com/prince-noukounwoui/pv-dimensioning-tool",
+        "documentation": "https://pv-tool-docs.readthedocs.io"
+      },
+      "image": "./assets/images/projects/pv-software.jpg",
+      "tags": ["Python", "Énergie", "Interface", "Photovoltaïque"]
+    },
+    {
+      "nom": "Conception d'un progiciel de dimensionnement de réseau électrique Basse Tension",
       "periode": "Janvier 2020 - Aujourd'hui",
       "organisation": "Projet personnel",
       "description": "Développement d'un logiciel complet pour le dimensionnement des systèmes photovoltaïques. L'application permet de calculer la taille optimale des installations solaires en fonction des besoins énergétiques, de l'irradiation solaire locale et des contraintes techniques. Interface graphique intuitive développée en Python pour faciliter l'utilisation par les professionnels du secteur.",
@@ -256,7 +277,7 @@ let cvData = {
         "Dimensionnement photovoltaïque"
       ],
       "statut": "En cours",
-      "type": "Personnel",
+      "type": "Académique",
       "liens": {
         "github": "https://github.com/prince-noukounwoui/pv-dimensioning-tool",
         "documentation": "https://pv-tool-docs.readthedocs.io"
@@ -287,8 +308,8 @@ const DOMAINS = {
         color: 'rgba(255, 204, 0, 0.8)',
         theme: 'solar'
     },
-    'infrastructure': {
-        name: 'Infrastructure & Électrotechnique',
+    'electricité': {
+        name: 'Réseau électrique & Électrotechnique',
         icon: 'fas fa-cogs',
         description: 'Réseaux électriques, cartographie, maintenance industrielle',
         technologies: ['QGIS', 'ArcGIS', 'Réseaux BT/HT', 'Moteurs AC', 'Cartographie GPS'],
@@ -301,9 +322,9 @@ const DOMAINS = {
 const COMPANY_DOMAINS = {
     'JEEDOM': 'iot',
     'Qotto': 'energy',
-    'Golf Business Company': 'infrastructure',
-    'ASEMI SA': 'infrastructure',
-    'Songhaï Centre': 'infrastructure'
+    'Golf Business Company': 'electricité',
+    'ASEMI SA': 'electricité',
+    'Songhaï Centre': 'electricité'
 };
 
 // Icônes pour les compétences
@@ -701,7 +722,7 @@ function animateHeroStats() {
     const stats = {
         'years-experience': yearsExperience,
         'projects-count': cvData.projets?.length || 0,
-        'domains-count': 3 // IoT, Énergie, Infrastructure
+        'domains-count': 3 // IoT, Énergie, electricité
     };
 
     Object.entries(stats).forEach(([id, target]) => {
@@ -1341,6 +1362,15 @@ function openProjectPreview(projectIndex) {
     document.body.appendChild(modal);
     document.body.style.overflow = 'hidden';
 
+    // Échapper pour fermer
+    const escapeHandler = function(e) {
+        if (e.key === 'Escape') {
+            closeProjectPreview();
+            document.removeEventListener('keydown', escapeHandler);
+        }
+    };
+    document.addEventListener('keydown', escapeHandler);
+
     // Animation d'ouverture
     setTimeout(() => modal.classList.add('active'), 10);
 }
@@ -1465,6 +1495,15 @@ function openProjectDetails(projectIndex) {
 
     document.body.appendChild(modal);
     document.body.style.overflow = 'hidden';
+
+    // Échapper pour fermer
+    const escapeHandler = function(e) {
+        if (e.key === 'Escape') {
+            closeProjectDetails();
+            document.removeEventListener('keydown', escapeHandler);
+        }
+    };
+    document.addEventListener('keydown', escapeHandler);
 
     // Animation d'ouverture
     setTimeout(() => modal.classList.add('active'), 10);
@@ -2026,7 +2065,7 @@ function initIoTBackground() {
             hasDataFlow: true,
             particleSpeed: 0.8,
             gridPattern: true,
-            name: 'Réseaux/Infrastructure'
+            name: 'Réseaux/electricité'
         },
         'electrical': {
             colors: [
@@ -2319,7 +2358,7 @@ window.showAvailableThemes = function() {
     console.log('🎨 Thèmes disponibles:');
     console.log('- iot (IoT/Domotique)');
     console.log('- solar (Énergie Solaire)');
-    console.log('- network (Réseaux/Infrastructure)');
+    console.log('- network (Réseaux/electricité)');
     console.log('- electrical (Électrotechnique)');
     console.log('Usage: testTheme("solar")');
 };
