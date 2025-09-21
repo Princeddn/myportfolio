@@ -1197,8 +1197,14 @@ function populateCertifications() {
 
 // Remplir les projets avec cartes visuelles
 function populateProjects() {
+    console.log('🎯 POPULATE PROJECTS: Début de la fonction');
     const container = document.getElementById('projets-grid');
-    if (!container || !cvData.projets) return;
+    console.log('📦 Container trouvé:', container);
+    console.log('📊 cvData.projets:', cvData.projets);
+    if (!container || !cvData.projets) {
+        console.log('❌ ERREUR: Container ou cvData.projets manquant');
+        return;
+    }
 
     container.innerHTML = '';
 
@@ -1223,7 +1229,7 @@ function populateProjects() {
                         <i class="${statusIcon}"></i>
                         ${projet.statut}
                     </div>
-                    <button class="project-preview-btn" onclick="openProjectPreview(${index})">
+                    <button class="btn btn-secondary project-preview-btn" data-project-index="${index}">
                         <i class="fas fa-eye"></i>
                         Aperçu
                     </button>
@@ -1277,10 +1283,6 @@ function populateProjects() {
                             </a>
                         `;
                     }).join('') : ''}
-                    <button class="project-action-btn project-details-btn"
-                            onclick="openProjectDetails(${index})" title="Détails">
-                        <i class="fas fa-info-circle"></i>
-                    </button>
                 </div>
             </div>
         `;
@@ -1299,6 +1301,171 @@ function populateProjects() {
         }, index * 150);
     });
 
+    // Ajouter les gestionnaires d'événements pour les boutons de projet (même logique que les domaines)
+    setTimeout(() => {
+
+        // Event listeners pour les boutons d'aperçu (SIMPLE comme les domaines)
+        document.querySelectorAll('.project-preview-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const index = parseInt(this.dataset.projectIndex);
+                if (!isNaN(index)) {
+                    const projet = cvData.projets[index];
+                    if (projet) {
+                        // Créer une modale simple et élégante
+                        const modal = document.createElement('div');
+                        modal.style.cssText = `
+                            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(0, 122, 255, 0.1));
+                            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+                            z-index: 10000; display: flex; align-items: center; justify-content: center;
+                            animation: fadeIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                        `;
+
+                        modal.innerHTML = `
+                            <div style="
+                                background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+                                backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+                                border-radius: 28px; padding: 3rem; max-width: 520px; width: 90%;
+                                box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3),
+                                           0 0 0 1px rgba(255, 255, 255, 0.3),
+                                           inset 0 1px 0 rgba(255, 255, 255, 0.8);
+                                position: relative; overflow: hidden;
+                                animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+                                font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+                                border: 2px solid rgba(255, 255, 255, 0.3);
+                            ">
+                                <!-- Effet de brillance animé -->
+                                <div style="
+                                    position: absolute; top: 0; left: 0; right: 0; height: 100%;
+                                    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+                                    background-size: 200% 100%; animation: modalShine 3s infinite;
+                                    pointer-events: none;
+                                "></div>
+
+                                <button onclick="this.closest('[style*=fixed]').remove()" style="
+                                    position: absolute; top: 1.5rem; right: 1.5rem; z-index: 10;
+                                    background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(240, 240, 240, 0.8));
+                                    border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer;
+                                    display: flex; align-items: center; justify-content: center;
+                                    color: var(--text-light); font-size: 18px; font-weight: 600;
+                                    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+                                    animation: float 4s ease-in-out infinite;
+                                ">✕</button>
+
+                                <div style="
+                                    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                                    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+                                    background-clip: text; margin: 0 0 2rem 0; padding-right: 4rem;
+                                ">
+                                    <h3 style="
+                                        margin: 0; font-size: 1.75rem; font-weight: 700; line-height: 1.2;
+                                        text-shadow: 0 2px 10px rgba(0, 122, 255, 0.3);
+                                    ">${projet.nom}</h3>
+                                </div>
+
+                                <div style="
+                                    margin-bottom: 2rem; padding: 1.5rem; border-radius: 20px;
+                                    background: linear-gradient(135deg, rgba(0, 122, 255, 0.1), rgba(88, 86, 214, 0.1));
+                                    border: 1px solid rgba(0, 122, 255, 0.2);
+                                    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+                                ">
+                                    <p style="
+                                        margin: 0 0 0.8rem 0; color: var(--text-dark);
+                                        font-size: 1rem; font-weight: 600; display: flex; align-items: center;
+                                    "><span style="
+                                        display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+                                        background: var(--primary-color); margin-right: 0.8rem;
+                                        box-shadow: 0 0 10px var(--primary-color);
+                                    "></span>Organisation: <span style="font-weight: 500; margin-left: 0.5rem;">${projet.organisation}</span></p>
+                                    <p style="
+                                        margin: 0; color: var(--text-dark);
+                                        font-size: 1rem; font-weight: 600; display: flex; align-items: center;
+                                    "><span style="
+                                        display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+                                        background: var(--accent-color); margin-right: 0.8rem;
+                                        box-shadow: 0 0 10px var(--accent-color);
+                                    "></span>Période: <span style="font-weight: 500; margin-left: 0.5rem;">${projet.periode}</span></p>
+                                </div>
+
+                                <div style="
+                                    padding: 1.5rem; border-radius: 20px; position: relative;
+                                    background: linear-gradient(145deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.4));
+                                    border: 1px solid rgba(255, 255, 255, 0.3);
+                                    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+                                    margin-bottom: 2rem;
+                                ">
+                                    <p style="
+                                        margin: 0; color: var(--text-dark); line-height: 1.6;
+                                        font-size: 1.05rem; font-weight: 400;
+                                    ">${projet.description}</p>
+                                </div>
+
+                                ${projet.liens ? `
+                                    <div style="
+                                        padding: 2rem; border-radius: 20px;
+                                        background: linear-gradient(145deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.5));
+                                        border: 1px solid rgba(255, 255, 255, 0.4);
+                                        box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9),
+                                                   0 8px 32px rgba(0, 0, 0, 0.08);
+                                        margin-bottom: 1.5rem;
+                                    ">
+                                        <h4 style="
+                                            margin: 0 0 1.5rem 0; color: var(--text-dark);
+                                            font-size: 1.2rem; font-weight: 700;
+                                        ">🔗 Liens rapides</h4>
+                                        <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                                            ${Object.entries(projet.liens).map(([key, url], index) => url && url.trim() !== '' && url !== '#' ? `
+                                                <a href="${url}" target="_blank" style="
+                                                    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                                                    color: white; padding: 0.8rem 1.5rem; border-radius: 16px;
+                                                    text-decoration: none; display: inline-flex; align-items: center; gap: 0.6rem;
+                                                    font-weight: 600; font-size: 0.95rem;
+                                                    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+                                                    box-shadow: 0 8px 25px rgba(0, 122, 255, 0.3),
+                                                               inset 0 1px 0 rgba(255, 255, 255, 0.3);
+                                                    animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) ${index * 0.1}s both;
+                                                    position: relative; overflow: hidden;
+                                                ">
+                                                    <span style="font-size: 1.1rem;">🔗</span>
+                                                    ${key.charAt(0).toUpperCase() + key.slice(1)}
+                                                    <span style="
+                                                        position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+                                                        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+                                                        animation: modalShine 2.5s infinite ${index * 0.3}s;
+                                                    "></span>
+                                                </a>
+                                            ` : '').join('')}
+                                        </div>
+                                    </div>
+                                ` : ''}
+
+                            </div>
+                        `;
+
+                        // Fermer en cliquant sur l'overlay
+                        modal.addEventListener('click', function(e) {
+                            if (e.target === modal) modal.remove();
+                        });
+
+
+                        document.body.appendChild(modal);
+                    }
+                }
+            });
+        });
+
+
+        // Event listeners pour les cartes de projet (COPIE EXACTE des domaines)
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (e.target.closest('.project-preview-btn')) return;
+                // Pas d'action sur les cartes de projet (contrairement aux domaines)
+            });
+        });
+    }, 200);
+
     // Projets remplis
 }
 
@@ -1311,9 +1478,9 @@ function openProjectPreview(projectIndex) {
     const modal = document.createElement('div');
     modal.className = 'project-preview-modal';
     modal.innerHTML = `
-        <div class="modal-overlay" onclick="closeProjectPreview()"></div>
+        <div class="modal-overlay"></div>
         <div class="preview-content">
-            <button class="modal-close" onclick="closeProjectPreview()">
+            <button class="modal-close">
                 <i class="fas fa-times"></i>
             </button>
 
@@ -1335,6 +1502,11 @@ function openProjectPreview(projectIndex) {
 
                 <div class="preview-actions">
                     ${projet.liens ? Object.entries(projet.liens).map(([key, url]) => {
+                        // Ignorer les liens vides ou invalides
+                        if (!url || url.trim() === '' || url === '#') {
+                            return '';
+                        }
+
                         const linkIcons = {
                             'github': 'fab fa-github',
                             'demo': 'fas fa-external-link-alt',
@@ -1346,12 +1518,12 @@ function openProjectPreview(projectIndex) {
                         const label = key.charAt(0).toUpperCase() + key.slice(1);
 
                         return `
-                            <a href="${url}" target="_blank" rel="noopener noreferrer" class="preview-btn">
+                            <a href="${url}" target="_blank" rel="noopener noreferrer" class="preview-btn" onclick="event.stopPropagation();">
                                 <i class="${icon}"></i> ${label}
                             </a>
                         `;
-                    }).join('') : ''}
-                    <button class="preview-btn secondary" onclick="openProjectDetails(${projectIndex})">
+                    }).filter(link => link !== '').join('') : ''}
+                    <button class="btn btn-secondary preview-details-btn" data-project-index="${projectIndex}">
                         <i class="fas fa-info-circle"></i> Détails complets
                     </button>
                 </div>
@@ -1360,7 +1532,47 @@ function openProjectPreview(projectIndex) {
     `;
 
     document.body.appendChild(modal);
+
+    // Ajouter événement de clic sur l'overlay
+    const overlay = modal.querySelector('.modal-overlay');
+    const content = modal.querySelector('.preview-content');
+    const closeBtn = modal.querySelector('.modal-close');
+
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) {
+            e.stopPropagation();
+            closeProjectPreview();
+        }
+    });
+
+    // Bouton de fermeture
+    closeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeProjectPreview();
+    });
+
+    // Empêcher la propagation sur le contenu
+    content.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+
+    // Bouton "Détails complets"
+    const detailsBtn = modal.querySelector('.preview-details-btn');
+    if (detailsBtn) {
+        detailsBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const index = parseInt(this.dataset.projectIndex);
+            if (!isNaN(index)) {
+                openProjectDetails(index);
+            }
+        });
+    }
+
+    // Prévenir le défilement arrière-plan (mobile et desktop)
     document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
 
     // Échapper pour fermer
     const escapeHandler = function(e) {
@@ -1382,7 +1594,10 @@ function closeProjectPreview() {
         modal.classList.remove('active');
         setTimeout(() => {
             modal.remove();
-            document.body.style.overflow = 'auto';
+            // Restaurer le défilement normal
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
         }, 300);
     }
 }
@@ -1399,14 +1614,14 @@ function openProjectDetails(projectIndex) {
     const modal = document.createElement('div');
     modal.className = 'project-details-modal';
     modal.innerHTML = `
-        <div class="modal-overlay" onclick="closeProjectDetails()"></div>
+        <div class="modal-overlay"></div>
         <div class="details-content">
             <div class="details-header">
                 <div class="details-title">
                     <h2>${projet.nom}</h2>
                     <span class="project-type-badge">${projet.type}</span>
                 </div>
-                <button class="modal-close" onclick="closeProjectDetails()">
+                <button class="modal-close">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -1494,7 +1709,35 @@ function openProjectDetails(projectIndex) {
     `;
 
     document.body.appendChild(modal);
+
+    // Ajouter événement de clic sur l'overlay
+    const overlay = modal.querySelector('.modal-overlay');
+    const content = modal.querySelector('.details-content');
+    const closeBtn = modal.querySelector('.modal-close');
+
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) {
+            e.stopPropagation();
+            closeProjectDetails();
+        }
+    });
+
+    // Bouton de fermeture
+    closeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeProjectDetails();
+    });
+
+    // Empêcher la propagation sur le contenu
+    content.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+
+    // Prévenir le défilement arrière-plan (mobile et desktop)
     document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
 
     // Échapper pour fermer
     const escapeHandler = function(e) {
@@ -1516,7 +1759,10 @@ function closeProjectDetails() {
         modal.classList.remove('active');
         setTimeout(() => {
             modal.remove();
-            document.body.style.overflow = 'auto';
+            // Restaurer le défilement normal
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
         }, 300);
     }
 }
@@ -2679,6 +2925,11 @@ function updateActiveSection() {
 function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
+            // Ignorer les clics venant des modales de projet
+            if (this.closest('.project-preview-modal, .project-details-modal')) {
+                return;
+            }
+
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
 
