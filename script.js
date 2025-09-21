@@ -245,6 +245,27 @@ let cvData = {
     },
     {
       "nom": "Conception d'un progiciel de dimensionnement de réseau électrique Basse Tension",
+      "periode": "Fevrier 2022 - Juillet 2022",
+      "organisation": "Projet personnel",
+      "description": "Développement d'un logiciel complet pour le dimensionnement des systèmes photovoltaïques. L'application permet de calculer la taille optimale des installations solaires en fonction des besoins énergétiques, de l'irradiation solaire locale et des contraintes techniques. Interface graphique intuitive développée en Python pour faciliter l'utilisation par les professionnels du secteur.",
+      "competences": [
+        "Processus de la qualité",
+        "VBA Excel",
+        "Conception d'interface graphique",
+        "Réseau électrique Basse tension",
+        "Dimensionnement réseau électrique"
+      ],
+      "statut": "Fait",
+      "type": "Académique",
+      "liens": {
+        "github": "https://github.com/prince-noukounwoui/pv-dimensioning-tool",
+        "documentation": "https://pv-tool-docs.readthedocs.io"
+      },
+      "image": "./assets/images/projects/pv-software.jpg",
+      "tags": ["Python", "Énergie", "Interface", "Photovoltaïque"]
+    },
+    {
+      "nom": "Conception d'un progiciel de dimensionnement de réseau électrique Basse Tension",
       "periode": "Janvier 2020 - Aujourd'hui",
       "organisation": "Projet personnel",
       "description": "Développement d'un logiciel complet pour le dimensionnement des systèmes photovoltaïques. L'application permet de calculer la taille optimale des installations solaires en fonction des besoins énergétiques, de l'irradiation solaire locale et des contraintes techniques. Interface graphique intuitive développée en Python pour faciliter l'utilisation par les professionnels du secteur.",
@@ -256,7 +277,7 @@ let cvData = {
         "Dimensionnement photovoltaïque"
       ],
       "statut": "En cours",
-      "type": "Personnel",
+      "type": "Académique",
       "liens": {
         "github": "https://github.com/prince-noukounwoui/pv-dimensioning-tool",
         "documentation": "https://pv-tool-docs.readthedocs.io"
@@ -1341,6 +1362,15 @@ function openProjectPreview(projectIndex) {
     document.body.appendChild(modal);
     document.body.style.overflow = 'hidden';
 
+    // Échapper pour fermer
+    const escapeHandler = function(e) {
+        if (e.key === 'Escape') {
+            closeProjectPreview();
+            document.removeEventListener('keydown', escapeHandler);
+        }
+    };
+    document.addEventListener('keydown', escapeHandler);
+
     // Animation d'ouverture
     setTimeout(() => modal.classList.add('active'), 10);
 }
@@ -1465,6 +1495,15 @@ function openProjectDetails(projectIndex) {
 
     document.body.appendChild(modal);
     document.body.style.overflow = 'hidden';
+
+    // Échapper pour fermer
+    const escapeHandler = function(e) {
+        if (e.key === 'Escape') {
+            closeProjectDetails();
+            document.removeEventListener('keydown', escapeHandler);
+        }
+    };
+    document.addEventListener('keydown', escapeHandler);
 
     // Animation d'ouverture
     setTimeout(() => modal.classList.add('active'), 10);
