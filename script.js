@@ -50,334 +50,84 @@ function createLogoElement(organizationName, type = 'company') {
 }
 
 // Variables globales
-let cvData = {
-  "nom": "Prince Noukounwoui",
-  "localisation": "Rennes, Bretagne, France",
-  "titre": "Étudiant en Master 2 Ingénierie Durable des Bâtiments Communicants Intelligents (ISTIC Rennes)",
-  "coordonnees": {
-    "telephone": "0612719903",
-    "email": "noukounwouiprince@gmail.com",
-    "linkedin": "https://www.linkedin.com/in/prince-noukounwoui-ba1978217",
-    "photo": "./assets/images/profile.jpg"
-  },
-  "resume": "Actuellement en alternance chez JEEDOM, je travaille sur l'intégration de solutions Smarthome, Smartbuilding et Smartcity, en mettant l'accent sur les technologies Zigbee et LoRaWAN. Mes tâches incluent le choix et les tests de produits, la création de dashboards énergétiques, ainsi que le support d'installations GTB. Mes expériences précédentes, notamment chez Qotto et Golf Business Company, m'ont permis de développer des compétences solides en maintenance photovoltaïque, analyse de données IoT et optimisation des infrastructures électriques.",
-  "competences": [
-    "JavaScript",
-    "Python",
-    "ZigBee",
-    "LoRa",
-    "LoRaWAN",
-    "GTB/GTC",
-    "Analyse de données IoT",
-    "Maintenance photovoltaïque",
-    "Électrotechnique",
-    "QGIS / ArcGIS"
-  ],
-  "certifications": [
-    "Certificat Solutions Victron Energy pour les télécoms",
-    "LoRa et LoRaWAN pour l'Internet des Objets",
-    "Analyse et dépannage à distance par VRM"
-  ],
-  "experiences": [
-    {
-      "entreprise": "JEEDOM",
-      "poste": "Alternant intégrateur smarthome, smartbuilding et smartcity",
-      "periode": "Septembre 2025 - Présent",
-      "lieu": "Lyon, France",
-      "missions": [
-        "Choix et tests des produits (Zigbee & LoRaWAN)",
-        "Intégration des décodeurs",
-        "Appairage et réalisation de coffrets domotiques",
-        "Création de dashboards énergétiques et widgets",
-        "Suivi et support d'installations GTB",
-        "Prise en main du KNX sur Jeedom"
-      ]
-    },
-    {
-      "entreprise": "JEEDOM",
-      "poste": "Stagiaire en intégration smarthome, smartbuilding et smartcity",
-      "periode": "Mai 2025 - Août 2025",
-      "lieu": "Lyon, France",
-      "missions": [
-        "Choix et tests des produits (Zigbee & LoRaWAN)",
-        "Intégration des décodeurs",
-        "Appairage et réalisation de coffrets domotiques",
-        "Création de dashboards énergétiques et widgets",
-        "Suivi et support d'installations GTB",
-        "Prise en main du KNX sur Jeedom"
-      ]
-    },
-    {
-      "entreprise": "Qotto",
-      "poste": "Stagiaire Analyste Junior – Maintenance et Intervention Photovoltaïque",
-      "periode": "Avril 2023 - Août 2023",
-      "lieu": "Cotonou, Bénin",
-      "missions": [
-        "Surveillance à distance des kits solaires via plateforme IoT",
-        "Maintenance préventive et curative à distance",
-        "Analyse des données de production et de charge",
-        "Coordination des interventions terrain via Google Sheets"
-      ]
-    },
-    {
-      "entreprise": "Golf Business Company",
-      "poste": "Chargé d'Études en Infrastructures Électriques",
-      "periode": "Juillet 2022 - Mars 2023",
-      "lieu": "Cotonou, Bénin",
-      "missions": [
-        "Cartographie réseaux électriques et traitement de données GPS (QGIS, ArcGIS)",
-        "Plans géoréférencés pour optimisation d'infrastructures",
-        "Rapports techniques (sécurité, coûts, faisabilité)",
-        "Contribution à l'électrification rurale"
-      ]
-    },
-    {
-      "entreprise": "ASEMI SA",
-      "poste": "Technicien Électrotechnicien – Réseaux Basse Tension",
-      "periode": "Avril 2022 - Juin 2022",
-      "lieu": "Cotonou, Bénin",
-      "missions": [
-        "Construction et déploiement de réseaux BT souterrains",
-        "Maintenance postes HT/BT",
-        "Analyse de performances et supervision"
-      ]
-    },
-    {
-      "entreprise": "Songhaï Centre",
-      "poste": "Technicien Électrotechnique",
-      "periode": "Juillet 2021 - Septembre 2021",
-      "lieu": "Porto-Novo, Bénin",
-      "missions": [
-        "Rebobinage de moteurs AC triphasés",
-        "Installation et entretien d'équipements électrotechniques",
-        "Mise en place de procédures de test et diagnostic"
-      ]
+let cvData = {};
+let DOMAINS = {};
+let COMPANY_DOMAINS = {};
+let skillIcons = {};
+
+// Fonction pour charger les données depuis cv.json
+async function loadCVData() {
+    try {
+        const response = await fetch('./cv.json');
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP: ${response.status} - ${response.statusText}`);
+        }
+        const data = await response.json();
+
+        // Assigner les données aux variables globales
+        cvData = data;
+        DOMAINS = data.domains || {};
+        COMPANY_DOMAINS = data.company_domains || {};
+        skillIcons = data.skill_icons || {};
+
+        console.log('✅ Données chargées avec succès:', Object.keys(cvData));
+        return true;
+    } catch (error) {
+        console.error('❌ Erreur lors du chargement des données:', error);
+
+        // Fallback avec données minimales pour éviter les erreurs
+        cvData = {
+            nom: "Prince Noukounwoui",
+            titre: "Étudiant en Master 2 Ingénierie Durable des Bâtiments Communicants Intelligents",
+            localisation: "Rennes, Bretagne, France",
+            coordonnees: {
+                email: "noukounwouiprince@gmail.com",
+                telephone: "0612719903",
+                linkedin: "https://www.linkedin.com/in/prince-noukounwoui-ba1978217",
+                photo: "./assets/images/profile.jpg"
+            },
+            resume: "Portfolio en cours de chargement...",
+            experiences: [],
+            projets: [],
+            competences: [],
+            formation: [],
+            certifications: []
+        };
+        DOMAINS = {
+            'iot': {
+                name: 'IoT & Domotique',
+                icon: 'fas fa-home',
+                color: 'rgba(0, 122, 255, 0.8)',
+                description: 'Smart Home, Smart Building, Smart City',
+                technologies: ['IoT', 'Domotique', 'Capteurs'],
+                theme: 'iot'
+            },
+            'energy': {
+                name: 'Énergie & Photovoltaïque',
+                icon: 'fas fa-solar-panel',
+                color: 'rgba(255, 204, 0, 0.8)',
+                description: 'Systèmes solaires, monitoring énergétique',
+                technologies: ['Photovoltaïque', 'Monitoring'],
+                theme: 'solar'
+            },
+            'electricité': {
+                name: 'Réseau électrique',
+                icon: 'fas fa-cogs',
+                color: 'rgba(175, 82, 222, 0.8)',
+                description: 'Réseaux électriques, maintenance',
+                technologies: ['Électrotechnique', 'Maintenance'],
+                theme: 'network'
+            }
+        };
+        COMPANY_DOMAINS = {};
+        skillIcons = {};
+
+        console.log('🔄 Données de fallback chargées');
+        return false;
     }
-  ],
-  "formation": [
-    {
-      "ecole": "Université de Rennes 1",
-      "diplome": "Master Ingénierie Durable des Bâtiments Communicants Intelligents",
-      "periode": "Septembre 2024 - Juin 2026"
-    },
-    {
-      "ecole": "Université de Franche-Comté",
-      "diplome": "Licence Ingénierie électrique et énergie",
-      "periode": "Septembre 2023 - Juin 2024"
-    },
-    {
-      "ecole": "Esmer (École Supérieure des Métiers des Énergies Renouvelables)",
-      "diplome": "Licence professionnelle Génie électrique et énergie renouvelable",
-      "periode": "Novembre 2020 - Juin 2022"
-    }
-  ],
-  "projets": [
-    {
-      "nom": "LoRaWAN Plug and Play",
-      "periode": "Novembre 2024 - Avril 2025",
-      "organisation": "Université de Rennes",
-      "description": "Développement d'une bibliothèque Python pour décoder les trames LoRaWAN. Cette bibliothèque permet d'extraire automatiquement les informations des capteurs (fabricant, modèle, données mesurées) et de reconnaître les capteurs grâce à l'analyse des trames. Elle est conçue pour faciliter la gestion et l'intégration des capteurs dans des systèmes IoT.",
-      "competences": [
-        "Internet of Things (IoT)",
-        "Gestion des technologies de l'information",
-        "Bases de données",
-        "Network server",
-        "LoRaWAN",
-        "Processus de la qualité",
-        "Réseaux de capteurs sans fil",
-        "Python (langage de programmation)",
-        "Cloud",
-        "Linux",
-        "Réseaux informatiques",
-        "SSH",
-        "Gestion d'équipe"
-      ],
-      "statut": "Fait",
-      "type": "Académique",
-      "liens": {
-        "github": "https://princeddn.github.io/chirp-api/",
-        "documentation": "https://www.canva.com/design/DAGky2L7_84/lE3B8_EZERy5ZF2FewYPlw/edit?utm_content=DAGky2L7_84&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
-      },
-      "image": "./assets/images/projects/lorawan-project.jpg",
-      "tags": ["Python", "IoT", "LoRaWAN", "Capteurs", "Chirpstack"]
-    },
-    {
-      "nom": "Création d'une mini station météo avec Arduino",
-      "periode": "Janvier 2022 - Aujourd'hui",
-      "organisation": "Esmer (École Supérieure des Métiers des Énergies Renouvelables)",
-      "description": "Projet de mini station météo avec Arduino, intégrant des capteurs pour mesurer la vitesse du vent (anémomètre) et les précipitations (pluviomètre). Les données collectées sont affichées en temps réel sur un écran LCD, grâce à une programmation optimisée en Arduino. Ce projet visait à concevoir une solution compacte, efficace et accessible pour surveiller les conditions météorologiques locales.",
-      "competences": [
-        "Internet of Things (IoT)",
-        "Capteurs",
-        "Arduino",
-        "Processus de la qualité",
-        "Électronique Embarqué",
-        "Électronique",
-        "Arduino IDE"
-      ],
-      "statut": "Fait",
-      "type": "Académique",
-      "liens": {
-      },
-      "image": "./assets/images/projects/arduino-meteo.jpg",
-      "tags": ["Arduino", "IoT", "Capteurs", "LCD"]
-    },
-    {
-      "nom": "Conception d'un logiciel de dimensionnement de système photovoltaïque avec Python",
-      "periode": "Janvier 2020 - Aujourd'hui",
-      "organisation": "Projet personnel",
-      "description": "Développement d'un logiciel complet pour le dimensionnement des systèmes photovoltaïques. L'application permet de calculer la taille optimale des installations solaires en fonction des besoins énergétiques, de l'irradiation solaire locale et des contraintes techniques. Interface graphique intuitive développée en Python pour faciliter l'utilisation par les professionnels du secteur.",
-      "competences": [
-        "Processus de la qualité",
-        "Python (langage de programmation)",
-        "Conception d'interface graphique",
-        "Énergies renouvelables",
-        "Dimensionnement photovoltaïque"
-      ],
-      "statut": "En cours",
-      "type": "Personnel",
-      "liens": {
-        "github": "https://github.com/prince-noukounwoui/pv-dimensioning-tool",
-        "documentation": "https://pv-tool-docs.readthedocs.io"
-      },
-      "image": "./assets/images/projects/pv-software.jpg",
-      "tags": ["Python", "Énergie", "Interface", "Photovoltaïque"]
-    },
-    {
-      "nom": "Conception d'un progiciel de dimensionnement de réseau électrique Basse Tension",
-      "periode": "Fevrier 2022 - Juillet 2022",
-      "organisation": "Projet personnel",
-      "description": "Développement d'un logiciel complet pour le dimensionnement des systèmes photovoltaïques. L'application permet de calculer la taille optimale des installations solaires en fonction des besoins énergétiques, de l'irradiation solaire locale et des contraintes techniques. Interface graphique intuitive développée en Python pour faciliter l'utilisation par les professionnels du secteur.",
-      "competences": [
-        "Processus de la qualité",
-        "VBA Excel",
-        "Conception d'interface graphique",
-        "Réseau électrique Basse tension",
-        "Dimensionnement réseau électrique"
-      ],
-      "statut": "Fait",
-      "type": "Académique",
-      "liens": {
-        "github": "https://github.com/prince-noukounwoui/pv-dimensioning-tool",
-        "documentation": "https://pv-tool-docs.readthedocs.io"
-      },
-      "image": "./assets/images/projects/pv-software.jpg",
-      "tags": ["Python", "Énergie", "Interface", "Photovoltaïque"]
-    },
-    {
-      "nom": "Conception d'un progiciel de dimensionnement de réseau électrique Basse Tension",
-      "periode": "Janvier 2020 - Aujourd'hui",
-      "organisation": "Projet personnel",
-      "description": "Développement d'un logiciel complet pour le dimensionnement des systèmes photovoltaïques. L'application permet de calculer la taille optimale des installations solaires en fonction des besoins énergétiques, de l'irradiation solaire locale et des contraintes techniques. Interface graphique intuitive développée en Python pour faciliter l'utilisation par les professionnels du secteur.",
-      "competences": [
-        "Processus de la qualité",
-        "Python (langage de programmation)",
-        "Conception d'interface graphique",
-        "Énergies renouvelables",
-        "Dimensionnement photovoltaïque"
-      ],
-      "statut": "En cours",
-      "type": "Académique",
-      "liens": {
-        "github": "https://github.com/prince-noukounwoui/pv-dimensioning-tool",
-        "documentation": "https://pv-tool-docs.readthedocs.io"
-      },
-      "image": "./assets/images/projects/pv-software.jpg",
-      "tags": ["Python", "Énergie", "Interface", "Photovoltaïque"]
-    }
-  ]
-};
+}
 
 let currentDomain = 'iot'; // Domaine par défaut
-
-// Configuration des domaines d'expertise
-const DOMAINS = {
-    'iot': {
-        name: 'IoT & Domotique',
-        icon: 'fas fa-home',
-        description: 'Smart Home, Smart Building, Smart City',
-        technologies: ['Zigbee', 'LoRaWAN', 'KNX', 'Jeedom', 'GTB/GTC'],
-        color: 'rgba(0, 122, 255, 0.8)',
-        theme: 'iot'
-    },
-    'energy': {
-        name: 'Énergie & Photovoltaïque',
-        icon: 'fas fa-solar-panel',
-        description: 'Systèmes solaires, monitoring énergétique',
-        technologies: ['Photovoltaïque', 'Monitoring IoT', 'Analyse de données', 'VRM'],
-        color: 'rgba(255, 204, 0, 0.8)',
-        theme: 'solar'
-    },
-    'electricité': {
-        name: 'Réseau électrique & Électrotechnique',
-        icon: 'fas fa-cogs',
-        description: 'Réseaux électriques, cartographie, maintenance industrielle',
-        technologies: ['QGIS', 'ArcGIS', 'Réseaux BT/HT', 'Moteurs AC', 'Cartographie GPS'],
-        color: 'rgba(175, 82, 222, 0.8)',
-        theme: 'network'
-    }
-};
-
-// Mapping des entreprises vers les domaines
-const COMPANY_DOMAINS = {
-    'JEEDOM': 'iot',
-    'Qotto': 'energy',
-    'Golf Business Company': 'electricité',
-    'ASEMI SA': 'electricité',
-    'Songhaï Centre': 'electricité'
-};
-
-// Icônes pour les compétences
-const skillIcons = {
-    // Langages de programmation
-    'JavaScript': 'fab fa-js-square',
-    'Python': 'fab fa-python',
-    'HTML': 'fab fa-html5',
-    'CSS': 'fab fa-css3-alt',
-
-    // Technologies IoT & Communication
-    'ZigBee': 'fas fa-wifi',
-    'LoRa': 'fas fa-broadcast-tower',
-    'LoRaWAN': 'fas fa-satellite-dish',
-    'KNX': 'fas fa-network-wired',
-    'Internet of Things (IoT)': 'fas fa-microchip',
-    'Capteurs': 'fas fa-thermometer-half',
-    'Arduino': 'fas fa-microchip',
-    'Communication sans fil': 'fas fa-wifi',
-
-    // Systèmes et données
-    'GTB/GTC': 'fas fa-building',
-    'Analyse de données IoT': 'fas fa-chart-line',
-    'Bases de données': 'fas fa-database',
-    'Linux': 'fab fa-linux',
-    'SSH': 'fas fa-terminal',
-    'Cloud': 'fas fa-cloud',
-    'Network server': 'fas fa-server',
-    'Réseaux informatiques': 'fas fa-network-wired',
-
-    // Énergie et électrotechnique
-    'Maintenance photovoltaïque': 'fas fa-solar-panel',
-    'Électrotechnique': 'fas fa-bolt',
-    'Énergies renouvelables': 'fas fa-leaf',
-    'Dimensionnement photovoltaïque': 'fas fa-solar-panel',
-    'Électronique': 'fas fa-microchip',
-    'Électronique Embarqué': 'fas fa-microchip',
-
-    // Géospatial et cartographie
-    'QGIS / ArcGIS': 'fas fa-map',
-    'Cartographie GPS': 'fas fa-map-marker-alt',
-    'Architecture des réseaux': 'fas fa-sitemap',
-
-    // Gestion et qualité
-    'Gestion des technologies de l\'information': 'fas fa-tasks',
-    'Processus de la qualité': 'fas fa-award',
-    'Gestion d\'équipe': 'fas fa-users',
-
-    // Outils et interfaces
-    'Interface utilisateur': 'fas fa-desktop',
-    'Conception d\'interface graphique': 'fas fa-paint-brush',
-    'Arduino IDE': 'fas fa-code'
-};
 
 // Données CV intégrées et prêtes
 
@@ -524,33 +274,73 @@ function organizeProjectsByDomain() {
 }
 
 // Chargement du DOM
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialisation du portfolio par domaines
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('🚀 Démarrage du portfolio...');
 
-    // Initialiser les composants
-    initNavigation();
-    initEnhancedNavigation();
-    initSmoothScroll();
-    createScrollIndicator();
-    initCustomCursor();
-    initIoTBackground();
+    try {
+        // Charger les données depuis cv.json
+        const dataLoaded = await loadCVData();
 
-    // Remplir le contenu
-    populateContent();
+        if (!dataLoaded) {
+            console.warn('⚠️ Données chargées en mode fallback');
+        }
 
-    // Initialiser les fonctionnalités
-    initDomainNavigation();
-    initScrollAnimations();
-    initSmoothScrolling();
-    initMessaging();
-    initCalendlyListeners();
+        // Vérifier que les données essentielles sont présentes
+        if (!cvData || !cvData.nom) {
+            throw new Error('Données CV manquantes ou invalides');
+        }
 
-    // Mettre à jour les effets de survol après le chargement du contenu
-    setTimeout(() => {
-        updateHoverEffects();
-    }, 500);
+        console.log('📊 Initialisation des composants...');
 
-    // Portfolio initialisé avec succès
+        // Initialiser les composants de base (qui ne dépendent pas des données)
+        if (typeof initNavigation === 'function') initNavigation();
+        if (typeof initEnhancedNavigation === 'function') initEnhancedNavigation();
+        if (typeof initSmoothScroll === 'function') initSmoothScroll();
+        if (typeof createScrollIndicator === 'function') createScrollIndicator();
+        if (typeof initCustomCursor === 'function') initCustomCursor();
+
+        // Remplir le contenu (dépend des données)
+        console.log('📝 Remplissage du contenu...');
+        if (typeof populateContent === 'function') {
+            populateContent();
+        } else {
+            console.warn('⚠️ Fonction populateContent non trouvée');
+        }
+
+        // Initialiser les fonctionnalités avancées
+        console.log('⚙️ Initialisation des fonctionnalités...');
+        if (typeof initDomainNavigation === 'function') initDomainNavigation();
+        if (typeof initScrollAnimations === 'function') initScrollAnimations();
+        if (typeof initSmoothScrolling === 'function') initSmoothScrolling();
+        if (typeof initMessaging === 'function') initMessaging();
+        if (typeof initCalendlyListeners === 'function') initCalendlyListeners();
+
+        // Initialiser l'arrière-plan IoT après que tout soit chargé
+        setTimeout(() => {
+            if (typeof initIoTBackground === 'function') {
+                initIoTBackground();
+            }
+        }, 1000);
+
+        // Mettre à jour les effets de survol après le chargement du contenu
+        setTimeout(() => {
+            if (typeof updateHoverEffects === 'function') {
+                updateHoverEffects();
+            }
+        }, 1500);
+
+        console.log('✅ Portfolio initialisé avec succès');
+    } catch (error) {
+        console.error('❌ Erreur lors de l\'initialisation du portfolio:', error);
+        // Afficher un message d'erreur à l'utilisateur
+        document.body.innerHTML = `
+            <div style="padding: 20px; text-align: center; color: red;">
+                <h2>Erreur de chargement</h2>
+                <p>Une erreur s'est produite lors du chargement du portfolio.</p>
+                <p>Détails: ${error.message}</p>
+            </div>
+        `;
+    }
 });
 
 // Remplir le contenu de la page
@@ -889,7 +679,7 @@ function populateDomainCards(domainExperiences, domainProjects) {
             </div>
 
             <div class="domain-technologies">
-                ${domain.technologies.map(tech =>
+                ${(domain.technologies || []).map(tech =>
                     `<span class="tech-tag">${tech}</span>`
                 ).join('')}
             </div>
@@ -942,7 +732,7 @@ function openDomainPanel(domainKey) {
 
     // Technologies
     const technologiesContainer = document.getElementById('panel-technologies');
-    technologiesContainer.innerHTML = domain.technologies.map(tech =>
+    technologiesContainer.innerHTML = (domain.technologies || []).map(tech =>
         `<div class="tech-item">${tech}</div>`
     ).join('');
 
@@ -2509,17 +2299,33 @@ function initIoTBackground() {
             opacity: 0.8,
             life: 1,
             decay: 0.02,
-            color: themes[currentTheme].colors[Math.floor(Math.random() * themes[currentTheme].colors.length)]
+            color: themes[currentTheme].colors[Math.floor(Math.random() * themes[currentTheme].colors.length)],
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life -= this.decay;
+                this.opacity = Math.max(0, this.life * 0.8);
+
+                if (this.life <= 0) {
+                    const index = particles.indexOf(this);
+                    if (index > -1) {
+                        particles.splice(index, 1);
+                    }
+                }
+            },
+
+            draw() {
+                if (this.life > 0) {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color + this.opacity + ')';
+                    ctx.fill();
+                }
+            }
         };
 
         particles.push(tempParticle);
-
-        setTimeout(() => {
-            const index = particles.indexOf(tempParticle);
-            if (index > -1) {
-                particles.splice(index, 1);
-            }
-        }, 2000);
     }
 
     // Boucle d'animation
