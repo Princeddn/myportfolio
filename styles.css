@@ -2712,6 +2712,37 @@ body {
     }
 }
 
+/* Animation slide-in-up pour les éléments au scroll */
+.slide-in-up {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+/* État initial pour les éléments à animer */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* État animé pour les éléments */
+.animated-in {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+/* Animation d'apparition pour tous les éléments de type carte */
+.skill-item,
+.project-card,
+.certification-item,
+.education-item,
+.timeline-item,
+.domain-card,
+.card {
+    will-change: opacity, transform;
+}
+
 /* Styles pour améliorer les modales inline des projets */
 [style*="position: fixed"][style*="background: linear-gradient"] button[onclick*="remove"] {
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
