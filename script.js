@@ -591,13 +591,14 @@ function animateCounters() {
     const counters = document.querySelectorAll('.animated-stat');
 
     const observerOptions = {
-        threshold: 0.5,
-        once: true
+        threshold: 0.3,
+        rootMargin: '0px 0px -50px 0px'
     };
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
+            if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+                entry.target.classList.add('animated');
                 animateCounter(entry.target);
             }
         });
@@ -630,6 +631,87 @@ function animateCounter(element) {
             numberElement.textContent = Math.floor(current);
         }
     }, 16);
+}
+
+// Initialiser les animations de scroll
+function initScrollAnimations() {
+    // Attendre que tous les éléments soient créés
+    setTimeout(() => {
+        // Observer pour les éléments à animer au scroll
+        const elementsToAnimate = document.querySelectorAll('.skills-grid .skill-item, .projects-grid .project-card, .certifications-grid .certification-item, .education-timeline .education-item, .cards-grid .domain-card');
+
+        console.log('🎬 Elements trouvés pour animation:', elementsToAnimate.length);
+
+        if (elementsToAnimate.length === 0) {
+            console.log('⚠️ Aucun élément trouvé, réessai dans 500ms...');
+            setTimeout(() => initScrollAnimations(), 500);
+            return;
+        }
+
+    const observerOptions = {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+                // Délai progressif pour un effet de cascade
+                setTimeout(() => {
+                    entry.target.classList.add('slide-in-up', 'animated');
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }, index * 100);
+            }
+        });
+    }, observerOptions);
+
+    elementsToAnimate.forEach(element => {
+        // État initial pour l'animation
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(30px)';
+        element.style.transition = 'all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)';
+
+        scrollObserver.observe(element);
+    });
+
+    // Animation des barres de progression pour les compétences
+    const skillBars = document.querySelectorAll('.skill-level');
+    skillBars.forEach(bar => {
+        scrollObserver.observe(bar.parentElement);
+        bar.parentElement.addEventListener('animationstart', () => {
+            const level = bar.getAttribute('data-level') || '80';
+            setTimeout(() => {
+                bar.style.width = level + '%';
+            }, 300);
+        });
+    });
+
+    // Forcer l'initialisation des animations pour les éléments déjà visibles
+    setTimeout(() => {
+        forceVisibleAnimations();
+    }, 100);
+    }, 300); // Fermer le setTimeout principal
+}
+
+// Forcer les animations pour les éléments déjà visibles
+function forceVisibleAnimations() {
+    const elementsToCheck = document.querySelectorAll('.skills-grid .skill-item, .projects-grid .project-card, .certifications-grid .certification-item, .education-timeline .education-item, .cards-grid .domain-card');
+
+    elementsToCheck.forEach((element, index) => {
+        if (!element.classList.contains('animated')) {
+            const rect = element.getBoundingClientRect();
+            const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+            if (isVisible) {
+                setTimeout(() => {
+                    element.classList.add('slide-in-up', 'animated');
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }, index * 50);
+            }
+        }
+    });
 }
 
 // Remplir les cartes des domaines
@@ -2574,6 +2656,242 @@ function resetBookingForm() {
     if (step3) step3.classList.add('hidden');
     if (step4) step4.classList.add('hidden');
 }
+
+// Fonction pour s'assurer que toutes les animations sont actives
+function ensureAnimationsWork() {
+    // Réinitialiser les animations lors du redimensionnement
+    window.addEventListener('resize', () => {
+        setTimeout(forceVisibleAnimations, 100);
+    });
+
+    // Marquer que les animations sont initialisées
+    setTimeout(() => {
+        if (!window.animationsInitialized) {
+            // Initialiser les animations de scroll
+            initScrollAnimations();
+            forceVisibleAnimations();
+            window.animationsInitialized = true;
+        }
+    }, 500);
+
+    // Vérifier périodiquement si les animations fonctionnent
+    setInterval(() => {
+        if (typeof forceVisibleAnimations === 'function') {
+            const elementsCount = document.querySelectorAll('.skills-grid .skill-item, .projects-grid .project-card, .certifications-grid .certification-item, .education-timeline .education-item, .cards-grid .domain-card').length;
+            if (elementsCount > 0) {
+                forceVisibleAnimations();
+            } else {
+                // Si aucun élément n'est trouvé, réessayer d'initialiser les animations
+                initScrollAnimations();
+            }
+        }
+    }, 2000);
+}
+
+// Fonction de debug pour les animations
+function debugAnimations() {
+    console.log('🔍 DEBUG ANIMATIONS:');
+    console.log('Skills:', document.querySelectorAll('.skills-grid .skill-item').length);
+    console.log('Projects:', document.querySelectorAll('.projects-grid .project-card').length);
+    console.log('Certifications:', document.querySelectorAll('.certifications-grid .certification-item').length);
+    console.log('Education:', document.querySelectorAll('.education-timeline .education-item').length);
+    console.log('Domain cards:', document.querySelectorAll('.cards-grid .domain-card').length);
+
+    // Vérifier tous les sélecteurs possibles
+    console.log('Tous skill-item:', document.querySelectorAll('.skill-item').length);
+    console.log('Tous project-card:', document.querySelectorAll('.project-card').length);
+    console.log('Tous certification-item:', document.querySelectorAll('.certification-item').length);
+    console.log('Tous education-item:', document.querySelectorAll('.education-item').length);
+    console.log('Tous timeline-item:', document.querySelectorAll('.timeline-item').length);
+    console.log('Tous domain-card:', document.querySelectorAll('.domain-card').length);
+
+    console.log('Total elements:', document.querySelectorAll('.skills-grid .skill-item, .projects-grid .project-card, .certifications-grid .certification-item, .education-timeline .education-item, .cards-grid .domain-card').length);
+
+    // Lister tous les éléments avec les classes card
+    const allCards = document.querySelectorAll('[class*="card"], [class*="item"]');
+    console.log('Tous les éléments avec "card" ou "item":', allCards.length);
+    allCards.forEach((el, i) => {
+        if (i < 20) console.log(`Element ${i}:`, el.className, el.tagName);
+    });
+}
+
+// Démarrer après chargement complet
+window.addEventListener('load', ensureAnimationsWork);
+
+// Debug après chargement
+window.addEventListener('load', () => {
+    // Gérer les erreurs d'images pour éviter qu'elles interfèrent avec les animations
+    handleImageErrors();
+
+    setTimeout(debugAnimations, 1000);
+    setTimeout(initUniversalScrollAnimations, 1500);
+
+    // Animation de secours au cas où
+    setTimeout(() => {
+        if (!window.animationsStarted) {
+            console.log('🔄 Démarrage animation de secours...');
+            emergencyAnimationFallback();
+        }
+    }, 3000);
+});
+
+// Gérer les erreurs d'images
+function handleImageErrors() {
+    const images = document.querySelectorAll('img');
+    images.forEach(img => {
+        img.addEventListener('error', function() {
+            console.log('⚠️ Image manquante:', this.src);
+            // Remplacer par une image placeholder
+            this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0xMzUgODBIMTY1VjEyMEgxMzVWODBaIiBmaWxsPSIjRDREREREIi8+CjxjaXJjbGUgY3g9IjE1MCIgY3k9IjEwMCIgcj0iMTAiIGZpbGw9IiNBQUFBQUEiLz4KPC9zdmc+';
+            this.alt = 'Image placeholder';
+        });
+    });
+}
+
+// Système d'animation universel et robuste
+function initUniversalScrollAnimations() {
+    console.log('🚀 Initialisation animations universelles...');
+
+    // Sélecteurs multiples pour capturer tous les éléments possibles
+    const selectors = [
+        '.skill-item',
+        '.project-card',
+        '.certification-item',
+        '.education-item',
+        '.timeline-item',
+        '.domain-card',
+        '.card',
+        '.stat-item'
+    ];
+
+    let allElements = [];
+    selectors.forEach(selector => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(el => {
+            if (!allElements.includes(el)) {
+                allElements.push(el);
+            }
+        });
+    });
+
+    console.log('🎯 Éléments trouvés pour animation universelle:', allElements.length);
+
+    if (allElements.length === 0) {
+        console.log('⚠️ Aucun élément trouvé, réessai dans 1s...');
+        setTimeout(initUniversalScrollAnimations, 1000);
+        return;
+    }
+
+    // Configuration de l'observer
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const universalObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting && !entry.target.hasAttribute('data-animated')) {
+                console.log('🎬 Animation d\'un élément:', entry.target.className);
+
+                // Marquer comme animé
+                entry.target.setAttribute('data-animated', 'true');
+
+                // Appliquer l'animation avec délai
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    entry.target.style.transition = 'all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1)';
+                    entry.target.classList.add('animated-in');
+                }, index * 100);
+            }
+        });
+    }, observerOptions);
+
+    // Appliquer l'état initial et observer chaque élément
+    allElements.forEach((element, index) => {
+        // État initial
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(50px)';
+        element.style.transition = 'all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1)';
+
+        // Observer l'élément
+        universalObserver.observe(element);
+    });
+
+    console.log('✅ Animation universelle initialisée sur', allElements.length, 'éléments');
+    window.animationsStarted = true;
+
+    // Forcer l'animation des éléments déjà visibles
+    setTimeout(() => {
+        forceAnimationForVisibleElements(allElements);
+    }, 200);
+}
+
+// Forcer l'animation des éléments déjà visibles
+function forceAnimationForVisibleElements(elements) {
+    elements.forEach((element, index) => {
+        if (!element.hasAttribute('data-animated')) {
+            const rect = element.getBoundingClientRect();
+            const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+            if (isVisible) {
+                console.log('🎬 Animation forcée pour élément visible:', element.className);
+                element.setAttribute('data-animated', 'true');
+
+                setTimeout(() => {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                    element.classList.add('animated-in');
+                }, index * 50);
+            }
+        }
+    });
+}
+
+// Fonction de test des animations (à appeler depuis la console)
+function testAnimations() {
+    console.log('🧪 TEST DES ANIMATIONS');
+    initUniversalScrollAnimations();
+}
+
+// Fonction pour réinitialiser toutes les animations
+function resetAllAnimations() {
+    console.log('🔄 RESET ANIMATIONS');
+    const allElements = document.querySelectorAll('.skill-item, .project-card, .certification-item, .education-item, .timeline-item, .domain-card, .card');
+    allElements.forEach(el => {
+        el.removeAttribute('data-animated');
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(50px)';
+        el.classList.remove('animated-in');
+    });
+    setTimeout(initUniversalScrollAnimations, 100);
+}
+
+// Animation de secours simple
+function emergencyAnimationFallback() {
+    console.log('🆘 ANIMATION DE SECOURS ACTIVÉE');
+    const allElements = document.querySelectorAll('.skill-item, .project-card, .certification-item, .education-item, .timeline-item, .domain-card, .card, [class*="item"], [class*="card"]');
+
+    console.log('🔧 Éléments trouvés pour animation de secours:', allElements.length);
+
+    allElements.forEach((element, index) => {
+        setTimeout(() => {
+            element.style.opacity = '1';
+            element.style.transform = 'translateY(0)';
+            element.style.transition = 'all 0.6s ease-out';
+            element.setAttribute('data-animated', 'true');
+            console.log('🎬 Animation de secours appliquée à:', element.className);
+        }, index * 100);
+    });
+
+    window.animationsStarted = true;
+}
+
+// Rendre les fonctions accessibles globalement pour le debug
+window.testAnimations = testAnimations;
+window.resetAllAnimations = resetAllAnimations;
+window.debugAnimations = debugAnimations;
+window.emergencyAnimationFallback = emergencyAnimationFallback;
 
 // Fonction pour confirmer une réservation
 function confirmBooking() {
