@@ -1,6 +1,6 @@
 {
   "nom": "Prince Noukounwoui",
-  "localisation": "Rennes, Bretagne, France",
+  "localisation": "Lyon, Auvergne-Rhône-Alpes, France",
   "titre": "Étudiant en Master 2 Ingénierie Durable des Bâtiments Communicants Intelligents (ISTIC Rennes)",
   "coordonnees": {
     "telephone": "0612719903",
@@ -14,12 +14,20 @@
     "Python",
     "ZigBee",
     "LoRa",
+    "KNX",
     "LoRaWAN",
     "GTB/GTC",
     "Analyse de données IoT",
     "Maintenance photovoltaïque",
     "Électrotechnique",
-    "QGIS / ArcGIS"
+    "QGIS / ArcGIS",
+    "Autocad",
+    "ArchiCAD",
+    "VBA Excel",
+    "GlobalMapper",
+    "PVSYST",
+    "Comsol",
+    "MatLab"
   ],
   "certifications": [
     "Certificat Solutions Victron Energy pour les télécoms",
@@ -38,7 +46,8 @@
         "Appairage et réalisation de coffrets domotiques",
         "Création de dashboards énergétiques et widgets",
         "Suivi et support d'installations GTB",
-        "Prise en main du KNX sur Jeedom"
+        "Prise en main du KNX sur Jeedom",
+        "Etude d'integration de protocole domotique dans un automate programmable industrielle"
       ]
     },
     {
@@ -147,11 +156,53 @@
         "documentation": "https://www.canva.com/design/DAGky2L7_84/lE3B8_EZERy5ZF2FewYPlw/edit?utm_content=DAGky2L7_84&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
       },
       "image": "./assets/images/projects/lorawan-project.jpg",
-      "tags": ["Python", "IoT", "LoRaWAN", "Capteurs", "Chirpstack"]
+      "tags": [
+        "Python",
+        "IoT",
+        "LoRaWAN",
+        "Capteurs",
+        "Chirpstack"
+      ],
+      "domain": "iot"
+    },
+    {
+      "nom": "Modélisation et stabilisation d’un pendule inversé",
+      "periode": "2023 - 2024",
+      "organisation": "UFR STGI – Université de Franche-Comté",
+      "description": "Projet académique portant sur la modélisation dynamique et la stabilisation d’un pendule inversé monté sur chariot. Le travail a consisté à dériver les équations du mouvement à l’aide de la méthode de Lagrange, linéariser le modèle autour de l’équilibre vertical, définir les fonctions de transfert et réaliser une représentation en espace d’état. Une commande PID a ensuite été conçue et réglée sous MATLAB/Simulink afin d’assurer la stabilité et de respecter les contraintes de temps de stabilisation et de dépassement lors de perturbations impulsionnelles. L’étude inclut analyse, simulation et validation des performances.",
+      "competences": [
+        "Modélisation de systèmes dynamiques",
+        "Méthode de Lagrange",
+        "Automatique et commande des systèmes",
+        "Conception de contrôleur PID",
+        "Analyse en espace d’état",
+        "Fonctions de transfert",
+        "MATLAB / Simulink",
+        "Analyse de stabilité",
+        "Traitement et validation de performances",
+        "Travail en équipe",
+        "Rédaction scientifique"
+      ],
+      "statut": "Fait",
+      "type": "Académique",
+      "liens": {
+        "github": "",
+        "documentation": ""
+      },
+      "image": "",
+      "tags": [
+        "Automatique",
+        "PID",
+        "Modélisation",
+        "MATLAB",
+        "Contrôle",
+        "Systèmes dynamiques"
+      ],
+      "domain": "control-system"
     },
     {
       "nom": "Création d'une mini station météo avec Arduino",
-      "periode": "Janvier 2022 - Aujourd'hui",
+      "periode": "Juillet 2021 - Août 2021",
       "organisation": "Esmer (École Supérieure des Métiers des Énergies Renouvelables)",
       "description": "Projet de mini station météo avec Arduino, intégrant des capteurs pour mesurer la vitesse du vent (anémomètre) et les précipitations (pluviomètre). Les données collectées sont affichées en temps réel sur un écran LCD, grâce à une programmation optimisée en Arduino. Ce projet visait à concevoir une solution compacte, efficace et accessible pour surveiller les conditions météorologiques locales.",
       "competences": [
@@ -167,12 +218,18 @@
       "type": "Académique",
       "liens": {},
       "image": "./assets/images/projects/arduino-meteo.jpg",
-      "tags": ["Arduino", "IoT", "Capteurs", "LCD"]
+      "tags": [
+        "Arduino",
+        "IoT",
+        "Capteurs",
+        "LCD"
+      ],
+      "domain": "iot"
     },
     {
       "nom": "Conception d'un logiciel de dimensionnement de système photovoltaïque avec Python",
-      "periode": "Janvier 2020 - Aujourd'hui",
-      "organisation": "Projet personnel",
+      "periode": "Janvier 2020 - Février 2020",
+      "organisation": "Esmer (École Supérieure des Métiers des Énergies Renouvelables)",
       "description": "Développement d'un logiciel complet pour le dimensionnement des systèmes photovoltaïques. L'application permet de calculer la taille optimale des installations solaires en fonction des besoins énergétiques, de l'irradiation solaire locale et des contraintes techniques. Interface graphique intuitive développée en Python pour faciliter l'utilisation par les professionnels du secteur.",
       "competences": [
         "Processus de la qualité",
@@ -181,19 +238,25 @@
         "Énergies renouvelables",
         "Dimensionnement photovoltaïque"
       ],
-      "statut": "En cours",
-      "type": "Personnel",
+      "statut": "Fait",
+      "type": "Académique",
       "liens": {
         "github": "https://github.com/prince-noukounwoui/pv-dimensioning-tool",
         "documentation": "https://pv-tool-docs.readthedocs.io"
       },
       "image": "./assets/images/projects/pv-software.jpg",
-      "tags": ["Python", "Énergie", "Interface", "Photovoltaïque"]
+      "tags": [
+        "Python",
+        "Énergie",
+        "Interface",
+        "Photovoltaïque"
+      ],
+      "domain": "energy"
     },
     {
       "nom": "Conception d'un progiciel de dimensionnement de réseau électrique Basse Tension",
       "periode": "Fevrier 2022 - Juillet 2022",
-      "organisation": "Projet personnel",
+      "organisation": "Esmer (École Supérieure des Métiers des Énergies Renouvelables)",
       "description": "Développement d'un logiciel complet pour le dimensionnement des réseaux électriques basse tension. L'application permet de calculer les sections de câbles, chutes de tension et dimensionnement des équipements de protection. Interface développée en VBA Excel pour une utilisation pratique par les électriciens et ingénieurs.",
       "competences": [
         "Processus de la qualité",
@@ -206,7 +269,40 @@
       "type": "Académique",
       "liens": {},
       "image": "./assets/images/projects/electrical-network.jpg",
-      "tags": ["VBA", "Excel", "Électrique", "Dimensionnement"]
+      "tags": [
+        "VBA",
+        "Excel",
+        "Électrique",
+        "Dimensionnement",
+        "Rseau Électrique"
+      ],
+      "domain": "electricité"
+    },
+    {
+      "nom": "Conception et dimensionnement d'un biodigesteur pour la production de biogaz",
+      "periode": "Mars 2021 - Juin 2021",
+      "organisation": "Esmer (École Supérieure des Métiers des Énergies Renouvelables)",
+      "description": "Projet de conception d'un biodigesteur pour la production de biogaz à partir de déchets organiques. Le projet incluait le dimensionnement du réacteur, l'étude de faisabilité technique et économique, ainsi que l'analyse des performances énergétiques. Utilisation de Comsol pour la simulation des processus de fermentation anaérobie.",
+      "competences": [
+        "Énergies renouvelables",
+        "Biomasse",
+        "Comsol",
+        "Dimensionnement énergétique",
+        "Processus de fermentation",
+        "Analyse économique",
+        "Processus de la qualité"
+      ],
+      "statut": "Fait",
+      "type": "Académique",
+      "liens": {},
+      "image": "./assets/images/projects/biodigester.jpg",
+      "tags": [
+        "Biomasse",
+        "Comsol",
+        "Énergie",
+        "Biodigesteur"
+      ],
+      "domain": "energy"
     }
   ],
   "domains": {
@@ -214,15 +310,28 @@
       "name": "IoT & Domotique",
       "icon": "fas fa-home",
       "description": "Smart Home, Smart Building, Smart City",
-      "technologies": ["Zigbee", "LoRaWAN", "KNX", "Jeedom", "GTB/GTC"],
+      "technologies": [
+        "Zigbee",
+        "LoRaWAN",
+        "KNX",
+        "Jeedom",
+        "GTB/GTC",
+        "Meshtastic"
+      ],
       "color": "rgba(0, 122, 255, 0.8)",
       "theme": "iot"
     },
     "energy": {
-      "name": "Énergie & Photovoltaïque",
+      "name": "Énergie Renouvelable",
       "icon": "fas fa-solar-panel",
       "description": "Systèmes solaires, monitoring énergétique",
-      "technologies": ["Photovoltaïque", "Monitoring IoT", "Analyse de données", "VRM"],
+      "technologies": [
+        "Photovoltaïque",
+        "Monitoring IoT",
+        "Analyse de données",
+        "VRM",
+        "PVSYST"
+      ],
       "color": "rgba(255, 204, 0, 0.8)",
       "theme": "solar"
     },
@@ -230,7 +339,14 @@
       "name": "Réseau électrique & Électrotechnique",
       "icon": "fas fa-cogs",
       "description": "Réseaux électriques, cartographie, maintenance industrielle",
-      "technologies": ["QGIS", "ArcGIS", "Réseaux BT/HT", "Moteurs AC", "Cartographie GPS"],
+      "technologies": [
+        "QGIS",
+        "ArcGIS",
+        "Réseaux BT/HT",
+        "Moteurs AC",
+        "Cartographie GPS",
+        "GlobalMapper"
+      ],
       "color": "rgba(175, 82, 222, 0.8)",
       "theme": "network"
     }
@@ -282,6 +398,16 @@
     "Planification de projets": "fas fa-tasks",
     "Coordination d'équipe": "fas fa-users",
     "Supervision": "fas fa-eye",
-    "Gestion de la maintenance": "fas fa-wrench"
+    "Gestion de la maintenance": "fas fa-wrench",
+    "Autocad": "fas fa-drafting-compass",
+    "ArchiCAD": "fas fa-building",
+    "GlobalMapper": "fas fa-globe",
+    "PVSYST": "fas fa-solar-panel",
+    "Comsol": "fas fa-wave-square",
+    "MatLab": "fas fa-calculator",
+    "Biomasse": "fas fa-seedling",
+    "Dimensionnement énergétique": "fas fa-calculator",
+    "Processus de fermentation": "fas fa-flask",
+    "Analyse économique": "fas fa-chart-pie"
   }
 }

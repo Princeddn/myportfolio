@@ -248,25 +248,24 @@ function organizeProjectsByDomain() {
         domainProjects[domain] = [];
     });
 
-    // Classer les projets par domaine (basé sur les compétences)
+    // Classer les projets par domaine (basé sur la propriété domain)
     cvData.projets.forEach(project => {
-        let assignedDomain = 'iot'; // Par défaut
+        // Utiliser la propriété domain du projet si elle existe, sinon iot par défaut
+        const assignedDomain = project.domain || 'iot';
 
-        // Analyse des compétences pour déterminer le domaine
-        const competences = project.competences || [];
-
-        if (competences.includes('Python (langage de programmation)') &&
-            project.nom.includes('photovoltaïque')) {
-            assignedDomain = 'energy';
-        } else if (competences.includes('LoRaWAN') ||
-                   competences.includes('Internet of Things (IoT)')) {
-            assignedDomain = 'iot';
+        // Vérifier que le domaine existe dans notre configuration
+        if (domainProjects[assignedDomain]) {
+            domainProjects[assignedDomain].push({
+                ...project,
+                domain: assignedDomain
+            });
+        } else {
+            // Si le domaine n'existe pas, l'ajouter à iot par défaut
+            domainProjects['iot'].push({
+                ...project,
+                domain: 'iot'
+            });
         }
-
-        domainProjects[assignedDomain].push({
-            ...project,
-            domain: assignedDomain
-        });
     });
 
     // Projets organisés par domaine
