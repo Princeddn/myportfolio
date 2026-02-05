@@ -54,77 +54,103 @@ let cvData = {};
 let DOMAINS = {};
 let COMPANY_DOMAINS = {};
 let skillIcons = {};
+let skillLogos = {};
 
 // Fonction pour charger les données depuis cv.json
 async function loadCVData() {
-    try {
-        const response = await fetch('./cv.json');
-        if (!response.ok) {
-            throw new Error(`Erreur HTTP: ${response.status} - ${response.statusText}`);
-        }
-        const data = await response.json();
+    console.log('🔍 Chargement cv.json... Protocol:', window.location.protocol);
 
-        // Assigner les données aux variables globales
-        cvData = data;
-        DOMAINS = data.domains || {};
-        COMPANY_DOMAINS = data.company_domains || {};
-        skillIcons = data.skill_icons || {};
+    const isFileProtocol = window.location.protocol === 'file:';
+    const paths = ['./cv.json', 'cv.json', '/cv.json'];
 
-        console.log('✅ Données chargées avec succès:', Object.keys(cvData));
-        return true;
-    } catch (error) {
-        console.error('❌ Erreur lors du chargement des données:', error);
-
-        // Fallback avec données minimales pour éviter les erreurs
-        cvData = {
-            nom: "Prince Noukounwoui",
-            titre: "Étudiant en Master 2 Ingénierie Durable des Bâtiments Communicants Intelligents",
-            localisation: "Rennes, Bretagne, France",
-            coordonnees: {
-                email: "noukounwouiprince@gmail.com",
-                telephone: "0612719903",
-                linkedin: "https://www.linkedin.com/in/prince-noukounwoui-ba1978217",
-                photo: "./assets/images/profile.jpg"
-            },
-            resume: "Portfolio en cours de chargement...",
-            experiences: [],
-            projets: [],
-            competences: [],
-            formation: [],
-            certifications: []
-        };
-        DOMAINS = {
-            'iot': {
-                name: 'IoT & Domotique',
-                icon: 'fas fa-home',
-                color: 'rgba(0, 122, 255, 0.8)',
-                description: 'Smart Home, Smart Building, Smart City',
-                technologies: ['IoT', 'Domotique', 'Capteurs'],
-                theme: 'iot'
-            },
-            'energy': {
-                name: 'Énergie & Photovoltaïque',
-                icon: 'fas fa-solar-panel',
-                color: 'rgba(255, 204, 0, 0.8)',
-                description: 'Systèmes solaires, monitoring énergétique',
-                technologies: ['Photovoltaïque', 'Monitoring'],
-                theme: 'solar'
-            },
-            'electricité': {
-                name: 'Réseau électrique',
-                icon: 'fas fa-cogs',
-                color: 'rgba(175, 82, 222, 0.8)',
-                description: 'Réseaux électriques, maintenance',
-                technologies: ['Électrotechnique', 'Maintenance'],
-                theme: 'network'
-            }
-        };
-        COMPANY_DOMAINS = {};
-        skillIcons = {};
-
-        console.log('🔄 Données de fallback chargées');
-        return false;
+    if (isFileProtocol) {
+        console.warn('⚠️ Protocole file:// détecté - fetch peut échouer');
+        console.warn('⚠️ Utilisez un serveur local: python -m http.server 8000');
     }
+
+    for (const path of paths) {
+        try {
+            const url = isFileProtocol ? path : `${path}?v=${Date.now()}`;
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            const data = await response.json();
+
+            if (!data.nom || !data.projets) {
+                throw new Error('Données JSON incomplètes');
+            }
+
+            cvData = data;
+            DOMAINS = data.domains || {};
+            COMPANY_DOMAINS = data.company_domains || {};
+            skillIcons = data.skill_icons || {};
+            skillLogos = data.skill_logos || {};
+
+            console.log('✅ Données chargées:', {
+                projets: cvData.projets.length,
+                competences: cvData.competences.length,
+                certifications: cvData.certifications.length,
+                formation: cvData.formation.length,
+                experiences: cvData.experiences.length
+            });
+            return true;
+        } catch (error) {
+            console.warn(`❌ Échec avec ${path}:`, error.message);
+        }
+    }
+
+    console.error('❌ Impossible de charger cv.json');
+
+    // Fallback avec données minimales
+    cvData = {
+        nom: "Prince Noukounwoui",
+        titre: "Étudiant en Master 2 Ingénierie Durable des Bâtiments Communicants Intelligents",
+        localisation: "Lyon, Auvergne-Rhône-Alpes, France",
+        coordonnees: {
+            email: "noukounwouiprince@gmail.com",
+            telephone: "0612719903",
+            linkedin: "https://www.linkedin.com/in/prince-noukounwoui-ba1978217",
+            photo: "./assets/images/profile.jpg"
+        },
+        resume: "Portfolio en cours de chargement...",
+        experiences: [],
+        projets: [],
+        competences: [],
+        formation: [],
+        certifications: []
+    };
+    DOMAINS = {
+        'iot': {
+            name: 'IoT & Domotique',
+            icon: 'fas fa-home',
+            color: 'rgba(0, 122, 255, 0.8)',
+            description: 'Smart Home, Smart Building, Smart City',
+            technologies: ['IoT', 'Domotique', 'Capteurs'],
+            theme: 'iot'
+        },
+        'energy': {
+            name: 'Énergie & Photovoltaïque',
+            icon: 'fas fa-solar-panel',
+            color: 'rgba(255, 204, 0, 0.8)',
+            description: 'Systèmes solaires, monitoring énergétique',
+            technologies: ['Photovoltaïque', 'Monitoring'],
+            theme: 'solar'
+        },
+        'electricité': {
+            name: 'Réseau électrique',
+            icon: 'fas fa-cogs',
+            color: 'rgba(175, 82, 222, 0.8)',
+            description: 'Réseaux électriques, maintenance',
+            technologies: ['Électrotechnique', 'Maintenance'],
+            theme: 'network'
+        }
+    };
+    COMPANY_DOMAINS = {};
+    skillIcons = {};
+
+    console.log('🔄 Données de fallback chargées');
+    return false;
 }
 
 let currentDomain = 'iot'; // Domaine par défaut
@@ -637,7 +663,7 @@ function initScrollAnimations() {
     // Attendre que tous les éléments soient créés
     setTimeout(() => {
         // Observer pour les éléments à animer au scroll
-        const elementsToAnimate = document.querySelectorAll('.skills-grid .skill-item, .projects-grid .project-card, .certifications-grid .certification-item, .education-timeline .education-item, .cards-grid .domain-card');
+        const elementsToAnimate = document.querySelectorAll('.skills-grid:not(.skills-orbit-layout) .skill-item, .projects-grid .project-card, .certifications-grid .certification-item, .education-timeline .education-item, .cards-grid .domain-card');
 
         console.log('🎬 Elements trouvés pour animation:', elementsToAnimate.length);
 
@@ -695,7 +721,7 @@ function initScrollAnimations() {
 
 // Forcer les animations pour les éléments déjà visibles
 function forceVisibleAnimations() {
-    const elementsToCheck = document.querySelectorAll('.skills-grid .skill-item, .projects-grid .project-card, .certifications-grid .certification-item, .education-timeline .education-item, .cards-grid .domain-card');
+    const elementsToCheck = document.querySelectorAll('.skills-grid:not(.skills-orbit-layout) .skill-item, .projects-grid .project-card, .certifications-grid .certification-item, .education-timeline .education-item, .cards-grid .domain-card');
 
     elementsToCheck.forEach((element, index) => {
         if (!element.classList.contains('animated')) {
@@ -924,26 +950,139 @@ function closeDomainPanel() {
 
 // Remplir les compétences par domaine
 function populateSkillsByDomain() {
+    // Use SkillSphere 3D constellation if available
+    if (window.SkillSphere) {
+        window.SkillSphere.init();
+        return;
+    }
+
+    // Fallback: show old grid if SkillSphere failed to load
+    const wrapper = document.getElementById('skillsphere-wrapper');
+    const fallbackGrid = document.getElementById('competences-grid');
+    if (wrapper) wrapper.style.display = 'none';
+    if (fallbackGrid) fallbackGrid.style.display = '';
+
     const container = document.querySelector('#competences .skills-grid');
     if (!container || !cvData.competences) return;
 
     container.innerHTML = '';
 
-    cvData.competences.forEach(skill => {
-        const skillElement = document.createElement('div');
-        skillElement.className = 'skill-item';
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const useOrbitLayout = !prefersReducedMotion && !isMobile;
 
+    const buildSkillIconMarkup = (skill) => {
         const icon = skillIcons[skill] || 'fas fa-star';
+        const logo = skillLogos[skill];
 
-        skillElement.innerHTML = `
-            <i class="${icon}"></i>
-            <span>${skill}</span>
-        `;
+        if (Array.isArray(logo)) {
+            const logosHtml = logo.map((url) => (
+                `<img class="skill-logo" src="${url}" alt="${skill} logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';">`
+            )).join('');
 
-        container.appendChild(skillElement);
+            return `
+                <div class="skill-logo-stack">${logosHtml}</div>
+                <i class="skill-fallback-icon ${icon}" style="display:none;"></i>
+            `;
+        }
+
+        if (logo) {
+            return `
+                <img class="skill-logo" src="${logo}" alt="${skill} logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <i class="skill-fallback-icon ${icon}" style="display:none;"></i>
+            `;
+        }
+
+        return `<i class="skill-fallback-icon ${icon}"></i>`;
+    };
+
+    if (!useOrbitLayout) {
+        container.classList.remove('skills-orbit-layout');
+        cvData.competences.forEach(skill => {
+            const skillElement = document.createElement('div');
+            skillElement.className = 'skill-item';
+
+            const hasLogo = Boolean(skillLogos[skill]);
+            if (hasLogo) {
+                skillElement.classList.add('has-logo');
+            }
+
+            skillElement.innerHTML = `
+                ${buildSkillIconMarkup(skill)}
+                <span class="skill-name">${skill}</span>
+            `;
+
+            container.appendChild(skillElement);
+        });
+        return;
+    }
+
+    container.classList.add('skills-orbit-layout');
+
+    const orbit = document.createElement('div');
+    orbit.className = 'skills-orbit';
+
+    const center = document.createElement('div');
+    center.className = 'orbit-center';
+    center.innerHTML = `
+        <div class="earth-core">Competences</div>
+        <div class="earth-glow"></div>
+    `;
+
+    const ringsConfig = [
+        { className: 'orbit-ring ring-1', radius: 170, duration: 36, direction: 'normal' },
+        { className: 'orbit-ring ring-2', radius: 240, duration: 52, direction: 'reverse' }
+    ];
+
+    const skills = [...cvData.competences];
+    const splitIndex = Math.ceil(skills.length / 2);
+    const ringsSkills = [skills.slice(0, splitIndex), skills.slice(splitIndex)];
+
+    ringsConfig.forEach((config, ringIndex) => {
+        const ringElement = document.createElement('div');
+        ringElement.className = config.className;
+        ringElement.style.setProperty('--radius', `${config.radius}px`);
+        ringElement.style.setProperty('--duration', `${config.duration}s`);
+        ringElement.style.setProperty('--direction', config.direction);
+
+        const ringSkills = ringsSkills[ringIndex] || [];
+        const angleStep = ringSkills.length ? 360 / ringSkills.length : 0;
+
+        ringSkills.forEach((skill, index) => {
+            const skillElement = document.createElement('div');
+            skillElement.className = 'skill-item orbit-item';
+            skillElement.style.setProperty('--angle', `${angleStep * index}deg`);
+            skillElement.setAttribute('aria-label', skill);
+
+            const hasLogo = Boolean(skillLogos[skill]);
+            if (hasLogo) {
+                skillElement.classList.add('has-logo');
+            }
+
+            skillElement.innerHTML = `
+                <div class="skill-orbit-card">
+                    ${buildSkillIconMarkup(skill)}
+                </div>
+                <div class="skill-label">${skill}</div>
+            `;
+
+            skillElement.addEventListener('pointerenter', () => {
+                orbit.classList.add('orbit-paused');
+            });
+            skillElement.addEventListener('pointerleave', () => {
+                orbit.classList.remove('orbit-paused');
+            });
+
+            ringElement.appendChild(skillElement);
+        });
+
+        orbit.appendChild(ringElement);
     });
 
-    // Compétences remplies
+    orbit.appendChild(center);
+    container.appendChild(orbit);
+
+    // Competences remplies
 }
 
 // Remplir la formation
