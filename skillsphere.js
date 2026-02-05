@@ -12,10 +12,10 @@
         fov: 45,
         autoSpeed: 0.0015,
         damping: 0.94,
-        pointBase: 0.5,
-        pointLevelScale: 0.15,
-        lineAlpha: 0.18,
-        lineHoverAlpha: 0.5,
+        pointBase: 0.7,
+        pointLevelScale: 0.18,
+        lineAlpha: 0.28,
+        lineHoverAlpha: 0.65,
         pulseHz: 1.5,
         pulseAmp: 0.15,
         zoomMin: 9,
@@ -118,12 +118,20 @@
         geo:           { name: 'CAO & SIG',        color: '#FF453A', rgb: [255, 69, 58] },
     };
 
-    const DOMAIN_LOGOS = {
-        smartbuilding: './assets/logos/zigbee.png',
-        iot: './assets/logos/LoRaWAN.png',
-        energy: './assets/logos/PVsyst.png',
-        dev: 'https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png',
-        geo: './assets/logos/Autocad.png',
+    const DOMAIN_ICONS = {
+        smartbuilding: '\uf1ad',  // fa-building
+        iot:           '\uf1eb',  // fa-wifi
+        energy:        '\uf0e7',  // fa-bolt
+        dev:           '\uf121',  // fa-code
+        geo:           '\uf279',  // fa-map
+    };
+
+    const DOMAIN_LABELS = {
+        smartbuilding: 'Smart',
+        iot: 'IoT',
+        energy: 'Energie',
+        dev: 'Dev',
+        geo: 'SIG',
     };
 
     // ── State ──────────────────────────────────────────────────────
@@ -136,6 +144,7 @@
     var subSprites = [];
     var subLines = [];
     var interactiveSprites = [];
+    var skillLabels = [];
     var raycaster, pointerNDC;
 
     var autoRotate = true;
@@ -155,35 +164,42 @@
 
     // ── Init ───────────────────────────────────────────────────────
     function init() {
-        wrapperEl   = document.getElementById('skillsphere-wrapper');
-        containerEl = document.getElementById('skillsphere-container');
-        tooltipEl   = document.getElementById('skillsphere-tooltip');
-        detailEl    = document.getElementById('skillsphere-detail');
-        legendEl    = document.getElementById('skillsphere-legend');
-        mobileEl    = document.getElementById('skillsphere-mobile');
+        try {
+            wrapperEl   = document.getElementById('skillsphere-wrapper');
+            containerEl = document.getElementById('skillsphere-container');
+            tooltipEl   = document.getElementById('skillsphere-tooltip');
+            detailEl    = document.getElementById('skillsphere-detail');
+            legendEl    = document.getElementById('skillsphere-legend');
+            mobileEl    = document.getElementById('skillsphere-mobile');
 
-        if (!wrapperEl || !containerEl) return;
+            if (!wrapperEl || !containerEl) return false;
 
-        reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        var isMobile = window.innerWidth <= 768;
+            var isMobile = window.innerWidth <= 768;
 
-        if (isMobile || !window.THREE || !supportsWebGL()) {
-            wrapperEl.classList.add('sphere-mobile-mode');
-            buildMobileFallback();
-            return;
+            if (isMobile || !window.THREE || !supportsWebGL()) {
+                wrapperEl.classList.add('sphere-mobile-mode');
+                buildMobileFallback();
+                return true;
+            }
+
+            setupScene();
+            buildPoints();
+            buildLines();
+            buildSubSkills();
+            buildSkillLabels();
+            interactiveSprites = sprites.concat(subSprites);
+            buildAmbientParticles();
+            buildLegend();
+            setupEvents();
+            setupVisibility();
+            animate();
+            return true;
+        } catch (error) {
+            console.error('SkillSphere init error:', error);
+            return false;
         }
-
-        setupScene();
-        buildPoints();
-        buildLines();
-        buildSubSkills();
-        interactiveSprites = sprites.concat(subSprites);
-        buildAmbientParticles();
-        buildLegend();
-        setupEvents();
-        setupVisibility();
-        animate();
     }
 
     function supportsWebGL() {
@@ -239,6 +255,7 @@
     var textureCache = {};
     var logoTextureCache = {};
     var badgeTextureCache = {};
+    var labelTextureCache = {};
     var textureLoader = null;
 
     function glowTexture(rgb) {
@@ -314,17 +331,132 @@
         return tex;
     }
 
-function logoTexture(url) {
+    function labelTexture(text) {
+        var key = text || 'label';
+        if (labelTextureCache[key]) return labelTextureCache[key];
+
+        var size = 256;
+        var c = document.createElement('canvas');
+        c.width = c.height = size;
+        var ctx = c.getContext('2d');
+        ctx.clearRect(0, 0, size, size);
+
+        // soft rounded pill background
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.94)';
+        ctx.beginPath();
+        var r = 48;
+        var w = size - 20;
+        var h = 100;
+        var x = 10;
+        var y = (size - h) / 2;
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y, x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x, y + h, r);
+        ctx.arcTo(x, y + h, x, y, r);
+        ctx.arcTo(x, y, x + w, y, r);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
+        ctx.font = '700 58px \"SF Pro Display\", \"Segoe UI\", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, size / 2, size / 2 + 2);
+
+        var tex = new THREE.CanvasTexture(c);
+        labelTextureCache[key] = tex;
+        return tex;
+    }
+
+    function skillNameTexture(text) {
+        var key = 'sn_' + text;
+        if (labelTextureCache[key]) return labelTextureCache[key];
+
+        var cw = 360;
+        var ch = 100;
+        var c = document.createElement('canvas');
+        c.width = cw;
+        c.height = ch;
+        var ctx = c.getContext('2d');
+
+        // Measure text
+        ctx.font = '600 40px "SF Pro Display", "Segoe UI", sans-serif';
+        var tw = ctx.measureText(text).width;
+        var pillW = Math.min(tw + 30, cw - 8);
+        var pillH = 54;
+        var px = (cw - pillW) / 2;
+        var py = (ch - pillH) / 2;
+        var r = 14;
+
+        // Pill background
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+        ctx.beginPath();
+        ctx.moveTo(px + r, py);
+        ctx.arcTo(px + pillW, py, px + pillW, py + pillH, r);
+        ctx.arcTo(px + pillW, py + pillH, px, py + pillH, r);
+        ctx.arcTo(px, py + pillH, px, py, r);
+        ctx.arcTo(px, py, px + pillW, py, r);
+        ctx.closePath();
+        ctx.fill();
+
+        // Subtle border
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Text
+        ctx.fillStyle = 'rgba(29, 29, 31, 0.92)';
+        ctx.font = '600 40px "SF Pro Display", "Segoe UI", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, cw / 2, ch / 2);
+
+        var tex = new THREE.CanvasTexture(c);
+        labelTextureCache[key] = tex;
+        return tex;
+    }
+
+    function domainIconTexture(iconChar, colorHex) {
+        var key = 'dicon_' + iconChar + colorHex;
+        if (logoTextureCache[key]) return logoTextureCache[key];
+
+        var size = 256;
+        var c = document.createElement('canvas');
+        c.width = c.height = size;
+        var ctx = c.getContext('2d');
+        var cx = size / 2;
+
+        ctx.fillStyle = colorHex;
+        ctx.font = '900 90px "Font Awesome 6 Free"';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(iconChar, cx, cx);
+
+        var tex = new THREE.CanvasTexture(c);
+        logoTextureCache[key] = tex;
+        return tex;
+    }
+
+    function logoTexture(url, onLoad) {
         if (!url) return null;
-        if (logoTextureCache[url]) return logoTextureCache[url];
+        if (logoTextureCache[url]) {
+            if (onLoad) onLoad(logoTextureCache[url]);
+            return logoTextureCache[url];
+        }
         if (!textureLoader) {
             textureLoader = new THREE.TextureLoader();
             textureLoader.crossOrigin = 'anonymous';
         }
-        var tex = textureLoader.load(url);
-        if (tex && typeof THREE.SRGBColorSpace !== 'undefined' && tex.colorSpace !== undefined) {
-            tex.colorSpace = THREE.SRGBColorSpace;
-        }
+        var tex = textureLoader.load(url, function (loaded) {
+            if (loaded && typeof THREE.SRGBColorSpace !== 'undefined' && loaded.colorSpace !== undefined) {
+                loaded.colorSpace = THREE.SRGBColorSpace;
+            }
+            if (onLoad) onLoad(loaded || tex);
+        });
         logoTextureCache[url] = tex;
         return tex;
     }
@@ -421,33 +553,52 @@ function logoTexture(url) {
 
             var hub = new THREE.Sprite(mat);
             hub.position.set(x, y, z);
-            var hubScale = 0.4;
+            var hubScale = 0.55;
             hub.scale.set(hubScale, hubScale, 1);
             hub.userData = { domain: id, isHub: true, baseScale: hubScale };
             hub.renderOrder = 1;
 
-            var logoUrl = DOMAIN_LOGOS[id];
-            var logoTex = logoTexture(logoUrl);
-            if (logoTex) {
-                var badgeTex = badgeTexture(domain.color);
-                var badgeMat = new THREE.SpriteMaterial({
-                    map: badgeTex,
-                    transparent: true,
-                    opacity: 0.95,
-                    depthWrite: false,
-                    depthTest: false,
-                    blending: THREE.NormalBlending,
-                });
-                var badge = new THREE.Sprite(badgeMat);
-                var badgeScale = 0.65;
-                badge.scale.set(badgeScale, badgeScale, 1);
-                badge.position.set(0, 0, 0);
-                badge.userData = { isHubBadge: true, baseScale: badgeScale, domain: id };
-                badge.renderOrder = 2;
-                hub.add(badge);
+            var badgeTex = badgeTexture(domain.color);
+            var badgeMat = new THREE.SpriteMaterial({
+                map: badgeTex,
+                transparent: true,
+                opacity: 0.95,
+                depthWrite: false,
+                depthTest: false,
+                blending: THREE.NormalBlending,
+            });
+            var badge = new THREE.Sprite(badgeMat);
+            var badgeScale = 1.6;
+            badge.scale.set(badgeScale, badgeScale, 1);
+            badge.position.set(0, 0, 0);
+            badge.userData = { isHubBadge: true, baseScale: badgeScale, domain: id };
+            badge.renderOrder = 2;
+            hub.add(badge);
+            hub.userData.badge = badge;
 
+            var labelText = DOMAIN_LABELS[id] || domain.name;
+            var labelTex = labelTexture(labelText);
+            var labelMat = new THREE.SpriteMaterial({
+                map: labelTex,
+                transparent: true,
+                opacity: 0.92,
+                depthWrite: false,
+                depthTest: false,
+                blending: THREE.NormalBlending,
+            });
+            var label = new THREE.Sprite(labelMat);
+            var labelScale = 2.0;
+            label.scale.set(labelScale, labelScale, 1);
+            label.position.set(0, 0, 0);
+            label.userData = { isHubLabel: true, baseScale: labelScale, domain: id };
+            label.renderOrder = 3;
+            hub.add(label);
+            hub.userData.label = label;
+
+            var iconChar = DOMAIN_ICONS[id];
+            if (iconChar) {
                 var logoMat = new THREE.SpriteMaterial({
-                    map: logoTex,
+                    map: null,
                     transparent: true,
                     opacity: 0.98,
                     depthWrite: false,
@@ -455,14 +606,27 @@ function logoTexture(url) {
                     blending: THREE.NormalBlending,
                 });
                 var logo = new THREE.Sprite(logoMat);
-                var logoScale = 0.5;
+                var logoScale = 1.8;
                 logo.scale.set(logoScale, logoScale, 1);
                 logo.position.set(0, 0, 0);
                 logo.userData = { isHubLogo: true, baseScale: logoScale, domain: id };
-                logo.renderOrder = 3;
+                logo.renderOrder = 4;
+                logo.visible = false;
                 hub.add(logo);
                 hub.userData.logo = logo;
-                hub.userData.badge = badge;
+
+                // Render FA icon when webfont is ready
+                (function(logoSprite, labelSprite, ic, col) {
+                    if (document.fonts && document.fonts.ready) {
+                        document.fonts.ready.then(function() {
+                            var tex = domainIconTexture(ic, col);
+                            logoSprite.material.map = tex;
+                            logoSprite.material.needsUpdate = true;
+                            logoSprite.visible = true;
+                            if (labelSprite) labelSprite.visible = false;
+                        });
+                    }
+                })(logo, label, iconChar, domain.color);
             }
 
             group.add(hub);
@@ -502,8 +666,8 @@ function logoTexture(url) {
 
     // ── Sub-Skills ───────────────────────────────────────────────────
     function buildSubSkills() {
-        var subRadius = 0.55;
-        var subScale = 0.18;
+        var subRadius = 0.65;
+        var subScale = 0.25;
 
         SKILLS.forEach(function (skill) {
             if (!skill.subSkills || skill.subSkills.length === 0) return;
@@ -542,7 +706,7 @@ function logoTexture(url) {
                 var mat = new THREE.SpriteMaterial({
                     map: tex,
                     transparent: true,
-                    opacity: 0.6,
+                    opacity: 0.7,
                     depthWrite: false,
                     blending: THREE.NormalBlending,
                 });
@@ -558,7 +722,7 @@ function logoTexture(url) {
                     parentLabel: skill.label,
                     domain: skill.domain,
                     baseScale: subScale,
-                    baseOpacity: 0.6,
+                    baseOpacity: 0.7,
                 };
 
                 group.add(sprite);
@@ -576,6 +740,43 @@ function logoTexture(url) {
                 group.add(line);
                 subLines.push(line);
             });
+        });
+    }
+
+    // ── Skill Name Labels ────────────────────────────────────────────
+    function buildSkillLabels() {
+        sprites.forEach(function (sprite) {
+            var skill = sprite.userData;
+            var tex = skillNameTexture(skill.label);
+            var mat = new THREE.SpriteMaterial({
+                map: tex,
+                transparent: true,
+                opacity: 0.85,
+                depthWrite: false,
+                depthTest: false,
+                blending: THREE.NormalBlending,
+            });
+
+            var label = new THREE.Sprite(mat);
+
+            // Position outward from sphere surface
+            var normal = new THREE.Vector3().copy(sprite.position).normalize();
+            label.position.copy(sprite.position).addScaledVector(normal, 0.5);
+
+            // 360x100 canvas → aspect 3.6:1
+            var s = 0.75;
+            label.scale.set(s * 3.6, s, 1);
+            label.renderOrder = 10;
+
+            label.userData = {
+                isSkillLabel: true,
+                domain: skill.domain,
+                parentId: skill.id,
+                baseOpacity: 0.85,
+            };
+
+            group.add(label);
+            skillLabels.push(label);
         });
     }
 
@@ -602,9 +803,9 @@ function logoTexture(url) {
         var tex = ambientDotTexture();
         var mat = new THREE.PointsMaterial({
             map: tex,
-            size: 4,
+            size: 6,
             transparent: true,
-            opacity: 0.18,
+            opacity: 0.25,
             depthWrite: false,
             blending: THREE.NormalBlending,
             sizeAttenuation: true,
@@ -774,7 +975,7 @@ function logoTexture(url) {
         var isSub = skill.isSubSkill;
         var levelHtml = isSub ? '' : '<div class="tooltip-level">' + levelDots(skill.level) + '</div>';
         var subHtml = isSub
-            ? '<div class="tooltip-sub">Sous-compÃ©tence de ' + skill.parentLabel + '</div>'
+            ? '<div class="tooltip-sub">Sous-comp\u00e9tence de ' + skill.parentLabel + '</div>'
             : '';
 
         tooltipEl.innerHTML =
@@ -825,7 +1026,7 @@ function logoTexture(url) {
             }).join('');
             subHtml =
                 '<div class="detail-subskills">' +
-                    '<span class="detail-subskills-title">Sous-comp?tences</span>' +
+                    '<span class="detail-subskills-title">Sous-comp\u00e9tences</span>' +
                     '<div class="detail-subskills-list">' + subTags + '</div>' +
                 '</div>';
         }
@@ -953,9 +1154,29 @@ function logoTexture(url) {
 
             var logo = hub.userData && hub.userData.logo;
             var badge = hub.userData && hub.userData.badge;
+            var label = hub.userData && hub.userData.label;
             if (badge && badge.material) {
                 var tgtBadgeOp = hoveredDomain ? (isHov ? 1.0 : 0.2) : 0.95;
                 badge.material.opacity += (tgtBadgeOp - badge.material.opacity) * 0.12;
+            }
+            if (label && label.material) {
+                if (logo && logo.visible) {
+                    label.visible = false;
+                } else {
+                    label.visible = true;
+                }
+                var tgtLabelOp = hoveredDomain ? (isHov ? 1.0 : 0.2) : 0.92;
+                label.material.opacity += (tgtLabelOp - label.material.opacity) * 0.12;
+                if (isHov && !reducedMotion) {
+                    var lbPulse = 1 + Math.sin(t * CFG.pulseHz * Math.PI * 2) * (CFG.pulseAmp * 0.3);
+                    label.scale.setScalar(label.userData.baseScale * lbPulse);
+                } else {
+                    var lsc = label.scale.x;
+                    var lbs = label.userData.baseScale;
+                    if (Math.abs(lsc - lbs) > 0.001) {
+                        label.scale.setScalar(lsc + (lbs - lsc) * 0.1);
+                    }
+                }
             }
             if (logo && logo.material) {
                 var tgtLogoOp = hoveredDomain ? (isHov ? 1.0 : 0.2) : 0.98;
@@ -1021,6 +1242,24 @@ function logoTexture(url) {
             var baseLineOp = lineObj.userData.baseOpacity || (CFG.lineAlpha * 0.55);
             var tgtSubLine = hoveredDomain ? (isHovSub ? baseLineOp * 1.6 : baseLineOp * 0.35) : baseLineOp;
             lineObj.material.opacity += (tgtSubLine - lineObj.material.opacity) * 0.12;
+        }
+
+        // ─ Skill label effects ─
+        for (var m = 0; m < skillLabels.length; m++) {
+            var lbl = skillLabels[m];
+            var lblDomain = lbl.userData.domain;
+            var isLblDomain = hoveredDomain && lblDomain === hoveredDomain;
+            var isLblParentHov = hoveredSprite &&
+                !hoveredSprite.userData.isSubSkill &&
+                hoveredSprite.userData.id === lbl.userData.parentId;
+
+            var tgtLblOp = lbl.userData.baseOpacity;
+            if (hoveredDomain) {
+                tgtLblOp = isLblDomain ? 1.0 : 0.15;
+            }
+            if (isLblParentHov) tgtLblOp = 1.0;
+
+            lbl.material.opacity += (tgtLblOp - lbl.material.opacity) * 0.12;
         }
 
         // ─ Raycast ─
@@ -1153,6 +1392,10 @@ function logoTexture(url) {
         sprites = [];
         hubSprites = {};
         linesByDomain = {};
+        subSprites = [];
+        subLines = [];
+        skillLabels = [];
+        interactiveSprites = [];
     }
 
     // ── Expose ─────────────────────────────────────────────────────

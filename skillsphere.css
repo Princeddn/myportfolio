@@ -5,7 +5,7 @@
     position: relative;
     width: 100%;
     aspect-ratio: 16 / 10;
-    max-height: 620px;
+    max-height: 720px;
     background: transparent;
     border-radius: var(--border-radius-large, 24px);
     overflow: hidden;

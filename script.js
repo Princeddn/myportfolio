@@ -952,8 +952,12 @@ function closeDomainPanel() {
 function populateSkillsByDomain() {
     // Use SkillSphere 3D constellation if available
     if (window.SkillSphere) {
-        window.SkillSphere.init();
-        return;
+        try {
+            const ok = window.SkillSphere.init();
+            if (ok) return;
+        } catch (err) {
+            console.warn('SkillSphere init failed, fallback to grid.', err);
+        }
     }
 
     // Fallback: show old grid if SkillSphere failed to load
