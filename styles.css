@@ -935,6 +935,23 @@ body {
     margin: 0;
 }
 
+
+.skill-logo-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: rgba(0, 122, 255, 0.1);
+    color: var(--primary-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    margin: 0 auto 1rem;
+    border: 1px solid rgba(0, 122, 255, 0.18);
+}
+
 .skill-item.has-logo .skill-fallback-icon {
     display: none;
 }
@@ -3462,6 +3479,31 @@ body {
 
 .calendar-day.weekend {
     background: #fafafa;
+}
+
+.calendar-day.available {
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.calendar-day.available:hover {
+    background: rgba(0, 122, 255, 0.08);
+    border-color: var(--primary-color);
+}
+
+.calendar-day.selected {
+    background: var(--primary-color) !important;
+    color: white;
+}
+
+.calendar-day.selected .day-number {
+    color: white;
+}
+
+.calendar-day.empty {
+    background: transparent;
+    border: none;
+    min-height: auto;
 }
 
 .day-number {

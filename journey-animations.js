@@ -827,8 +827,8 @@
                 cinematicReveals.init();
                 scrollCounters.init();
 
-                // Progress indicator
-                journeyProgress.init();
+                // Progress indicator (disabled)
+                // journeyProgress.init();
 
                 // Visual enhancements
                 floatingParticles.init();

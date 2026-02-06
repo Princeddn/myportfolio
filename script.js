@@ -950,21 +950,34 @@ function closeDomainPanel() {
 
 // Remplir les compétences par domaine
 function populateSkillsByDomain() {
+    const wrapper = document.getElementById('skillsphere-wrapper');
+    const fallbackGrid = document.getElementById('competences-grid');
+
+    const showFallbackGrid = () => {
+        if (wrapper) wrapper.style.display = 'none';
+        if (fallbackGrid) fallbackGrid.style.display = '';
+    };
+
     // Use SkillSphere 3D constellation if available
     if (window.SkillSphere) {
         try {
             const ok = window.SkillSphere.init();
-            if (ok) return;
+            if (ok) {
+                setTimeout(() => {
+                    const canvas = document.querySelector('#skillsphere-container canvas');
+                    const isMobileMode = wrapper && wrapper.classList.contains('sphere-mobile-mode');
+                    if (!canvas && !isMobileMode) {
+                        showFallbackGrid();
+                    }
+                }, 1200);
+                return;
+            }
         } catch (err) {
             console.warn('SkillSphere init failed, fallback to grid.', err);
         }
     }
 
-    // Fallback: show old grid if SkillSphere failed to load
-    const wrapper = document.getElementById('skillsphere-wrapper');
-    const fallbackGrid = document.getElementById('competences-grid');
-    if (wrapper) wrapper.style.display = 'none';
-    if (fallbackGrid) fallbackGrid.style.display = '';
+    showFallbackGrid();
 
     const container = document.querySelector('#competences .skills-grid');
     if (!container || !cvData.competences) return;
@@ -975,6 +988,15 @@ function populateSkillsByDomain() {
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
     const useOrbitLayout = !prefersReducedMotion && !isMobile;
 
+    const getSkillBadgeText = (name) => {
+        const cleaned = name.replace(/[^A-Za-z0-9]/g, ' ').trim();
+        const parts = cleaned.split(/\s+/).filter(Boolean);
+        if (parts.length === 1) {
+            return parts[0].slice(0, 4).toUpperCase();
+        }
+        return parts.map(p => p[0]).join('').slice(0, 4).toUpperCase();
+    };
+
     const buildSkillIconMarkup = (skill) => {
         const icon = skillIcons[skill] || 'fas fa-star';
         const logo = skillLogos[skill];
@@ -983,21 +1005,24 @@ function populateSkillsByDomain() {
             const logosHtml = logo.map((url) => (
                 `<img class="skill-logo" src="${url}" alt="${skill} logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';">`
             )).join('');
+            const badge = getSkillBadgeText(skill);
 
             return `
                 <div class="skill-logo-stack">${logosHtml}</div>
-                <i class="skill-fallback-icon ${icon}" style="display:none;"></i>
+                <span class="skill-logo-badge" style="display:inline-flex;">${badge}</span>
             `;
         }
 
         if (logo) {
+            const badge = getSkillBadgeText(skill);
             return `
-                <img class="skill-logo" src="${logo}" alt="${skill} logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                <i class="skill-fallback-icon ${icon}" style="display:none;"></i>
+                <img class="skill-logo" src="${logo}" alt="${skill} logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+                <span class="skill-logo-badge" style="display:none;">${badge}</span>
             `;
         }
 
-        return `<i class="skill-fallback-icon ${icon}"></i>`;
+        const badge = getSkillBadgeText(skill);
+        return `<span class="skill-logo-badge">${badge}</span>`;
     };
 
     if (!useOrbitLayout) {
@@ -2251,18 +2276,27 @@ function initCalendlyListeners() {
 
 // Notifications
 function showNotification(message, type = 'info') {
+    const colors = {
+        success: '#30d158',
+        error: '#FF453A',
+        warning: '#FF9F0A',
+        info: '#007aff'
+    };
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
     notification.style.cssText = `
         position: fixed;
         top: 20px;
         right: 20px;
-        background: ${type === 'success' ? '#30d158' : '#007aff'};
+        background: ${colors[type] || colors.info};
         color: white;
         padding: 1rem 1.5rem;
         border-radius: 8px;
         z-index: 10000;
         animation: slideIn 0.3s ease-out;
+        max-width: 400px;
+        word-break: break-word;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.15);
     `;
     notification.textContent = message;
 
@@ -2696,16 +2730,18 @@ const eventsCache = {
 // Fonctions de contact
 function contactViaLinkedIn() {
     const linkedinUrl = cvData.coordonnees.linkedin;
-    const message = encodeURIComponent("Bonjour Prince, je vous contacte suite à la consultation de votre portfolio.");
 
-    // Ouvrir LinkedIn avec un message pré-rempli (si possible)
     window.open(linkedinUrl, '_blank');
-
-    showNotification('Redirection vers LinkedIn pour vous connecter', 'info');
+    showNotification('Redirection vers LinkedIn', 'info');
 }
 
 function contactViaEmail() {
     const email = cvData.coordonnees.email;
+    if (!email) {
+        showNotification('Adresse email non disponible', 'error');
+        return;
+    }
+
     const subject = encodeURIComponent("Contact depuis votre portfolio");
     const body = encodeURIComponent(`Bonjour Prince,
 
@@ -2716,9 +2752,16 @@ Je vous contacte suite à la consultation de votre portfolio en ligne.
 Cordialement,`);
 
     const mailtoUrl = `mailto:${email}?subject=${subject}&body=${body}`;
-    window.location.href = mailtoUrl;
 
-    showNotification('Application mail ouverte', 'success');
+    // Use a temporary link to open mailto (more reliable across browsers)
+    const link = document.createElement('a');
+    link.href = mailtoUrl;
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    showNotification(`Ouverture du client mail — ${email}`, 'success');
 }
 
 function contactViaSMS() {
@@ -2797,6 +2840,115 @@ function resetBookingForm() {
     if (step2) step2.classList.add('hidden');
     if (step3) step3.classList.add('hidden');
     if (step4) step4.classList.add('hidden');
+}
+
+// Navigation du calendrier de réservation
+function navigateMonth(direction) {
+    currentMonth.setMonth(currentMonth.getMonth() + direction);
+    renderCalendar();
+}
+
+function renderCalendar() {
+    const grid = document.getElementById('calendar-grid');
+    const titleEl = document.getElementById('calendar-title');
+    if (!grid || !titleEl) return;
+
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
+    const monthNames = [
+        'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+        'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+    ];
+    titleEl.textContent = `${monthNames[month]} ${year}`;
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Adjust firstDay (JS: 0=Sunday, we want 0=Monday)
+    const startOffset = (firstDay + 6) % 7;
+
+    // Day name headers (flat in grid)
+    let html = '';
+    ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].forEach(d => {
+        html += `<div class="calendar-day-header">${d}</div>`;
+    });
+
+    // Empty offset cells
+    for (let i = 0; i < startOffset; i++) {
+        html += '<div class="calendar-day empty"></div>';
+    }
+
+    // Day cells
+    for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(year, month, day);
+        const dayOfWeek = date.getDay();
+        const isPast = date < today;
+        const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const isSelected = selectedSlot && selectedSlot.date === dateStr;
+
+        let cls = 'calendar-day';
+        if (isPast) cls += ' past-day';
+        else if (isWeekend) cls += ' weekend';
+        else cls += ' available';
+        if (isSelected) cls += ' selected';
+
+        const clickable = !isPast && !isWeekend;
+        html += `<div class="${cls}" ${clickable ? `onclick="selectDate('${dateStr}')"` : ''}>
+            <span class="day-number">${day}</span>
+        </div>`;
+    }
+
+    grid.innerHTML = html;
+}
+
+function selectDate(dateStr) {
+    selectedSlot = { date: dateStr, time: '14:00' };
+
+    renderCalendar();
+
+    const step1 = document.getElementById('step-1');
+    const step2 = document.getElementById('step-2');
+    const dateDisplay = document.getElementById('selected-slot-date');
+    const timeDisplay = document.getElementById('selected-slot-time');
+
+    if (dateDisplay) {
+        const d = new Date(dateStr);
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        dateDisplay.textContent = d.toLocaleDateString('fr-FR', options);
+    }
+    if (timeDisplay) timeDisplay.textContent = '14:00 - 14:30';
+
+    if (step1) step1.classList.add('hidden');
+    if (step2) step2.classList.remove('hidden');
+}
+
+function goBackToCalendar() {
+    const step1 = document.getElementById('step-1');
+    const step2 = document.getElementById('step-2');
+    const step3 = document.getElementById('step-3');
+
+    if (step1) step1.classList.remove('hidden');
+    if (step2) step2.classList.add('hidden');
+    if (step3) step3.classList.add('hidden');
+}
+
+function proceedToBookingForm() {
+    const step2 = document.getElementById('step-2');
+    const step3 = document.getElementById('step-3');
+
+    const finalDate = document.getElementById('final-date-display');
+    const finalTime = document.getElementById('final-time-display');
+    const dateDisplay = document.getElementById('selected-slot-date');
+    const timeDisplay = document.getElementById('selected-slot-time');
+
+    if (finalDate && dateDisplay) finalDate.textContent = dateDisplay.textContent;
+    if (finalTime && timeDisplay) finalTime.textContent = timeDisplay.textContent;
+
+    if (step2) step2.classList.add('hidden');
+    if (step3) step3.classList.remove('hidden');
 }
 
 // Fonction pour s'assurer que toutes les animations sont actives
@@ -3253,6 +3405,10 @@ window.closeCalendly = closeCalendly;
 window.confirmBooking = confirmBooking;
 window.addToCalendar = addToCalendar;
 window.resetBookingForm = resetBookingForm;
+window.navigateMonth = navigateMonth;
+window.selectDate = selectDate;
+window.goBackToCalendar = goBackToCalendar;
+window.proceedToBookingForm = proceedToBookingForm;
 window.openInbox = openInbox;
 window.downloadCV = downloadCV;
 window.copyEmailToClipboard = copyEmailToClipboard;

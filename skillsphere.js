@@ -118,6 +118,37 @@
         geo:           { name: 'CAO & SIG',        color: '#FF453A', rgb: [255, 69, 58] },
     };
 
+        const SKILL_LOGOS = {
+        zigbee: './assets/logos/zigbee.png',
+        knx: null,
+        gtb: null,
+        lora: './assets/logos/lora.png',
+        lorawan: './assets/logos/LoRaWAN.png',
+        'iot-data': null,
+        pv: './assets/logos/PVsyst.png',
+        elec: null,
+        pvsyst: './assets/logos/PVsyst.png',
+        js: 'https://cdn.simpleicons.org/javascript',
+        python: 'https://cdn.simpleicons.org/python',
+        vba: 'https://cdn.simpleicons.org/microsoftexcel',
+        matlab: null,
+        comsol: null,
+        qgis: 'https://cdn.simpleicons.org/qgis',
+        autocad: './assets/logos/Autocad.png',
+        archicad: './assets/logos/archicad.png',
+        globalmapper: null,
+    };
+
+
+    const SKILL_LABELS = {
+        knx: 'KNX',
+        gtb: 'GTB',
+        'iot-data': 'IoT',
+        elec: 'ELEC',
+        globalmapper: 'GM',
+    };
+
+
     const DOMAIN_ICONS = {
         smartbuilding: '\uf1ad',  // fa-building
         iot:           '\uf1eb',  // fa-wifi
@@ -525,6 +556,75 @@
                 subSkills: skill.subSkills || [],
                 baseScale: baseScale,
             };
+
+            // Skill logo badge
+            var badgeTex = badgeTexture(domain.color);
+            var badgeMat = new THREE.SpriteMaterial({
+                map: badgeTex,
+                transparent: true,
+                opacity: 0.92,
+                depthWrite: false,
+                depthTest: false,
+                blending: THREE.NormalBlending,
+            });
+            var badge = new THREE.Sprite(badgeMat);
+            var badgeScale = baseScale * 1.15;
+            badge.scale.set(badgeScale, badgeScale, 1);
+            badge.position.set(0, 0, 0);
+            badge.userData = { isSkillBadge: true, baseScale: badgeScale };
+            badge.renderOrder = 3;
+            sprite.add(badge);
+
+            var labelText = SKILL_LABELS[skill.id] || skill.label;
+            var labelTex = labelTexture(labelText);
+            var labelMat = new THREE.SpriteMaterial({
+                map: labelTex,
+                transparent: true,
+                opacity: 0.9,
+                depthWrite: false,
+                depthTest: false,
+                blending: THREE.NormalBlending,
+            });
+            var label = new THREE.Sprite(labelMat);
+            var labelScale = baseScale * 0.9;
+            label.scale.set(labelScale, labelScale, 1);
+            label.position.set(0, 0, 0);
+            label.userData = { isSkillLabel: true, baseScale: labelScale };
+            label.renderOrder = 4;
+            sprite.add(label);
+
+            var logoUrl = SKILL_LOGOS[skill.id];
+            if (logoUrl) {
+                var logoMat = new THREE.SpriteMaterial({
+                    map: null,
+                    transparent: true,
+                    opacity: 0.98,
+                    depthWrite: false,
+                    depthTest: false,
+                    blending: THREE.NormalBlending,
+                });
+                var logo = new THREE.Sprite(logoMat);
+                var logoScale = baseScale * 0.85;
+                logo.scale.set(logoScale, logoScale, 1);
+                logo.position.set(0, 0, 0);
+                logo.userData = { isSkillLogo: true, baseScale: logoScale };
+                logo.renderOrder = 5;
+                logo.visible = false;
+                sprite.add(logo);
+
+                logoTexture(logoUrl, function (tex) {
+                    if (tex) {
+                        logo.material.map = tex;
+                        logo.visible = true;
+                        label.visible = false;
+                    }
+                });
+
+                sprite.userData.logo = logo;
+            }
+
+            sprite.userData.badge = badge;
+            sprite.userData.label = label;
 
             group.add(sprite);
             sprites.push(sprite);
@@ -1128,6 +1228,19 @@
                 tgtOp = isHovDomain ? 1.0 : 0.25;
             }
             sprite.material.opacity += (tgtOp - sprite.material.opacity) * 0.12;
+
+            var badge = sprite.userData.badge;
+            var label = sprite.userData.label;
+            var logo = sprite.userData.logo;
+            if (badge && badge.material) {
+                badge.material.opacity += ((tgtOp * 0.95) - badge.material.opacity) * 0.12;
+            }
+            if (label && label.material) {
+                label.material.opacity += ((tgtOp * 0.85) - label.material.opacity) * 0.12;
+            }
+            if (logo && logo.material) {
+                logo.material.opacity += ((tgtOp * 0.98) - logo.material.opacity) * 0.12;
+            }
 
             // Pulse hovered sprite
             if (isHovered && !reducedMotion) {

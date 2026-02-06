@@ -411,20 +411,23 @@
     "Analyse économique": "fas fa-chart-pie"
   },
   "skill_logos": {
-    "JavaScript": "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png",
-    "Python": "https://s3.dualstack.us-east-2.amazonaws.com/pythondotorg-assets/media/files/python-logo-only.svg",
-    "ZigBee": "https://upload.wikimedia.org/wikipedia/commons/1/1e/Zigbee_logo.svg",
-    "LoRa": "https://upload.wikimedia.org/wikipedia/commons/1/13/LoRaWAN_Logo.svg",
-    "LoRaWAN": "https://upload.wikimedia.org/wikipedia/commons/1/13/LoRaWAN_Logo.svg",
-    "KNX": "https://upload.wikimedia.org/wikipedia/commons/9/95/KNX_logo.svg",
-    "QGIS / ArcGIS": [
-      "https://upload.wikimedia.org/wikipedia/commons/9/91/QGIS_logo%2C_2017.svg",
-      "https://upload.wikimedia.org/wikipedia/commons/2/2a/ArcGIS_globe_%28cropped%29.svg"
-    ],
-    "Autocad": "https://upload.wikimedia.org/wikipedia/commons/7/70/AutoCad_logo.svg",
-    "ArchiCAD": "https://assets.graphisoft.com/icons/colored/36x36/archicad.svg",
-    "VBA Excel": "https://upload.wikimedia.org/wikipedia/commons/7/73/Microsoft_Excel_2013-2019_logo.svg",
-    "Comsol": "https://upload.wikimedia.org/wikipedia/commons/8/8c/COMSOL_Logo.svg",
-    "MatLab": "https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_icon.png"
+    "JavaScript": "https://cdn.simpleicons.org/javascript",
+    "Python": "https://cdn.simpleicons.org/python",
+    "ZigBee": "./assets/logos/zigbee.png",
+    "LoRa": "./assets/logos/lora.png",
+    "KNX": null,
+    "LoRaWAN": "./assets/logos/LoRaWAN.png",
+    "GTB/GTC": null,
+    "Analyse de donn?es IoT": null,
+    "Maintenance photovolta?que": "./assets/logos/PVsyst.png",
+    "?lectrotechnique": null,
+    "QGIS / ArcGIS": "https://cdn.simpleicons.org/qgis",
+    "Autocad": "./assets/logos/Autocad.png",
+    "ArchiCAD": "./assets/logos/archicad.png",
+    "VBA Excel": "https://cdn.simpleicons.org/microsoftexcel",
+    "GlobalMapper": null,
+    "PVSYST": "./assets/logos/PVsyst.png",
+    "Comsol": null,
+    "MatLab": null
   }
 }
