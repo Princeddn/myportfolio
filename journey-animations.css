@@ -293,6 +293,11 @@
     pointer-events: none;
 }
 
+/* Désactivé (doublon avec la barre latérale) */
+.chapter-indicator {
+    display: none !important;
+}
+
 .section.in-view .chapter-indicator {
     opacity: 1;
 }

@@ -949,20 +949,509 @@ function closeDomainPanel() {
 }
 
 // Remplir les compétences par domaine
+function buildSkillWheel() {
+    const wrapper = document.getElementById('skillwheel-wrapper');
+    const ring = document.getElementById('skillwheel-ring');
+    const activeArc = document.getElementById('skillwheel-active-arc');
+    const domainsEl = document.getElementById('skillwheel-domains');
+    const calloutsEl = document.getElementById('skillwheel-callouts');
+    const detailsEl = document.getElementById('skillwheel-details');
+
+    if (!wrapper || !ring || !domainsEl || !detailsEl) return false;
+
+    const data = window.SkillSphereData || null;
+    const domains = [];
+    const skillsByDomain = {};
+    const domainMap = {};
+    let skillLogoMap = {};
+
+    if (data && data.domains && data.skills) {
+        Object.keys(data.domains).forEach((id) => {
+            const d = data.domains[id];
+            const entry = {
+                id,
+                name: d.name,
+                color: d.color,
+                description: d.description || '',
+                logo: data.domainLogos ? data.domainLogos[id] : null,
+            };
+            domains.push(entry);
+            domainMap[id] = entry;
+            skillsByDomain[id] = [];
+        });
+
+        skillLogoMap = data.skillLogos || {};
+
+        data.skills.forEach((skill) => {
+            if (!skillsByDomain[skill.domain]) {
+                skillsByDomain[skill.domain] = [];
+            }
+            skillsByDomain[skill.domain].push({
+                id: skill.id,
+                label: skill.label,
+                logo: skillLogoMap[skill.id] || null,
+            });
+        });
+    } else if (cvData.domains) {
+        Object.keys(cvData.domains).forEach((id) => {
+            const d = cvData.domains[id];
+            const entry = {
+                id,
+                name: d.name,
+                color: d.color || 'rgba(0, 122, 255, 0.8)',
+                description: d.description || '',
+                logo: null,
+            };
+            domains.push(entry);
+            domainMap[id] = entry;
+            skillsByDomain[id] = (d.technologies || []).map((label) => ({
+                id: label,
+                label,
+                logo: skillLogos[label] || null,
+            }));
+        });
+        skillLogoMap = skillLogos || {};
+    }
+
+    if (!domains.length) return false;
+
+    const step = 360 / domains.length;
+    const domainAngles = {};
+    const gradient = domains.map((d, i) => {
+        const start = i * step;
+        const end = (i + 1) * step;
+        domainAngles[d.id] = { start, end };
+        return `${d.color} ${start}deg ${end}deg`;
+    }).join(', ');
+    ring.style.background = `conic-gradient(${gradient})`;
+
+    const getBadge = (name) => {
+        const cleaned = String(name || '').replace(/[^A-Za-z0-9]/g, ' ').trim();
+        const parts = cleaned.split(/\s+/).filter(Boolean);
+        if (parts.length === 0) return 'SK';
+        if (parts.length === 1) return parts[0].slice(0, 3).toUpperCase();
+        return parts.map(p => p[0]).join('').slice(0, 3).toUpperCase();
+    };
+
+    const toRgba = (color, alpha) => {
+        if (!color) return `rgba(0, 122, 255, ${alpha})`;
+        if (color.startsWith('rgba')) {
+            const parts = color.replace('rgba(', '').replace(')', '').split(',');
+            return `rgba(${parts[0]}, ${parts[1]}, ${parts[2]}, ${alpha})`;
+        }
+        if (color.startsWith('rgb')) {
+            const parts = color.replace('rgb(', '').replace(')', '').split(',');
+            return `rgba(${parts[0]}, ${parts[1]}, ${parts[2]}, ${alpha})`;
+        }
+        if (color.startsWith('#')) {
+            const hex = color.replace('#', '');
+            const r = parseInt(hex.slice(0, 2), 16);
+            const g = parseInt(hex.slice(2, 4), 16);
+            const b = parseInt(hex.slice(4, 6), 16);
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        }
+        return color;
+    };
+
+    domainsEl.innerHTML = '';
+    if (calloutsEl) calloutsEl.innerHTML = '';
+    const domainButtons = [];
+    const calloutItems = [];
+
+    domains.forEach((domain, index) => {
+        const angle = (index * step) + (step / 2);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'skillwheel-domain';
+        btn.dataset.domain = domain.id;
+        btn.style.setProperty('--angle', `${angle}deg`);
+        btn.style.setProperty('--delay', `${index * 120}ms`);
+
+        const fallback = getBadge(domain.name);
+        const logoHtml = domain.logo
+            ? `<img class="skillwheel-domain-logo" src="${domain.logo}" alt="${domain.name} logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">`
+            : '';
+
+        btn.innerHTML = `
+            ${logoHtml}
+            <span class="skillwheel-domain-fallback" style="${domain.logo ? 'display:none;' : 'display:flex;'}">${fallback}</span>
+            <span class="skillwheel-domain-label">${domain.name}</span>
+        `;
+
+        btn.addEventListener('mouseenter', () => setActiveDomain(domain.id));
+        btn.addEventListener('focus', () => setActiveDomain(domain.id));
+        btn.addEventListener('click', () => setActiveDomain(domain.id));
+
+        domainsEl.appendChild(btn);
+        domainButtons.push(btn);
+
+        if (calloutsEl) {
+            const isRight = angle <= 90 || angle >= 270;
+            const callout = document.createElement('button');
+            callout.type = 'button';
+            callout.className = `skillwheel-callout ${isRight ? 'is-right' : 'is-left'}`;
+            callout.dataset.domain = domain.id;
+            callout.style.setProperty('--angle', `${angle}deg`);
+            callout.style.setProperty('--delay', `${index * 120 + 80}ms`);
+            callout.style.setProperty('--line-color', domain.color);
+            callout.style.setProperty('--accent', domain.color);
+            callout.style.setProperty('--accent-bg', toRgba(domain.color, 0.12));
+
+            callout.innerHTML = `
+                <span class="skillwheel-callout-number">${index + 1}</span>
+                <span>
+                    <div class="skillwheel-callout-title">${domain.name}</div>
+                    <div class="skillwheel-callout-sub">${domain.description || 'Compétences clés'}</div>
+                </span>
+            `;
+
+            callout.addEventListener('mouseenter', () => setActiveDomain(domain.id));
+            callout.addEventListener('focus', () => setActiveDomain(domain.id));
+            callout.addEventListener('click', () => setActiveDomain(domain.id));
+
+            calloutsEl.appendChild(callout);
+            calloutItems.push({ el: callout, isRight });
+        }
+    });
+
+    const setRadius = () => {
+        const rect = ring.getBoundingClientRect();
+        const radius = Math.max(120, rect.width * 0.42);
+        const calloutRadius = Math.max(170, rect.width * 0.52);
+        const calloutOffset = Math.max(140, rect.width * 0.26);
+        domainButtons.forEach((btn) => {
+            btn.style.setProperty('--radius', `${radius}px`);
+        });
+        calloutItems.forEach((item) => {
+            item.el.style.setProperty('--radius', `${calloutRadius}px`);
+            item.el.style.setProperty('--offsetX', `${item.isRight ? calloutOffset : -calloutOffset}px`);
+        });
+    };
+
+    const renderDetails = (domainId) => {
+        const domain = domainMap[domainId];
+        const skills = skillsByDomain[domainId] || [];
+        const skillsHtml = skills.map((skill) => {
+            const badge = getBadge(skill.label);
+            const logo = skill.logo
+                ? `<img class="skillwheel-skill-logo" src="${skill.logo}" alt="${skill.label} logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">`
+                : '';
+            return `
+                <div class="skillwheel-skill">
+                    ${logo}
+                    <span class="skillwheel-skill-badge" style="${skill.logo ? 'display:none;' : 'display:inline-flex;'}">${badge}</span>
+                    <span>${skill.label}</span>
+                </div>
+            `;
+        }).join('');
+
+        detailsEl.innerHTML = `
+            <div class="skillwheel-detail-title">${domain.name}</div>
+            <div class="skillwheel-detail-sub">${domain.description || 'Compétences clés du domaine'}</div>
+            <div class="skillwheel-skill-list">${skillsHtml || '<div class="skillwheel-empty">Aucune compétence listée</div>'}</div>
+        `;
+        detailsEl.classList.remove('is-visible');
+        requestAnimationFrame(() => {
+            detailsEl.classList.add('is-visible');
+        });
+    };
+
+    const setActiveDomain = (domainId) => {
+        wrapper.dataset.active = domainId;
+        domainButtons.forEach((btn) => {
+            btn.classList.toggle('active', btn.dataset.domain === domainId);
+        });
+        calloutItems.forEach((item) => {
+            item.el.classList.toggle('active', item.el.dataset.domain === domainId);
+        });
+        if (activeArc && domainAngles[domainId]) {
+            activeArc.style.setProperty('--active-start', `${domainAngles[domainId].start}deg`);
+            activeArc.style.setProperty('--active-end', `${domainAngles[domainId].end}deg`);
+            activeArc.style.setProperty('--active-color', domainMap[domainId].color);
+        }
+        renderDetails(domainId);
+    };
+
+    setRadius();
+    window.addEventListener('resize', setRadius);
+    setActiveDomain(domains[0].id);
+    requestAnimationFrame(() => {
+        wrapper.classList.add('skillwheel-loaded');
+    });
+    return true;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SKILLS CONSTELLATION — Tech Blueprint Design
+// ═══════════════════════════════════════════════════════════════════════════
+function buildSkillsConstellation() {
+    const wrapper = document.getElementById('skills-constellation');
+    const nodesEl = document.getElementById('constellation-nodes');
+    const linesEl = document.getElementById('constellation-lines');
+    const panelEl = document.getElementById('skills-detail-panel');
+    const accordionEl = document.getElementById('skills-accordion');
+
+    if (!wrapper || !nodesEl) return false;
+
+    const data = window.SkillSphereData || null;
+    if (!data || !data.domains || !data.skills) return false;
+
+    const domains = Object.keys(data.domains).map(id => ({
+        id,
+        ...data.domains[id]
+    }));
+
+    const skillsByDomain = {};
+    data.skills.forEach(skill => {
+        if (!skillsByDomain[skill.domain]) skillsByDomain[skill.domain] = [];
+        skillsByDomain[skill.domain].push(skill);
+    });
+
+    const domainIcons = {
+        smartbuilding: 'fas fa-building',
+        iot: 'fas fa-wifi',
+        energy: 'fas fa-bolt',
+        dev: 'fas fa-code',
+        geo: 'fas fa-map'
+    };
+
+    const domainLogos = data.domainLogos || {};
+    const skillLogos = data.skillLogos || {};
+
+    // Build nodes in a pentagon layout
+    const n = domains.length;
+    const radius = 42; // % from center
+    const startAngle = -90; // Start from top
+
+    nodesEl.innerHTML = '';
+
+    domains.forEach((domain, i) => {
+        const angle = startAngle + (360 / n) * i;
+        const rad = (angle * Math.PI) / 180;
+        const x = 50 + radius * Math.cos(rad);
+        const y = 50 + radius * Math.sin(rad);
+
+        const node = document.createElement('div');
+        node.className = 'constellation-node';
+        node.dataset.domain = domain.id;
+        node.style.left = `${x}%`;
+        node.style.top = `${y}%`;
+        node.style.setProperty('--node-color', domain.color);
+        node.style.setProperty('--node-glow', domain.color.replace(')', ', 0.3)').replace('rgb', 'rgba'));
+
+        const skillCount = (skillsByDomain[domain.id] || []).length;
+        const logo = domainLogos[domain.id];
+        const iconClass = domainIcons[domain.id] || 'fas fa-circle';
+
+        node.innerHTML = `
+            <div class="node-hexagon">
+                <div class="node-icon">
+                    ${logo ? `<img src="${logo}" alt="${domain.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">` : ''}
+                    <i class="${iconClass}" style="${logo ? 'display:none;' : ''}"></i>
+                </div>
+                <span class="node-label">${domain.name}</span>
+            </div>
+            <span class="node-count">${skillCount}</span>
+        `;
+
+        node.addEventListener('click', () => setActiveDomainConstellation(domain.id));
+        node.addEventListener('mouseenter', () => highlightDomain(domain.id));
+        node.addEventListener('mouseleave', () => highlightDomain(null));
+
+        nodesEl.appendChild(node);
+    });
+
+    // Draw SVG lines from center to each node
+    if (linesEl) {
+        const rect = wrapper.getBoundingClientRect();
+        const cx = rect.width / 2;
+        const cy = rect.height / 2;
+
+        let linesHtml = '';
+        domains.forEach((domain, i) => {
+            const angle = startAngle + (360 / n) * i;
+            const rad = (angle * Math.PI) / 180;
+            const x = cx + (radius / 100) * cx * 2 * Math.cos(rad);
+            const y = cy + (radius / 100) * cy * 2 * Math.sin(rad);
+
+            linesHtml += `<line data-domain="${domain.id}" x1="${cx}" y1="${cy}" x2="${x}" y2="${y}"></line>`;
+            linesHtml += `<line class="pulse-path" data-domain="${domain.id}" x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" style="animation-delay: ${i * 0.4}s;"></line>`;
+        });
+
+        linesEl.innerHTML = linesHtml;
+        linesEl.setAttribute('viewBox', `0 0 ${rect.width} ${rect.height}`);
+    }
+
+    // Resize handler for SVG lines
+    const resizeLines = () => {
+        if (!linesEl) return;
+        const rect = wrapper.getBoundingClientRect();
+        const cx = rect.width / 2;
+        const cy = rect.height / 2;
+
+        const lines = linesEl.querySelectorAll('line');
+        let idx = 0;
+        domains.forEach((domain, i) => {
+            const angle = startAngle + (360 / n) * i;
+            const rad = (angle * Math.PI) / 180;
+            const x = cx + (radius / 100) * cx * 2 * Math.cos(rad);
+            const y = cy + (radius / 100) * cy * 2 * Math.sin(rad);
+
+            if (lines[idx]) {
+                lines[idx].setAttribute('x1', cx);
+                lines[idx].setAttribute('y1', cy);
+                lines[idx].setAttribute('x2', x);
+                lines[idx].setAttribute('y2', y);
+            }
+            if (lines[idx + 1]) {
+                lines[idx + 1].setAttribute('x1', cx);
+                lines[idx + 1].setAttribute('y1', cy);
+                lines[idx + 1].setAttribute('x2', x);
+                lines[idx + 1].setAttribute('y2', y);
+            }
+            idx += 2;
+        });
+        linesEl.setAttribute('viewBox', `0 0 ${rect.width} ${rect.height}`);
+    };
+
+    window.addEventListener('resize', resizeLines);
+
+    // Highlight domain on hover
+    const highlightDomain = (domainId) => {
+        nodesEl.querySelectorAll('.constellation-node').forEach(node => {
+            if (!domainId) {
+                node.style.opacity = '';
+            } else {
+                node.style.opacity = node.dataset.domain === domainId ? '1' : '0.4';
+            }
+        });
+
+        if (linesEl) {
+            linesEl.querySelectorAll('line:not(.pulse-path)').forEach(line => {
+                line.classList.toggle('active', line.dataset.domain === domainId);
+            });
+        }
+    };
+
+    // Set active domain and update detail panel
+    const setActiveDomainConstellation = (domainId) => {
+        const domain = domains.find(d => d.id === domainId);
+        if (!domain) return;
+
+        nodesEl.querySelectorAll('.constellation-node').forEach(node => {
+            node.classList.toggle('active', node.dataset.domain === domainId);
+        });
+
+        if (panelEl) {
+            const badge = panelEl.querySelector('#detail-badge');
+            const name = panelEl.querySelector('#detail-domain-name');
+            const desc = panelEl.querySelector('#detail-domain-desc');
+            const grid = panelEl.querySelector('#detail-skills-grid');
+
+            if (badge) {
+                badge.style.setProperty('--badge-bg', domain.color.replace(')', ', 0.12)').replace('rgb', 'rgba').replace('#', 'rgba('));
+                badge.style.setProperty('--badge-border', domain.color.replace(')', ', 0.3)').replace('rgb', 'rgba'));
+                badge.style.setProperty('--badge-color', domain.color);
+                badge.innerHTML = `<i class="${domainIcons[domainId] || 'fas fa-circle'}"></i>`;
+            }
+
+            if (name) name.textContent = domain.name;
+            if (desc) desc.textContent = domain.description || '';
+
+            if (grid) {
+                const skills = skillsByDomain[domainId] || [];
+                grid.innerHTML = skills.map(skill => {
+                    const logo = skillLogos[skill.id];
+                    const levelDots = Array(3).fill(0).map((_, i) =>
+                        `<span class="dot ${i < skill.level ? 'filled' : ''}"></span>`
+                    ).join('');
+
+                    return `
+                        <div class="detail-skill-card" style="--node-color: ${domain.color}">
+                            <div class="skill-card-icon">
+                                ${logo ? `<img src="${logo}" alt="${skill.label}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">` : ''}
+                                <i class="${domainIcons[domainId] || 'fas fa-circle'}" style="${logo ? 'display:none;' : ''}"></i>
+                            </div>
+                            <span class="skill-card-name">${skill.label}</span>
+                            <div class="skill-card-level">${levelDots}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+    };
+
+    // Build mobile accordion
+    if (accordionEl) {
+        accordionEl.innerHTML = domains.map(domain => {
+            const skills = skillsByDomain[domain.id] || [];
+            const iconClass = domainIcons[domain.id] || 'fas fa-circle';
+
+            return `
+                <div class="accordion-domain" data-domain="${domain.id}">
+                    <div class="accordion-header" style="--acc-bg: ${domain.color}20; --acc-color: ${domain.color}">
+                        <div class="accordion-icon"><i class="${iconClass}"></i></div>
+                        <span class="accordion-title">${domain.name}</span>
+                        <span class="accordion-count">${skills.length} skills</span>
+                        <i class="fas fa-chevron-down accordion-chevron"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-skills">
+                            ${skills.map(s => `<span class="accordion-skill">${s.label}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        accordionEl.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const parent = header.parentElement;
+                const wasOpen = parent.classList.contains('open');
+                accordionEl.querySelectorAll('.accordion-domain').forEach(d => d.classList.remove('open'));
+                if (!wasOpen) parent.classList.add('open');
+            });
+        });
+    }
+
+    // Initialize with first domain
+    setActiveDomainConstellation(domains[0].id);
+
+    return true;
+}
+
 function populateSkillsByDomain() {
+    // Try new Skills Constellation first (Tech Blueprint design)
+    if (buildSkillsConstellation()) {
+        console.log('Skills Constellation initialized');
+        return;
+    }
+
+    // Fallback to old layouts if constellation fails
     const wrapper = document.getElementById('skillsphere-wrapper');
     const fallbackGrid = document.getElementById('competences-grid');
+    const wheelWrapper = document.getElementById('skillwheel-wrapper');
 
     const showFallbackGrid = () => {
         if (wrapper) wrapper.style.display = 'none';
+        if (wheelWrapper) wheelWrapper.style.display = 'none';
         if (fallbackGrid) fallbackGrid.style.display = '';
     };
+
+    // Use Skill Wheel if available
+    if (buildSkillWheel()) {
+        if (wheelWrapper) wheelWrapper.style.display = '';
+        if (wrapper) wrapper.style.display = 'none';
+        if (fallbackGrid) fallbackGrid.style.display = 'none';
+        return;
+    }
 
     // Use SkillSphere 3D constellation if available
     if (window.SkillSphere) {
         try {
             const ok = window.SkillSphere.init();
             if (ok) {
+                if (wheelWrapper) wheelWrapper.style.display = 'none';
                 setTimeout(() => {
                     const canvas = document.querySelector('#skillsphere-container canvas');
                     const isMobileMode = wrapper && wrapper.classList.contains('sphere-mobile-mode');
@@ -1125,6 +1614,17 @@ function populateFormation() {
         const item = document.createElement('div');
         item.className = `timeline-item ${index % 2 === 0 ? 'left' : 'right'}`;
 
+        const competencesHtml = Array.isArray(formation.competences) && formation.competences.length
+            ? `
+                <div class="formation-competences">
+                    <div class="formation-competences-title">Compétences acquises</div>
+                    <ul class="formation-competences-list">
+                        ${formation.competences.map(comp => `<li>${comp}</li>`).join('')}
+                    </ul>
+                </div>
+            `
+            : '';
+
         item.innerHTML = `
             <div class="timeline-content">
                 <div class="timeline-header">
@@ -1135,6 +1635,7 @@ function populateFormation() {
                         <h4>${formation.ecole}</h4>
                     </div>
                 </div>
+                ${competencesHtml}
             </div>
         `;
 

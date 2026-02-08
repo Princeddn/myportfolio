@@ -8,7 +8,7 @@
     // ── Configuration ──────────────────────────────────────────────
     const CFG = {
         radius: 5,
-        cameraDist: 13,
+        cameraDist: 14.5,
         fov: 45,
         autoSpeed: 0.0015,
         damping: 0.94,
@@ -111,32 +111,57 @@
     ];
 
     const DOMAINS = {
-        smartbuilding: { name: 'Smart Building',  color: '#007AFF', rgb: [0, 122, 255] },
-        iot:           { name: 'IoT / LoRaWAN',   color: '#34C759', rgb: [52, 199, 89] },
-        energy:        { name: 'Énergie',          color: '#FF9F0A', rgb: [255, 159, 10] },
-        dev:           { name: 'Dev & Simulation', color: '#BF5AF2', rgb: [191, 90, 242] },
-        geo:           { name: 'CAO & SIG',        color: '#FF453A', rgb: [255, 69, 58] },
+        smartbuilding: {
+            name: 'Smart Building',
+            color: '#007AFF',
+            rgb: [0, 122, 255],
+            description: 'GTB/GTC, KNX, Zigbee, Jeedom, automatismes',
+        },
+        iot: {
+            name: 'IoT / LoRaWAN',
+            color: '#34C759',
+            rgb: [52, 199, 89],
+            description: 'Réseaux LPWAN, LoRa/LoRaWAN, data & monitoring',
+        },
+        energy: {
+            name: 'Énergie',
+            color: '#FF9F0A',
+            rgb: [255, 159, 10],
+            description: 'Photovoltaïque, maintenance, monitoring, PVSYST',
+        },
+        dev: {
+            name: 'Dev & Simulation',
+            color: '#BF5AF2',
+            rgb: [191, 90, 242],
+            description: 'JS, Python, VBA, MATLAB, modélisation',
+        },
+        geo: {
+            name: 'CAO & SIG',
+            color: '#FF453A',
+            rgb: [255, 69, 58],
+            description: 'QGIS, AutoCAD, ArcGIS, cartographie',
+        },
     };
 
-        const SKILL_LOGOS = {
+    const SKILL_LOGOS = {
         zigbee: './assets/logos/zigbee.png',
-        knx: null,
-        gtb: null,
+        knx: 'https://cdn.simpleicons.org/knx?viewbox=auto',
+        gtb: './assets/logos/jeedom.png',
         lora: './assets/logos/lora.png',
         lorawan: './assets/logos/LoRaWAN.png',
-        'iot-data': null,
-        pv: './assets/logos/PVsyst.png',
-        elec: null,
+        'iot-data': 'https://cdn.simpleicons.org/grafana?viewbox=auto',
+        pv: './assets/logos/Victron.png',
+        elec: 'https://cdn.simpleicons.org/schneiderelectric?viewbox=auto',
         pvsyst: './assets/logos/PVsyst.png',
-        js: 'https://cdn.simpleicons.org/javascript',
-        python: 'https://cdn.simpleicons.org/python',
-        vba: 'https://cdn.simpleicons.org/microsoftexcel',
-        matlab: null,
-        comsol: null,
-        qgis: 'https://cdn.simpleicons.org/qgis',
+        js: 'https://cdn.simpleicons.org/javascript?viewbox=auto',
+        python: 'https://cdn.simpleicons.org/python?viewbox=auto',
+        vba: 'https://cdn.simpleicons.org/microsoftexcel?viewbox=auto',
+        matlab: 'https://cdn.simpleicons.org/mathworks?viewbox=auto',
+        comsol: 'https://cdn.simpleicons.org/comsol?viewbox=auto',
+        qgis: 'https://cdn.simpleicons.org/qgis?viewbox=auto',
         autocad: './assets/logos/Autocad.png',
         archicad: './assets/logos/archicad.png',
-        globalmapper: null,
+        globalmapper: 'https://cdn.simpleicons.org/esri?viewbox=auto',
     };
 
 
@@ -163,6 +188,14 @@
         energy: 'Energie',
         dev: 'Dev',
         geo: 'SIG',
+    };
+
+    const DOMAIN_LOGOS = {
+        smartbuilding: './assets/logos/jeedom.png',
+        iot: './assets/logos/LoRaWAN.png',
+        energy: './assets/logos/Victron.png',
+        dev: 'https://cdn.simpleicons.org/javascript?viewbox=auto',
+        geo: 'https://cdn.simpleicons.org/qgis?viewbox=auto',
     };
 
     // ── State ──────────────────────────────────────────────────────
@@ -219,7 +252,6 @@
             buildPoints();
             buildLines();
             buildSubSkills();
-            buildSkillLabels();
             interactiveSprites = sprites.concat(subSprites);
             buildAmbientParticles();
             buildLegend();
@@ -362,8 +394,16 @@
         return tex;
     }
 
+    function normalizeLabel(value, fallback) {
+        if (typeof value === 'string') return value;
+        if (value && typeof value.label === 'string') return value.label;
+        if (value && typeof value.name === 'string') return value.name;
+        return typeof fallback === 'string' ? fallback : '';
+    }
+
     function labelTexture(text) {
-        var key = text || 'label';
+        var safeText = normalizeLabel(text, '');
+        var key = safeText || 'label';
         if (labelTextureCache[key]) return labelTextureCache[key];
 
         var size = 256;
@@ -396,7 +436,7 @@
         ctx.font = '700 58px \"SF Pro Display\", \"Segoe UI\", sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(text, size / 2, size / 2 + 2);
+        ctx.fillText(safeText, size / 2, size / 2 + 2);
 
         var tex = new THREE.CanvasTexture(c);
         labelTextureCache[key] = tex;
@@ -404,7 +444,8 @@
     }
 
     function skillNameTexture(text) {
-        var key = 'sn_' + text;
+        var safeText = normalizeLabel(text, '');
+        var key = 'sn_' + safeText;
         if (labelTextureCache[key]) return labelTextureCache[key];
 
         var cw = 360;
@@ -416,7 +457,7 @@
 
         // Measure text
         ctx.font = '600 40px "SF Pro Display", "Segoe UI", sans-serif';
-        var tw = ctx.measureText(text).width;
+        var tw = ctx.measureText(safeText).width;
         var pillW = Math.min(tw + 30, cw - 8);
         var pillH = 54;
         var px = (cw - pillW) / 2;
@@ -444,7 +485,7 @@
         ctx.font = '600 40px "SF Pro Display", "Segoe UI", sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(text, cw / 2, ch / 2);
+        ctx.fillText(safeText, cw / 2, ch / 2);
 
         var tex = new THREE.CanvasTexture(c);
         labelTextureCache[key] = tex;
@@ -482,12 +523,19 @@
             textureLoader = new THREE.TextureLoader();
             textureLoader.crossOrigin = 'anonymous';
         }
-        var tex = textureLoader.load(url, function (loaded) {
+        var tex = textureLoader.load(
+            url,
+            function (loaded) {
             if (loaded && typeof THREE.SRGBColorSpace !== 'undefined' && loaded.colorSpace !== undefined) {
                 loaded.colorSpace = THREE.SRGBColorSpace;
             }
             if (onLoad) onLoad(loaded || tex);
-        });
+            },
+            undefined,
+            function () {
+                if (onLoad) onLoad(null);
+            }
+        );
         logoTextureCache[url] = tex;
         return tex;
     }
@@ -497,12 +545,19 @@
         var domainIds = Object.keys(DOMAINS);
         var N = domainIds.length;
 
-        // Fibonacci sphere for evenly-spaced domain centers
+        // Fibonacci sphere for evenly-spaced domain hubs
         var centers = {};
+        var hubPositions = {};
+        var hubRadius = CFG.radius * 1.12;
         domainIds.forEach(function (id, i) {
             var theta = Math.acos(1 - 2 * (i + 0.5) / N);
             var phi = Math.PI * (1 + Math.sqrt(5)) * (i + 0.5);
             centers[id] = { theta: theta, phi: phi };
+
+            var x = hubRadius * Math.sin(theta) * Math.cos(phi);
+            var y = hubRadius * Math.cos(theta);
+            var z = hubRadius * Math.sin(theta) * Math.sin(phi);
+            hubPositions[id] = new THREE.Vector3(x, y, z);
         });
 
         SKILLS.forEach(function (skill) {
@@ -512,35 +567,33 @@
             var idx = siblings.indexOf(skill);
             var count = siblings.length;
 
-            var theta = center.theta;
-            var phi = center.phi;
+            var hubPos = hubPositions[skill.domain];
+            var normal = new THREE.Vector3().copy(hubPos).normalize();
+            var ref = Math.abs(normal.y) > 0.9
+                ? new THREE.Vector3(1, 0, 0)
+                : new THREE.Vector3(0, 1, 0);
+            var t1 = new THREE.Vector3().crossVectors(normal, ref).normalize();
+            var t2 = new THREE.Vector3().crossVectors(normal, t1).normalize();
 
-            if (count > 1) {
-                var a = (2 * Math.PI * idx) / count;
-                var spread = 0.3 + 0.08 * count;
-                var sinT = Math.max(Math.sin(center.theta), 0.3);
-                theta += Math.cos(a) * spread;
-                phi += Math.sin(a) * spread / sinT;
-            }
-
-            theta = Math.max(0.15, Math.min(Math.PI - 0.15, theta));
-
-            var R = CFG.radius;
-            var x = R * Math.sin(theta) * Math.cos(phi);
-            var y = R * Math.cos(theta);
-            var z = R * Math.sin(theta) * Math.sin(phi);
+            var a = count > 1 ? (2 * Math.PI * idx) / count : 0;
+            var ringRadius = 0.7 + 0.08 * Math.max(count - 2, 0);
+            var offset = new THREE.Vector3()
+                .copy(hubPos)
+                .addScaledVector(t1, Math.cos(a) * ringRadius)
+                .addScaledVector(t2, Math.sin(a) * ringRadius)
+                .addScaledVector(normal, 0.12);
 
             var tex = glowTexture(domain.rgb);
             var mat = new THREE.SpriteMaterial({
                 map: tex,
                 transparent: true,
-                opacity: 0.9,
+                opacity: 0.6,
                 depthWrite: false,
                 blending: THREE.NormalBlending,
             });
 
             var sprite = new THREE.Sprite(mat);
-            sprite.position.set(x, y, z);
+            sprite.position.copy(offset);
 
             var baseScale = CFG.pointBase + (skill.level - 1) * CFG.pointLevelScale;
             sprite.scale.set(baseScale, baseScale, 1);
@@ -557,74 +610,74 @@
                 baseScale: baseScale,
             };
 
-            // Skill logo badge
-            var badgeTex = badgeTexture(domain.color);
-            var badgeMat = new THREE.SpriteMaterial({
-                map: badgeTex,
+            // Skill logo (uniform size) with subtle 3D shadow
+            var shadowTex = glowTexture([0, 0, 0]);
+            var shadowMat = new THREE.SpriteMaterial({
+                map: shadowTex,
                 transparent: true,
-                opacity: 0.92,
+                opacity: 0.18,
                 depthWrite: false,
                 depthTest: false,
                 blending: THREE.NormalBlending,
             });
-            var badge = new THREE.Sprite(badgeMat);
-            var badgeScale = baseScale * 1.15;
-            badge.scale.set(badgeScale, badgeScale, 1);
-            badge.position.set(0, 0, 0);
-            badge.userData = { isSkillBadge: true, baseScale: badgeScale };
-            badge.renderOrder = 3;
-            sprite.add(badge);
-
-            var labelText = SKILL_LABELS[skill.id] || skill.label;
-            var labelTex = labelTexture(labelText);
-            var labelMat = new THREE.SpriteMaterial({
-                map: labelTex,
-                transparent: true,
-                opacity: 0.9,
-                depthWrite: false,
-                depthTest: false,
-                blending: THREE.NormalBlending,
-            });
-            var label = new THREE.Sprite(labelMat);
-            var labelScale = baseScale * 0.9;
-            label.scale.set(labelScale, labelScale, 1);
-            label.position.set(0, 0, 0);
-            label.userData = { isSkillLabel: true, baseScale: labelScale };
-            label.renderOrder = 4;
-            sprite.add(label);
+            var shadow = new THREE.Sprite(shadowMat);
+            var shadowScale = baseScale * 1.95;
+            shadow.scale.set(shadowScale, shadowScale, 1);
+            shadow.position.set(0.03, -0.03, -0.02);
+            shadow.userData = { isSkillShadow: true, baseScale: shadowScale };
+            shadow.renderOrder = 2;
+            sprite.add(shadow);
 
             var logoUrl = SKILL_LOGOS[skill.id];
-            if (logoUrl) {
-                var logoMat = new THREE.SpriteMaterial({
-                    map: null,
-                    transparent: true,
-                    opacity: 0.98,
-                    depthWrite: false,
-                    depthTest: false,
-                    blending: THREE.NormalBlending,
-                });
-                var logo = new THREE.Sprite(logoMat);
-                var logoScale = baseScale * 0.85;
-                logo.scale.set(logoScale, logoScale, 1);
-                logo.position.set(0, 0, 0);
-                logo.userData = { isSkillLogo: true, baseScale: logoScale };
-                logo.renderOrder = 5;
-                logo.visible = false;
-                sprite.add(logo);
+            var logoMat = new THREE.SpriteMaterial({
+                map: null,
+                transparent: true,
+                opacity: 0.98,
+                depthWrite: false,
+                depthTest: false,
+                blending: THREE.NormalBlending,
+            });
+            var logo = new THREE.Sprite(logoMat);
+            var logoScale = baseScale * 1.7;
+            logo.scale.set(logoScale, logoScale, 1);
+            logo.position.set(0, 0, 0.02);
+            logo.userData = { isSkillLogo: true, baseScale: logoScale };
+            logo.renderOrder = 5;
+            logo.visible = false;
+            sprite.add(logo);
 
+            var iconChar = DOMAIN_ICONS[skill.domain];
+
+            var renderFallback = function () {
+                if (!iconChar) return;
+                var fallbackTex = domainIconTexture(iconChar, domain.color);
+                logo.material.map = fallbackTex;
+                logo.material.needsUpdate = true;
+                logo.visible = true;
+            };
+
+            if (logoUrl) {
                 logoTexture(logoUrl, function (tex) {
                     if (tex) {
                         logo.material.map = tex;
+                        logo.material.needsUpdate = true;
                         logo.visible = true;
-                        label.visible = false;
+                    } else if (document.fonts && document.fonts.ready) {
+                        document.fonts.ready.then(renderFallback);
+                    } else {
+                        renderFallback();
                     }
                 });
-
-                sprite.userData.logo = logo;
+            } else if (iconChar) {
+                if (document.fonts && document.fonts.ready) {
+                    document.fonts.ready.then(renderFallback);
+                } else {
+                    renderFallback();
+                }
             }
 
-            sprite.userData.badge = badge;
-            sprite.userData.label = label;
+            sprite.userData.logo = logo;
+            sprite.userData.shadow = shadow;
 
             group.add(sprite);
             sprites.push(sprite);
@@ -633,13 +686,10 @@
         // Create hub sprites at domain centers (star structure)
         domainIds.forEach(function (id) {
             var domain = DOMAINS[id];
-            var center = centers[id];
-            var theta = center.theta;
-            var phi = center.phi;
-            var R = CFG.radius;
-            var x = R * Math.sin(theta) * Math.cos(phi);
-            var y = R * Math.cos(theta);
-            var z = R * Math.sin(theta) * Math.sin(phi);
+            var hubPos = hubPositions[id];
+            var x = hubPos.x;
+            var y = hubPos.y;
+            var z = hubPos.z;
 
             var tex = glowTexture(domain.rgb);
             var mat = new THREE.SpriteMaterial({
@@ -653,80 +703,76 @@
 
             var hub = new THREE.Sprite(mat);
             hub.position.set(x, y, z);
-            var hubScale = 0.55;
+            var hubScale = 0.65;
             hub.scale.set(hubScale, hubScale, 1);
             hub.userData = { domain: id, isHub: true, baseScale: hubScale };
             hub.renderOrder = 1;
 
-            var badgeTex = badgeTexture(domain.color);
-            var badgeMat = new THREE.SpriteMaterial({
-                map: badgeTex,
+            // Subtle shadow for 3D depth
+            var hubShadowTex = glowTexture([0, 0, 0]);
+            var hubShadowMat = new THREE.SpriteMaterial({
+                map: hubShadowTex,
                 transparent: true,
-                opacity: 0.95,
+                opacity: 0.22,
                 depthWrite: false,
                 depthTest: false,
                 blending: THREE.NormalBlending,
             });
-            var badge = new THREE.Sprite(badgeMat);
-            var badgeScale = 1.6;
-            badge.scale.set(badgeScale, badgeScale, 1);
-            badge.position.set(0, 0, 0);
-            badge.userData = { isHubBadge: true, baseScale: badgeScale, domain: id };
-            badge.renderOrder = 2;
-            hub.add(badge);
-            hub.userData.badge = badge;
+            var hubShadow = new THREE.Sprite(hubShadowMat);
+            var hubShadowScale = 2.2;
+            hubShadow.scale.set(hubShadowScale, hubShadowScale, 1);
+            hubShadow.position.set(0.04, -0.04, -0.02);
+            hubShadow.userData = { isHubShadow: true, baseScale: hubShadowScale, domain: id };
+            hubShadow.renderOrder = 2;
+            hub.add(hubShadow);
+            hub.userData.shadow = hubShadow;
 
-            var labelText = DOMAIN_LABELS[id] || domain.name;
-            var labelTex = labelTexture(labelText);
-            var labelMat = new THREE.SpriteMaterial({
-                map: labelTex,
+            // Domain logo (big icon)
+            var logoMat = new THREE.SpriteMaterial({
+                map: null,
                 transparent: true,
-                opacity: 0.92,
+                opacity: 0.98,
                 depthWrite: false,
                 depthTest: false,
                 blending: THREE.NormalBlending,
             });
-            var label = new THREE.Sprite(labelMat);
-            var labelScale = 2.0;
-            label.scale.set(labelScale, labelScale, 1);
-            label.position.set(0, 0, 0);
-            label.userData = { isHubLabel: true, baseScale: labelScale, domain: id };
-            label.renderOrder = 3;
-            hub.add(label);
-            hub.userData.label = label;
+            var logo = new THREE.Sprite(logoMat);
+            var logoScale = 2.6;
+            logo.scale.set(logoScale, logoScale, 1);
+            logo.position.set(0, 0, 0.02);
+            logo.userData = { isHubLogo: true, baseScale: logoScale, domain: id };
+            logo.renderOrder = 3;
+            logo.visible = false;
+            hub.add(logo);
+            hub.userData.logo = logo;
 
+            var domainLogoUrl = DOMAIN_LOGOS[id];
             var iconChar = DOMAIN_ICONS[id];
-            if (iconChar) {
-                var logoMat = new THREE.SpriteMaterial({
-                    map: null,
-                    transparent: true,
-                    opacity: 0.98,
-                    depthWrite: false,
-                    depthTest: false,
-                    blending: THREE.NormalBlending,
-                });
-                var logo = new THREE.Sprite(logoMat);
-                var logoScale = 1.8;
-                logo.scale.set(logoScale, logoScale, 1);
-                logo.position.set(0, 0, 0);
-                logo.userData = { isHubLogo: true, baseScale: logoScale, domain: id };
-                logo.renderOrder = 4;
-                logo.visible = false;
-                hub.add(logo);
-                hub.userData.logo = logo;
 
-                // Render FA icon when webfont is ready
-                (function(logoSprite, labelSprite, ic, col) {
-                    if (document.fonts && document.fonts.ready) {
-                        document.fonts.ready.then(function() {
-                            var tex = domainIconTexture(ic, col);
-                            logoSprite.material.map = tex;
-                            logoSprite.material.needsUpdate = true;
-                            logoSprite.visible = true;
-                            if (labelSprite) labelSprite.visible = false;
-                        });
+            var renderIcon = function () {
+                if (!iconChar) return;
+                var tex = domainIconTexture(iconChar, domain.color);
+                logo.material.map = tex;
+                logo.material.needsUpdate = true;
+                logo.visible = true;
+            };
+
+            if (domainLogoUrl) {
+                logoTexture(domainLogoUrl, function (tex) {
+                    if (tex) {
+                        logo.material.map = tex;
+                        logo.material.needsUpdate = true;
+                        logo.visible = true;
+                    } else {
+                        renderIcon();
                     }
-                })(logo, label, iconChar, domain.color);
+                });
+            } else if (iconChar) {
+                if (document.fonts && document.fonts.ready) {
+                    document.fonts.ready.then(renderIcon);
+                } else {
+                    renderIcon();
+                }
             }
 
             group.add(hub);
@@ -1066,6 +1112,13 @@
         if (renderer && renderer.domElement) {
             renderer.domElement.style.cursor = sprite ? 'pointer' : 'grab';
         }
+        if (sprite) {
+            autoRotate = false;
+            clearTimeout(autoResumeTimer);
+        } else if (!dragging && !reducedMotion) {
+            clearTimeout(autoResumeTimer);
+            autoResumeTimer = setTimeout(function () { autoRotate = true; }, CFG.returnDelay);
+        }
     }
 
     // ── Tooltip ────────────────────────────────────────────────────
@@ -1073,15 +1126,17 @@
         if (!tooltipEl) return;
         var domain = DOMAINS[skill.domain];
         var isSub = skill.isSubSkill;
+        var safeLabel = normalizeLabel(skill.label, '');
+        var safeParent = normalizeLabel(skill.parentLabel, '');
         var levelHtml = isSub ? '' : '<div class="tooltip-level">' + levelDots(skill.level) + '</div>';
         var subHtml = isSub
-            ? '<div class="tooltip-sub">Sous-comp\u00e9tence de ' + skill.parentLabel + '</div>'
+            ? '<div class="tooltip-sub">Sous-comp\u00e9tence de ' + safeParent + '</div>'
             : '';
 
         tooltipEl.innerHTML =
             '<div class="tooltip-header">' +
                 '<span class="tooltip-dot" style="background:' + domain.color + '"></span>' +
-                '<strong>' + skill.label + '</strong>' +
+                '<strong>' + safeLabel + '</strong>' +
             '</div>' +
             '<div class="tooltip-domain">' + domain.name + '</div>' +
             subHtml +
@@ -1107,6 +1162,7 @@
     function showDetail(skill) {
         if (!detailEl) return;
         var domain = DOMAINS[skill.domain];
+        var safeLabel = normalizeLabel(skill.label, '');
 
         var proofHtml = '';
         if (skill.proofUrl) {
@@ -1115,7 +1171,8 @@
                 '<i class="fas fa-external-link-alt"></i> Voir le projet</a>';
         }
 
-        var tagsHtml = skill.tags.map(function (t) {
+        var tags = Array.isArray(skill.tags) ? skill.tags : [];
+        var tagsHtml = tags.map(function (t) {
             return '<span class="detail-tag">' + t + '</span>';
         }).join('');
 
@@ -1142,7 +1199,7 @@
                 domain.color + ';border:1px solid ' + domain.color + '40">' +
                 domain.name +
             '</div>' +
-            '<h3 class="detail-title">' + skill.label + '</h3>' +
+            '<h3 class="detail-title">' + safeLabel + '</h3>' +
             '<div class="detail-level">' +
                 '<span class="detail-level-label">Niveau</span>' +
                 '<div class="detail-level-bar">' +
@@ -1229,30 +1286,19 @@
             }
             sprite.material.opacity += (tgtOp - sprite.material.opacity) * 0.12;
 
-            var badge = sprite.userData.badge;
-            var label = sprite.userData.label;
+            var shadow = sprite.userData.shadow;
             var logo = sprite.userData.logo;
-            if (badge && badge.material) {
-                badge.material.opacity += ((tgtOp * 0.95) - badge.material.opacity) * 0.12;
-            }
-            if (label && label.material) {
-                label.material.opacity += ((tgtOp * 0.85) - label.material.opacity) * 0.12;
+            if (shadow && shadow.material) {
+                shadow.material.opacity += ((tgtOp * 0.45) - shadow.material.opacity) * 0.12;
             }
             if (logo && logo.material) {
                 logo.material.opacity += ((tgtOp * 0.98) - logo.material.opacity) * 0.12;
             }
 
-            // Pulse hovered sprite
-            if (isHovered && !reducedMotion) {
-                var pulse = 1 + Math.sin(t * CFG.pulseHz * Math.PI * 2) * CFG.pulseAmp;
-                sprite.scale.setScalar(sprite.userData.baseScale * pulse);
-            } else {
-                var cs = sprite.scale.x;
-                var bs = sprite.userData.baseScale;
-                if (Math.abs(cs - bs) > 0.001) {
-                    sprite.scale.setScalar(cs + (bs - cs) * 0.1);
-                }
-            }
+            // Hover zoom (simple, clean)
+            var targetScale = sprite.userData.baseScale * (isHovered && !reducedMotion ? 1.25 : 1);
+            var cs = sprite.scale.x;
+            sprite.scale.setScalar(cs + (targetScale - cs) * 0.18);
         }
 
         // ─ Hub effects ─
@@ -1266,44 +1312,17 @@
             hub.material.opacity += (tgtHubOp - hub.material.opacity) * 0.12;
 
             var logo = hub.userData && hub.userData.logo;
-            var badge = hub.userData && hub.userData.badge;
-            var label = hub.userData && hub.userData.label;
-            if (badge && badge.material) {
-                var tgtBadgeOp = hoveredDomain ? (isHov ? 1.0 : 0.2) : 0.95;
-                badge.material.opacity += (tgtBadgeOp - badge.material.opacity) * 0.12;
-            }
-            if (label && label.material) {
-                if (logo && logo.visible) {
-                    label.visible = false;
-                } else {
-                    label.visible = true;
-                }
-                var tgtLabelOp = hoveredDomain ? (isHov ? 1.0 : 0.2) : 0.92;
-                label.material.opacity += (tgtLabelOp - label.material.opacity) * 0.12;
-                if (isHov && !reducedMotion) {
-                    var lbPulse = 1 + Math.sin(t * CFG.pulseHz * Math.PI * 2) * (CFG.pulseAmp * 0.3);
-                    label.scale.setScalar(label.userData.baseScale * lbPulse);
-                } else {
-                    var lsc = label.scale.x;
-                    var lbs = label.userData.baseScale;
-                    if (Math.abs(lsc - lbs) > 0.001) {
-                        label.scale.setScalar(lsc + (lbs - lsc) * 0.1);
-                    }
-                }
+            var shadow = hub.userData && hub.userData.shadow;
+            if (shadow && shadow.material) {
+                var tgtShadowOp = hoveredDomain ? (isHov ? 0.35 : 0.08) : 0.22;
+                shadow.material.opacity += (tgtShadowOp - shadow.material.opacity) * 0.12;
             }
             if (logo && logo.material) {
                 var tgtLogoOp = hoveredDomain ? (isHov ? 1.0 : 0.2) : 0.98;
                 logo.material.opacity += (tgtLogoOp - logo.material.opacity) * 0.12;
-                if (isHov && !reducedMotion) {
-                    var lPulse = 1 + Math.sin(t * CFG.pulseHz * Math.PI * 2) * (CFG.pulseAmp * 0.4);
-                    logo.scale.setScalar(logo.userData.baseScale * lPulse);
-                } else {
-                    var ls = logo.scale.x;
-                    var lbs = logo.userData.baseScale;
-                    if (Math.abs(ls - lbs) > 0.001) {
-                        logo.scale.setScalar(ls + (lbs - ls) * 0.1);
-                    }
-                }
+                var tgtLogoScale = logo.userData.baseScale * (isHov && !reducedMotion ? 1.12 : 1);
+                var ls = logo.scale.x;
+                logo.scale.setScalar(ls + (tgtLogoScale - ls) * 0.16);
             }
         });
 
@@ -1355,24 +1374,6 @@
             var baseLineOp = lineObj.userData.baseOpacity || (CFG.lineAlpha * 0.55);
             var tgtSubLine = hoveredDomain ? (isHovSub ? baseLineOp * 1.6 : baseLineOp * 0.35) : baseLineOp;
             lineObj.material.opacity += (tgtSubLine - lineObj.material.opacity) * 0.12;
-        }
-
-        // ─ Skill label effects ─
-        for (var m = 0; m < skillLabels.length; m++) {
-            var lbl = skillLabels[m];
-            var lblDomain = lbl.userData.domain;
-            var isLblDomain = hoveredDomain && lblDomain === hoveredDomain;
-            var isLblParentHov = hoveredSprite &&
-                !hoveredSprite.userData.isSubSkill &&
-                hoveredSprite.userData.id === lbl.userData.parentId;
-
-            var tgtLblOp = lbl.userData.baseOpacity;
-            if (hoveredDomain) {
-                tgtLblOp = isLblDomain ? 1.0 : 0.15;
-            }
-            if (isLblParentHov) tgtLblOp = 1.0;
-
-            lbl.material.opacity += (tgtLblOp - lbl.material.opacity) * 0.12;
         }
 
         // ─ Raycast ─
@@ -1512,6 +1513,12 @@
     }
 
     // ── Expose ─────────────────────────────────────────────────────
+    window.SkillSphereData = {
+        domains: DOMAINS,
+        skills: SKILLS,
+        skillLogos: SKILL_LOGOS,
+        domainLogos: DOMAIN_LOGOS,
+    };
     window.SkillSphere = { init: init, dispose: dispose };
 
 })();

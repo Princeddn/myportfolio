@@ -5,12 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prince Noukounwoui - Portfolio</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=20260206-4">
     <!-- Journey Animations - Voyage Immersif -->
     <link rel="stylesheet" href="journey-animations.css">
     <!-- SkillSphere - 3D Skills Constellation -->
-    <link rel="stylesheet" href="skillsphere.css">
+    <link rel="stylesheet" href="skillsphere.css?v=20260206-3">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- JetBrains Mono for Tech Blueprint design -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Calendly widget CSS -->
     <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
 </head>
@@ -176,21 +178,47 @@
     </section>
 
     <!-- Compétences -->
-    <section id="competences" class="section">
+    <section id="competences" class="section skills-constellation-section">
+        <div class="skills-blueprint-bg">
+            <div class="blueprint-grid"></div>
+            <div class="blueprint-glow"></div>
+        </div>
         <div class="container">
-            <h2 class="section-title"><i class="fas fa-cogs"></i> Compétences</h2>
-            <p class="section-subtitle">Explorez mes compétences techniques — survolez et cliquez pour en savoir plus</p>
-            <!-- SkillSphere (3D desktop / accordion mobile) -->
-            <div class="skillsphere-wrapper" id="skillsphere-wrapper">
-                <div id="skillsphere-container"></div>
-                <div id="skillsphere-tooltip" class="sphere-tooltip"></div>
-                <div id="skillsphere-detail" class="sphere-detail-panel"></div>
-                <div id="skillsphere-legend" class="sphere-legend"></div>
-                <div id="skillsphere-mobile"></div>
+            <div class="skills-header">
+                <span class="skills-label">/ Expertise technique</span>
+                <h2 class="skills-title">Compétences</h2>
+                <p class="skills-intro">Architecture IoT, énergies renouvelables et développement — une vision transversale du bâtiment intelligent.</p>
             </div>
-            <!-- Fallback grid (if SkillSphere fails to load) -->
-            <div class="skills-grid" id="competences-grid" style="display:none">
+
+            <!-- Skills Constellation -->
+            <div class="skills-constellation" id="skills-constellation">
+                <svg class="constellation-lines" id="constellation-lines" preserveAspectRatio="xMidYMid meet"></svg>
+                <div class="constellation-nodes" id="constellation-nodes"></div>
+                <div class="constellation-center">
+                    <div class="center-pulse"></div>
+                    <div class="center-core">
+                        <span class="center-icon"><i class="fas fa-microchip"></i></span>
+                    </div>
+                </div>
             </div>
+
+            <!-- Skills Detail Panel -->
+            <div class="skills-detail-panel" id="skills-detail-panel">
+                <div class="detail-scan-line"></div>
+                <div class="detail-header">
+                    <div class="detail-badge" id="detail-badge">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="detail-titles">
+                        <h3 class="detail-domain-name" id="detail-domain-name">Smart Building</h3>
+                        <p class="detail-domain-desc" id="detail-domain-desc">GTB/GTC, KNX, Zigbee, Jeedom</p>
+                    </div>
+                </div>
+                <div class="detail-skills-grid" id="detail-skills-grid"></div>
+            </div>
+
+            <!-- Mobile Accordion Fallback -->
+            <div class="skills-accordion" id="skills-accordion"></div>
         </div>
     </section>
 
@@ -614,8 +642,8 @@
     <!-- Three.js for SkillSphere -->
     <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.min.js"></script>
     <!-- SkillSphere - 3D Skills Constellation -->
-    <script src="skillsphere.js"></script>
-    <script src="script.js"></script>
+    <script src="skillsphere.js?v=20260206-3"></script>
+    <script src="script.js?v=20260206-4"></script>
     <!-- Journey Animations - Voyage Immersif -->
     <script src="journey-animations.js"></script>
 </body>

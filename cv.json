@@ -115,7 +115,15 @@
     {
       "ecole": "Université de Rennes 1",
       "diplome": "Master Ingénierie Durable des Bâtiments Communicants Intelligents",
-      "periode": "Septembre 2024 - Juin 2026"
+      "periode": "Septembre 2024 - Juin 2026",
+      "competences": [
+        "Conception, intégration et mise en œuvre de solutions d’automatisation du bâtiment (GTB/GTC)",
+        "Réseaux et protocoles du bâtiment et de la ville (Wi‑Fi, Bluetooth, Zigbee, KNX, BACnet, DALI, EnOcean, LoRa, Modbus)",
+        "Gestion du bâti : thermique, acoustique, éclairage, énergie, confort et sécurité",
+        "Administration de réseaux informatiques hétérogènes et réseaux spécifiques du bâtiment",
+        "Programmation et communication réseau pour le bâtiment connecté (capteurs, programmation objet/réseau)",
+        "Modélisation, simulation, exploitation et optimisation du bâtiment dans une logique de développement durable"
+      ]
     },
     {
       "ecole": "Université de Franche-Comté",
@@ -411,23 +419,23 @@
     "Analyse économique": "fas fa-chart-pie"
   },
   "skill_logos": {
-    "JavaScript": "https://cdn.simpleicons.org/javascript",
-    "Python": "https://cdn.simpleicons.org/python",
+    "JavaScript": "https://cdn.simpleicons.org/javascript?viewbox=auto",
+    "Python": "https://cdn.simpleicons.org/python?viewbox=auto",
     "ZigBee": "./assets/logos/zigbee.png",
     "LoRa": "./assets/logos/lora.png",
-    "KNX": null,
+    "KNX": "https://cdn.simpleicons.org/knx?viewbox=auto",
     "LoRaWAN": "./assets/logos/LoRaWAN.png",
-    "GTB/GTC": null,
-    "Analyse de donn?es IoT": null,
-    "Maintenance photovolta?que": "./assets/logos/PVsyst.png",
-    "?lectrotechnique": null,
-    "QGIS / ArcGIS": "https://cdn.simpleicons.org/qgis",
+    "GTB/GTC": "./assets/logos/jeedom.png",
+    "Analyse de données IoT": "https://cdn.simpleicons.org/grafana?viewbox=auto",
+    "Maintenance photovoltaïque": "./assets/logos/Victron.png",
+    "Électrotechnique": "https://cdn.simpleicons.org/schneiderelectric?viewbox=auto",
+    "QGIS / ArcGIS": "https://cdn.simpleicons.org/qgis?viewbox=auto",
     "Autocad": "./assets/logos/Autocad.png",
     "ArchiCAD": "./assets/logos/archicad.png",
-    "VBA Excel": "https://cdn.simpleicons.org/microsoftexcel",
-    "GlobalMapper": null,
+    "VBA Excel": "https://cdn.simpleicons.org/microsoftexcel?viewbox=auto",
+    "GlobalMapper": "https://cdn.simpleicons.org/esri?viewbox=auto",
     "PVSYST": "./assets/logos/PVsyst.png",
-    "Comsol": null,
-    "MatLab": null
+    "Comsol": "https://cdn.simpleicons.org/comsol?viewbox=auto",
+    "MatLab": "https://cdn.simpleicons.org/mathworks?viewbox=auto"
   }
 }

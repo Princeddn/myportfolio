@@ -833,7 +833,7 @@
                 // Visual enhancements
                 floatingParticles.init();
                 cursorGlow.init();
-                chapterIndicators.init();
+                // chapterIndicators.init();
 
                 // Interactive features
                 magneticHover.init();
