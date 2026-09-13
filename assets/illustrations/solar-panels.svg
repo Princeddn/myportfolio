@@ -1,0 +1,38 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Panneaux solaires">
+  <g fill="var(--primary-svg-color, #1d1d1f)" stroke="var(--primary-svg-color, #1d1d1f)">
+    <!-- Soleil -->
+    <circle cx="312" cy="66" r="24" stroke="none" fill-opacity="0.9"/>
+    <circle cx="312" cy="66" r="36" fill="none" stroke-width="3" stroke-opacity="0.35"/>
+    <g stroke-width="4" stroke-linecap="round" stroke-opacity="0.8">
+      <line x1="312" y1="12" x2="312" y2="26"/>
+      <line x1="312" y1="106" x2="312" y2="120"/>
+      <line x1="258" y1="66" x2="272" y2="66"/>
+      <line x1="352" y1="66" x2="366" y2="66"/>
+      <line x1="274" y1="28" x2="284" y2="38"/>
+      <line x1="340" y1="94" x2="350" y2="104"/>
+      <line x1="350" y1="28" x2="340" y2="38"/>
+      <line x1="284" y1="94" x2="274" y2="104"/>
+    </g>
+
+    <!-- Panneau solaire en perspective : parallélogramme -->
+    <path d="M60 178 L232 140 L300 212 L128 250 Z" stroke="none" fill-opacity="0.16"/>
+    <path d="M60 178 L232 140 L300 212 L128 250 Z" fill="none" stroke-width="3.5" stroke-linejoin="round"/>
+
+    <!-- Grille de cellules : lignes "verticales" (le long du panneau) -->
+    <g fill="none" stroke-width="2" stroke-opacity="0.6">
+      <line x1="103" y1="168.5" x2="171" y2="240.5"/>
+      <line x1="146" y1="159" x2="214" y2="231"/>
+      <line x1="189" y1="149.5" x2="257" y2="221.5"/>
+      <!-- lignes "horizontales" (traverses) -->
+      <line x1="83.3" y1="200.7" x2="255.3" y2="162.7"/>
+      <line x1="106.6" y1="223.3" x2="278.6" y2="185.3"/>
+    </g>
+
+    <!-- Mât et socle -->
+    <g stroke-width="4" stroke-linecap="round">
+      <line x1="196" y1="205" x2="188" y2="278"/>
+      <line x1="222" y1="212" x2="230" y2="278"/>
+    </g>
+    <line x1="168" y1="280" x2="252" y2="280" stroke-width="4" stroke-linecap="round" stroke-opacity="0.7"/>
+  </g>
+</svg>

@@ -757,8 +757,12 @@ function populateDomainCards(domainExperiences, domainProjects) {
         const card = document.createElement('div');
         card.className = 'card domain-card';
         card.dataset.domain = domainKey;
+        // Identité visuelle par domaine : couleur d'accent + illustration thématique unDraw
+        card.dataset.theme = domain.theme || '';
+        card.style.setProperty('--domain-accent', domain.color || 'var(--primary-color)');
 
         card.innerHTML = `
+            <div class="domain-illustration" aria-hidden="true"></div>
             <div class="domain-header">
                 <div class="domain-icon">
                     <i class="${domain.icon}"></i>
@@ -800,6 +804,17 @@ function populateDomainCards(domainExperiences, domainProjects) {
         `;
 
         container.appendChild(card);
+
+        // Charger l'illustration thématique en inline pour permettre la teinte via --primary-svg-color
+        const illustrationByTheme = { iot: 'iot-home', solar: 'solar-panels', network: 'power-grid' };
+        const illustrationName = illustrationByTheme[domain.theme];
+        if (illustrationName) {
+            const illustrationEl = card.querySelector('.domain-illustration');
+            fetch(`assets/illustrations/${illustrationName}.svg`)
+                .then(response => (response.ok ? response.text() : ''))
+                .then(svg => { if (svg) illustrationEl.innerHTML = svg; })
+                .catch(() => {});
+        }
     });
 
     // Cartes des domaines créées

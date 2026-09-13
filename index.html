@@ -10,11 +10,17 @@
     <link rel="stylesheet" href="journey-animations.css">
     <!-- SkillSphere - 3D Skills Constellation -->
     <link rel="stylesheet" href="skillsphere.css?v=20260206-3">
+    <!-- Thème Kali (dark terminal) — activable via le toggle -->
+    <link rel="stylesheet" href="theme-kali.css">
+    <!-- Identité visuelle par domaine (couleurs + illustrations) -->
+    <link rel="stylesheet" href="domain-identity.css?v=2">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- JetBrains Mono for Tech Blueprint design -->
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Calendly widget CSS -->
     <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+    <!-- Bascule de thème : appliquée tôt pour éviter le flash visuel -->
+    <script src="theme-toggle.js"></script>
 </head>
 
 <body>
@@ -36,6 +42,7 @@
                 <li><a href="#formation" class="nav-link"><i class="fas fa-graduation-cap"></i> Formation</a></li>
                 <li><a href="#rendezvous" class="nav-link"><i class="fas fa-calendar-alt"></i> Rendez-vous</a></li>
             </ul>
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Activer le thème Kali"><i class="fas fa-terminal"></i></button>
             <div class="hamburger">
                 <span></span>
                 <span></span>
@@ -643,9 +650,14 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.min.js"></script>
     <!-- SkillSphere - 3D Skills Constellation -->
     <script src="skillsphere.js?v=20260206-3"></script>
-    <script src="script.js?v=20260206-4"></script>
+    <script src="script.js?v=20260628-1"></script>
     <!-- Journey Animations - Voyage Immersif -->
     <script src="journey-animations.js"></script>
+    <!-- Motion design premium : GSAP + ScrollTrigger + Lenis -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" defer></script>
+    <script src="motion.js" defer></script>
 </body>
 
 </html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prince Noukounwoui — Prototype</title>
+    <meta name="robots" content="noindex">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="apple-tokens.css">
+    <link rel="stylesheet" href="apple.css">
+
+    <!-- Sans defer : pose `has-js` avant le premier rendu pour éviter que le
+         contenu apparaisse puis disparaisse au moment de l'initialisation. -->
+    <script src="apple-motion.js"></script>
+    <script src="apple-scrub.js" defer></script>
+</head>
+
+<body>
+    <nav class="a-nav">
+        <div class="a-nav__inner">
+            <a class="a-nav__brand" href="#accueil">Prince Noukounwoui</a>
+            <ul class="a-nav__list">
+                <li><a class="a-nav__link" href="#expertise">Expertise</a></li>
+                <li><a class="a-nav__link" href="#parcours">Parcours</a></li>
+                <li><a class="a-nav__link" href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section id="accueil" class="scene scene--dark hero">
+            <div class="scene__inner">
+                <p class="eyebrow" data-reveal>Ingénierie des bâtiments communicants</p>
+                <h1 class="headline headline--hero" data-reveal>
+                    L'intelligence,<br>intégrée au bâtiment.
+                </h1>
+                <p class="subhead subhead--center" data-reveal>
+                    Du capteur au tableau de bord. IoT, énergie renouvelable et
+                    réseaux électriques, réunis dans une même chaîne technique.
+                </p>
+                <div class="cta-row cta-row--center" data-reveal>
+                    <a class="cta-pill" href="#contact">Me contacter</a>
+                    <a class="cta-link" href="#expertise">Découvrir le parcours</a>
+                </div>
+                <div class="hero__stage" data-reveal>
+                    <img class="hero__portrait" src="./assets/images/profile.jpg"
+                        alt="Portrait de Prince Noukounwoui" width="320" height="320">
+                </div>
+                <p class="hero__scroll">Lyon, Auvergne-Rhône-Alpes</p>
+            </div>
+        </section>
+
+        <section id="expertise" class="scene">
+            <div class="scene__inner">
+                <p class="eyebrow" data-reveal>Expertise</p>
+                <h2 class="headline" data-reveal>Trois terrains.<br>Une même exigence.</h2>
+            </div>
+        </section>
+
+        <section class="stage">
+            <div class="stage__sticky">
+                <div class="stage__media">
+                    <figure class="stage__figure is-active">
+                        <img src="./assets/illustrations/iot-home.svg" alt="" width="400" height="300">
+                    </figure>
+                    <figure class="stage__figure">
+                        <img src="./assets/illustrations/solar-panels.svg" alt="" width="400" height="300">
+                    </figure>
+                    <figure class="stage__figure">
+                        <img src="./assets/illustrations/power-grid.svg" alt="" width="400" height="300">
+                    </figure>
+                </div>
+
+                <div class="stage__copy">
+                    <article class="chapter is-active">
+                        <p class="eyebrow">01 — IoT &amp; Domotique</p>
+                        <h3 class="headline">Le bâtiment<br>qui se pilote.</h3>
+                        <p class="subhead">
+                            Intégration Smart Home, Smart Building et Smart City.
+                            Choix des produits, tests terrain, supervision GTB.
+                        </p>
+                        <ul class="chapter__tech">
+                            <li>Zigbee</li>
+                            <li>LoRaWAN</li>
+                            <li>KNX</li>
+                            <li>Jeedom</li>
+                            <li>GTB/GTC</li>
+                        </ul>
+                    </article>
+
+                    <article class="chapter">
+                        <p class="eyebrow">02 — Énergie renouvelable</p>
+                        <h3 class="headline">L'énergie,<br>rendue lisible.</h3>
+                        <p class="subhead">
+                            Systèmes photovoltaïques et monitoring énergétique.
+                            Dimensionnement, maintenance, analyse de production.
+                        </p>
+                        <ul class="chapter__tech">
+                            <li>Photovoltaïque</li>
+                            <li>Monitoring IoT</li>
+                            <li>VRM</li>
+                            <li>PVSYST</li>
+                        </ul>
+                    </article>
+
+                    <article class="chapter">
+                        <p class="eyebrow">03 — Réseaux électriques</p>
+                        <h3 class="headline">Le réseau,<br>cartographié.</h3>
+                        <p class="subhead">
+                            Études d'infrastructures basse et haute tension,
+                            cartographie SIG et maintenance industrielle.
+                        </p>
+                        <ul class="chapter__tech">
+                            <li>QGIS</li>
+                            <li>ArcGIS</li>
+                            <li>Réseaux BT/HT</li>
+                            <li>Cartographie GPS</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="stage__progress" aria-hidden="true">
+                    <span class="stage__dot is-active"></span>
+                    <span class="stage__dot"></span>
+                    <span class="stage__dot"></span>
+                </div>
+            </div>
+        </section>
+
+        <section class="scrub" data-scrub-src="./assets/media/sequences/demo/frame-{index}.svg"
+            data-scrub-count="60">
+            <div class="scrub__sticky">
+                <canvas class="scrub__canvas" width="1200" height="800"
+                    role="img" aria-label="Trajet d'une trame LoRaWAN du capteur au serveur"></canvas>
+                <div class="scrub__overlay">
+                    <p class="eyebrow">De la trame à la donnée</p>
+                    <p class="subhead">
+                        Le capteur émet, la passerelle relaie, le serveur décode.
+                        Chaque maillon de la chaîne doit être dimensionné.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="parcours" class="scene scene--alt">
+            <div class="scene__inner">
+                <p class="eyebrow" data-reveal>Aujourd'hui</p>
+                <h2 class="headline" data-reveal>Alternant chez JEEDOM.</h2>
+                <p class="subhead subhead--center" data-reveal>
+                    Intégration de solutions Smarthome, Smartbuilding et Smartcity.
+                    Sélection et tests de produits Zigbee et LoRaWAN, création de
+                    tableaux de bord énergétiques, support d'installations GTB.
+                </p>
+
+                <div class="stat-grid" data-reveal>
+                    <div class="stat">
+                        <span class="stat__value">6</span>
+                        <span class="stat__label">expériences professionnelles</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat__value">6</span>
+                        <span class="stat__label">projets menés</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat__value">3</span>
+                        <span class="stat__label">domaines d'expertise</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat__value">18</span>
+                        <span class="stat__label">technologies maîtrisées</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="scene scene--dark">
+            <div class="scene__inner">
+                <h2 class="headline" data-reveal>Parlons-en.</h2>
+                <p class="subhead subhead--center" data-reveal>
+                    Master 2 Ingénierie Durable des Bâtiments Communicants
+                    Intelligents, ISTIC Rennes.
+                </p>
+                <div class="cta-row cta-row--center" data-reveal>
+                    <a class="cta-pill" href="mailto:noukounwouiprince@gmail.com">Envoyer un message</a>
+                    <a class="cta-link" href="https://www.linkedin.com/in/prince-noukounwoui-ba1978217"
+                        target="_blank" rel="noopener">LinkedIn</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="scene scene--strip">
+        <p class="caption">
+            Prototype de direction artistique.
+            <a href="./index.html">Voir la version actuelle du portfolio</a>
+        </p>
+    </footer>
+</body>
+
+</html>

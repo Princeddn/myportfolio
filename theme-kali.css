@@ -1,0 +1,129 @@
+/*
+ * Thème "Kali" — variante dark terminal/cybersécurité, activable via le toggle.
+ * Le thème de base (Apple/clair) reste inchangé : on ne fait que surcharger
+ * les variables CSS de :root quand l'attribut data-theme="kali" est présent sur <html>.
+ * Couleurs issues du design system "Cyberpunk UI / Terminal CLI".
+ */
+
+html[data-theme="kali"] {
+    /* Accents : vert matrix pour les actions, cyan pour les données, amber pour les alertes */
+    --primary-color: #33FF00;
+    --secondary-color: #00D4FF;
+    --accent-color: #FFB000;
+    --success-color: #33FF00;
+
+    /* Texte : tons clairs légèrement verdâtres sur fond void */
+    --text-dark: #C9D1C9;
+    --text-light: #7E8C7E;
+    --text-lighter: #5A6B5A;
+
+    /* Surfaces sombres */
+    --bg-light: #0A0A0F;
+    --bg-dark: #050505;
+    --bg-card: #12121A;
+    --white: #12121A;
+    --border-color: #1F2A1F;
+
+    /* Ombres reteintées en vert discret plutôt que noir pur */
+    --shadow-subtle: 0 2px 16px rgba(0, 0, 0, 0.55);
+    --shadow-medium: 0 4px 32px rgba(0, 0, 0, 0.6);
+    --shadow-strong: 0 8px 48px rgba(0, 0, 0, 0.7);
+
+    /* Glassmorphism adapté au fond sombre */
+    --glass-bg: rgba(18, 18, 26, 0.82);
+    --glass-border: rgba(51, 255, 0, 0.18);
+}
+
+/* Police monospace globale en mode Kali (JetBrains Mono est déjà chargée) */
+html[data-theme="kali"] body {
+    font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+}
+
+/* Scanlines très légères en overlay global — discret, non bloquant */
+html[data-theme="kali"] body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(51, 255, 0, 0.04) 0px,
+        rgba(51, 255, 0, 0.04) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+}
+
+/* Glow vert discret au survol des surfaces interactives */
+html[data-theme="kali"] .btn:hover,
+html[data-theme="kali"] .nav-link:hover,
+html[data-theme="kali"] .card:hover {
+    box-shadow: 0 0 12px rgba(51, 255, 0, 0.22);
+}
+
+/* Liens et titres de section : accent vert net */
+html[data-theme="kali"] .section-title {
+    color: var(--text-dark);
+}
+
+html[data-theme="kali"] .section-title i {
+    color: var(--primary-color);
+}
+
+/* Logo navbar façon prompt shell */
+html[data-theme="kali"] .nav-logo .logo-text::before {
+    content: "> ";
+    color: var(--primary-color);
+}
+
+/* Curseur typewriter du hero en vert */
+html[data-theme="kali"] .cursor,
+html[data-theme="kali"] .typewriter {
+    color: var(--primary-color);
+}
+
+/* Lien de navigation actif : retire le fond/halo bleu codé en dur du thème de base */
+html[data-theme="kali"] .nav-link.active {
+    background: rgba(51, 255, 0, 0.12);
+    box-shadow: 0 2px 8px rgba(51, 255, 0, 0.18);
+}
+
+/* Bouton "outline" : passe du bleu hérité au vert terminal */
+html[data-theme="kali"] .btn-outline {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Respect des préférences d'accessibilité : pas d'effets animés gênants */
+@media (prefers-reduced-motion: reduce) {
+    html[data-theme="kali"] body::after {
+        display: none;
+    }
+}
+
+/* ----- Bouton de bascule de thème (présent dans les deux thèmes) ----- */
+.theme-toggle {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-dark);
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transition: var(--transition-fast);
+    margin-left: 1rem;
+}
+
+.theme-toggle:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+html[data-theme="kali"] .theme-toggle {
+    box-shadow: 0 0 10px rgba(51, 255, 0, 0.2);
+}

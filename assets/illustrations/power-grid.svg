@@ -1,0 +1,38 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Réseau électrique">
+  <g fill="var(--primary-svg-color, #1d1d1f)" stroke="var(--primary-svg-color, #1d1d1f)">
+    <!-- Pylône électrique : mât en treillis -->
+    <g fill="none" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">
+      <!-- montants -->
+      <path d="M176 250 L192 96 L208 96 L224 250"/>
+      <!-- traverses -->
+      <line x1="150" y1="110" x2="250" y2="110"/>
+      <line x1="158" y1="140" x2="242" y2="140"/>
+      <!-- croisillons -->
+      <path d="M190 130 L210 160 M210 130 L190 160" stroke-width="2.5" stroke-opacity="0.6"/>
+      <path d="M187 170 L213 205 M213 170 L187 205" stroke-width="2.5" stroke-opacity="0.6"/>
+      <path d="M184 210 L216 245 M216 210 L184 245" stroke-width="2.5" stroke-opacity="0.6"/>
+      <!-- pied écarté -->
+      <path d="M176 250 L166 268 M224 250 L234 268" stroke-linecap="round"/>
+    </g>
+
+    <!-- Isolateurs -->
+    <g stroke="none" fill-opacity="0.9">
+      <circle cx="150" cy="110" r="5"/>
+      <circle cx="250" cy="110" r="5"/>
+      <circle cx="158" cy="140" r="4"/>
+      <circle cx="242" cy="140" r="4"/>
+    </g>
+
+    <!-- Câbles en caténaire vers l'extérieur -->
+    <g fill="none" stroke-width="2.5" stroke-opacity="0.55">
+      <path d="M150 110 Q80 150 20 130"/>
+      <path d="M250 110 Q320 150 380 130"/>
+      <path d="M158 140 Q90 178 28 162"/>
+      <path d="M242 140 Q310 178 372 162"/>
+    </g>
+
+    <!-- Éclair : symbole de l'énergie -->
+    <path d="M300 60 L280 108 L298 108 L286 150 L322 96 L302 96 L316 60 Z"
+          stroke="none" fill-opacity="0.9"/>
+  </g>
+</svg>

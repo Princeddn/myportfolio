@@ -1,0 +1,67 @@
+/*
+ * Identité visuelle par domaine sur les cartes de la section Expériences.
+ * Chaque carte reçoit la couleur de son domaine (--domain-accent, défini en JS)
+ * et une illustration thématique unDraw teintée via --primary-svg-color.
+ */
+
+.domain-card {
+    position: relative;
+    overflow: hidden;
+    border-top: 3px solid var(--domain-accent, var(--primary-color));
+}
+
+/* Illustration thématique du domaine, ancrée en bas a droite de la carte */
+.domain-illustration {
+    /* La couleur principale de l'illustration suit l'accent du domaine */
+    --primary-svg-color: var(--domain-accent, var(--primary-color));
+    position: absolute;
+    right: 2%;
+    bottom: 4%;
+    width: 42%;
+    max-width: 190px;
+    opacity: 0.45;
+    pointer-events: none;
+    z-index: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.domain-illustration svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* L'illustration se révèle davantage au survol de la carte */
+.domain-card:hover .domain-illustration {
+    opacity: 0.7;
+    transform: scale(1.05) translateY(-4px);
+}
+
+/* Le contenu reste au-dessus de l'illustration */
+.domain-card > *:not(.domain-illustration) {
+    position: relative;
+    z-index: 1;
+}
+
+/* Icone et accents teintés a la couleur du domaine */
+.domain-card .domain-icon {
+    color: var(--domain-accent, var(--primary-color));
+}
+
+.domain-card .tech-tag {
+    border-color: color-mix(in srgb, var(--domain-accent, var(--primary-color)) 40%, transparent);
+}
+
+.domain-card .btn-explore {
+    --primary-color: var(--domain-accent);
+}
+
+/* Accessibilité : pas d'animation d'illustration si l'utilisateur la refuse */
+@media (prefers-reduced-motion: reduce) {
+    .domain-illustration {
+        transition: none;
+    }
+    .domain-card:hover .domain-illustration {
+        transform: none;
+    }
+}

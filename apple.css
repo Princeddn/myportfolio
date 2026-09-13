@@ -1,0 +1,559 @@
+/*
+ * Primitives de mise en page — prototype "langage Apple".
+ * Dépend de apple-tokens.css. Volontairement court : la fidélité vient de la
+ * typographie et du vide, pas du nombre de règles.
+ */
+
+/* ------------------------------------------------------------------ Base */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--size-body);
+    line-height: var(--leading-body);
+    letter-spacing: var(--tracking-body);
+    color: var(--ink);
+    background: var(--canvas);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+/* ------------------------------------------------------- Typographie */
+
+.eyebrow {
+    margin: 0 0 0.75rem;
+    font-size: var(--size-subhead);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-subhead);
+    line-height: var(--leading-subhead);
+    color: var(--blue);
+}
+
+.scene--dark .eyebrow {
+    color: var(--blue-on-dark);
+}
+
+.headline {
+    margin: 0;
+    font-size: var(--size-headline);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-headline);
+    line-height: var(--leading-headline);
+    text-wrap: balance;
+}
+
+.headline--hero {
+    font-size: var(--size-hero);
+    letter-spacing: var(--tracking-hero);
+    line-height: var(--leading-hero);
+}
+
+.subhead {
+    margin: var(--space-block) 0 0;
+    max-width: var(--width-text);
+    font-size: var(--size-subhead);
+    font-weight: var(--weight-regular);
+    letter-spacing: var(--tracking-subhead);
+    line-height: var(--leading-subhead);
+    color: var(--ink-secondary);
+}
+
+.scene--dark .subhead {
+    color: var(--on-dark-secondary);
+}
+
+.subhead--center {
+    margin-inline: auto;
+}
+
+.caption {
+    margin: 1rem 0 0;
+    font-size: var(--size-caption);
+    line-height: 1.33;
+    color: var(--ink-tertiary);
+}
+
+/* ------------------------------------------------------------ Actions */
+
+.cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem 2rem;
+    align-items: center;
+    margin-top: var(--space-block);
+}
+
+.cta-row--center {
+    justify-content: center;
+}
+
+.cta-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.375rem;
+    border-radius: var(--radius-pill);
+    background: var(--blue);
+    color: var(--canvas);
+    font-size: var(--size-body);
+    line-height: 1.17;
+    text-decoration: none;
+    transition: background var(--duration-fast) var(--ease);
+}
+
+.cta-pill:hover {
+    background: var(--blue-hover);
+}
+
+.cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--blue);
+    font-size: var(--size-subhead);
+    letter-spacing: var(--tracking-subhead);
+    text-decoration: none;
+}
+
+.scene--dark .cta-link {
+    color: var(--blue-on-dark);
+}
+
+.cta-link:hover {
+    text-decoration: underline;
+}
+
+/* Le chevron glisse au survol : seul micro-mouvement autorisé sur un lien. */
+.cta-link::after {
+    content: "\203a";
+    font-size: 1.2em;
+    line-height: 1;
+    transform: translateY(-0.05em);
+    transition: transform var(--duration-fast) var(--ease);
+}
+
+.cta-link:hover::after {
+    transform: translate(0.15em, -0.05em);
+}
+
+/* --------------------------------------------------------- Navigation */
+
+.a-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--nav-bg);
+    -webkit-backdrop-filter: var(--nav-blur);
+    backdrop-filter: var(--nav-blur);
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--duration-fast) var(--ease);
+}
+
+.a-nav.is-scrolled {
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+/* La barre adopte le fond de la section qu'elle survole : une nav claire
+ * posée sur un hero noir est le défaut le plus visible d'une imitation. */
+.a-nav.is-dark {
+    background: var(--nav-bg-dark);
+}
+
+.a-nav.is-dark.is-scrolled {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.a-nav.is-dark .a-nav__brand,
+.a-nav.is-dark .a-nav__link {
+    color: var(--on-dark);
+}
+
+.a-nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    max-width: var(--width-wide);
+    height: var(--nav-height);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+}
+
+.a-nav__brand {
+    font-size: 0.875rem;
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color var(--duration-fast) var(--ease);
+}
+
+.a-nav__list {
+    display: flex;
+    gap: 1.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.a-nav__link {
+    font-size: 0.75rem;
+    line-height: var(--nav-height);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    opacity: 0.8;
+    text-decoration: none;
+    transition: opacity var(--duration-fast) var(--ease),
+        color var(--duration-fast) var(--ease);
+}
+
+.a-nav__link:hover {
+    opacity: 1;
+}
+
+@media (max-width: 47.9375rem) {
+    .a-nav__inner {
+        gap: 1rem;
+    }
+
+    .a-nav__brand {
+        font-size: 0.8125rem;
+    }
+
+    .a-nav__list {
+        gap: 1.125rem;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .a-nav__list::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/* ------------------------------------------------------------- Scènes */
+
+.scene {
+    padding: var(--space-section) var(--gutter);
+    text-align: center;
+}
+
+.scene--dark {
+    background: var(--canvas-dark);
+    color: var(--on-dark);
+}
+
+.scene--alt {
+    background: var(--canvas-alt);
+}
+
+.scene--strip {
+    padding-block: var(--space-block);
+}
+
+.scene__inner {
+    max-width: var(--width-content);
+    margin: 0 auto;
+}
+
+.scene__inner--wide {
+    max-width: var(--width-wide);
+}
+
+/* ---------------------------------------------------------------- Hero */
+
+.hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: calc(100svh - var(--nav-height));
+    padding-bottom: var(--space-block);
+}
+
+.hero__stage {
+    margin-top: var(--space-block);
+}
+
+/* Le portrait garde une découpe circulaire : reste sobre en monochrome. */
+.hero__portrait {
+    width: clamp(11rem, 26vw, 20rem);
+    aspect-ratio: 1;
+    margin: 0 auto;
+    border-radius: 50%;
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.08);
+}
+
+.hero__scroll {
+    margin-top: var(--space-block);
+    font-size: var(--size-caption);
+    color: var(--on-dark-secondary);
+}
+
+/* ------------------------------------------------------- Scène épinglée */
+
+.stage {
+    background: var(--canvas-alt);
+}
+
+.stage__sticky {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: var(--space-block);
+    max-width: var(--width-wide);
+    margin: 0 auto;
+    padding: var(--space-section) var(--gutter);
+}
+
+/* La hauteur de .stage définit la durée du scroll : un écran par chapitre. */
+.has-js .stage {
+    height: 300vh;
+}
+
+.has-js .stage__sticky {
+    position: sticky;
+    top: var(--nav-height);
+    height: calc(100svh - var(--nav-height));
+    padding-block: 0;
+}
+
+.has-js .stage__media,
+.has-js .stage__copy {
+    position: relative;
+    height: min(60vh, 30rem);
+}
+
+.stage__figure,
+.chapter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.stage__figure {
+    align-items: center;
+}
+
+.chapter {
+    text-align: left;
+}
+
+/* Les chapitres ne se superposent qu'avec le JS actif : sans lui ils
+ * s'empilent verticalement et restent tous lisibles. */
+.has-js .stage__figure,
+.has-js .chapter {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity var(--duration) var(--ease),
+        transform var(--duration) var(--ease);
+}
+
+.has-js .stage__figure {
+    transform: scale(0.96);
+}
+
+.has-js .chapter {
+    transform: translateY(1.5rem);
+}
+
+.has-js .stage__figure.is-active,
+.has-js .chapter.is-active {
+    opacity: 1;
+    transform: none;
+}
+
+.stage__figure img {
+    width: min(100%, 26rem);
+}
+
+.chapter__tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: var(--space-block) 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.chapter__tech li {
+    padding: 0.375rem 0.875rem;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-pill);
+    font-size: 0.8125rem;
+    color: var(--ink-secondary);
+}
+
+/* Indicateur de progression : remplace une pagination visible. */
+.stage__progress {
+    display: none;
+}
+
+.has-js .stage__progress {
+    position: absolute;
+    display: flex;
+    left: var(--gutter);
+    bottom: 2rem;
+    gap: 0.5rem;
+}
+
+.stage__dot {
+    width: 1.75rem;
+    height: 2px;
+    background: var(--hairline);
+    transition: background var(--duration-fast) var(--ease);
+}
+
+.stage__dot.is-active {
+    background: var(--ink);
+}
+
+@media (max-width: 47.9375rem) {
+    .stage__sticky {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .has-js .stage__media {
+        height: 30vh;
+    }
+
+    .has-js .stage__copy {
+        height: 40vh;
+    }
+
+    .chapter {
+        text-align: center;
+    }
+
+    .chapter__tech {
+        justify-content: center;
+    }
+}
+
+/* ------------------------------------------------------- Scrub au scroll */
+
+.scrub {
+    position: relative;
+    background: var(--canvas-alt);
+    /* Durée du scrub : surchargeable section par section. */
+    --scrub-length: 250vh;
+}
+
+.scrub--dark {
+    background: var(--canvas-dark);
+    color: var(--on-dark);
+}
+
+.has-js .scrub {
+    height: var(--scrub-length);
+}
+
+.scrub__sticky {
+    display: grid;
+    place-items: center;
+    padding: var(--space-block) var(--gutter);
+}
+
+.has-js .scrub__sticky {
+    position: sticky;
+    top: var(--nav-height);
+    height: calc(100svh - var(--nav-height));
+}
+
+.scrub__canvas,
+.scrub__video {
+    width: min(100%, 56rem);
+    height: auto;
+}
+
+/* Le média n'apparaît qu'une fois le composant initialisé : un canvas vide
+ * ou une vidéo à l'arrêt sur sa première image est un artefact visible. */
+.has-js .scrub__canvas,
+.has-js .scrub__video {
+    opacity: 0;
+    transition: opacity var(--duration) var(--ease);
+}
+
+.has-js .scrub.is-ready .scrub__canvas,
+.has-js .scrub.is-ready .scrub__video {
+    opacity: 1;
+}
+
+.scrub__overlay {
+    max-width: var(--width-text);
+    margin-top: var(--space-block);
+    text-align: center;
+}
+
+/* -------------------------------------------------------------- Chiffres */
+
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: var(--space-block);
+    margin-top: var(--space-section);
+    padding-top: var(--space-block);
+    border-top: 1px solid var(--hairline);
+}
+
+.stat__value {
+    display: block;
+    font-size: var(--size-title);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-headline);
+}
+
+.stat__label {
+    display: block;
+    margin-top: 0.5rem;
+    color: var(--ink-secondary);
+}
+
+/* ---------------------------------------------------------------- Reveal */
+
+/* Un seul geste : monter et apparaître. Appliqué via IntersectionObserver.
+ * Conditionné à .has-js pour que le contenu reste lisible sans JavaScript. */
+.has-js [data-reveal] {
+    opacity: 0;
+    transform: translateY(2.5rem);
+    transition: opacity var(--duration-slow) var(--ease),
+        transform var(--duration-slow) var(--ease);
+}
+
+.has-js [data-reveal].is-revealed {
+    opacity: 1;
+    transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .has-js [data-reveal] {
+        opacity: 1;
+        transform: none;
+    }
+}
