@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prince Noukounwoui - Portfolio</title>
+    <link rel="stylesheet" href="styles.css?v=20260206-4">
+    <!-- Journey Animations - Voyage Immersif -->
+    <link rel="stylesheet" href="journey-animations.css">
+    <!-- SkillSphere - 3D Skills Constellation -->
+    <link rel="stylesheet" href="skillsphere.css?v=20260206-3">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- JetBrains Mono for Tech Blueprint design -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Calendly widget CSS -->
+    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Curseur personnalisé -->
+    <div class="custom-cursor" id="custom-cursor"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">PN</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#accueil" class="nav-link"><i class="fas fa-home"></i> Accueil</a></li>
+                <li><a href="#apropos" class="nav-link"><i class="fas fa-user"></i> À propos</a></li>
+                <li><a href="#experiences" class="nav-link"><i class="fas fa-briefcase"></i> Expériences</a></li>
+                <li><a href="#competences" class="nav-link"><i class="fas fa-cogs"></i> Compétences</a></li>
+                <li><a href="#projets" class="nav-link"><i class="fas fa-rocket"></i> Projets</a></li>
+                <li><a href="#formation" class="nav-link"><i class="fas fa-graduation-cap"></i> Formation</a></li>
+                <li><a href="#rendezvous" class="nav-link"><i class="fas fa-calendar-alt"></i> Rendez-vous</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile menu overlay -->
+    <div class="mobile-menu-overlay"></div>
+
+    <!-- Hero Section -->
+    <section id="accueil" class="hero">
+        <canvas id="iot-background" class="iot-canvas"></canvas>
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-greeting">
+                    <span class="greeting-text">Bonjour, je suis</span>
+                </div>
+                <h1 class="hero-title" id="nom-titre">
+                    <span class="name-part">Prince Noukounwoui</span>
+                </h1>
+                <div class="hero-dynamic-subtitle">
+                    <span class="subtitle-prefix">Spécialisé en</span>
+                    <span id="typewriter-text" class="typewriter"></span>
+                    <span class="cursor">|</span>
+                </div>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <span class="stat-number" id="years-experience">0</span>
+                        <span class="stat-label">ans d'expérience</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="stat-number" id="projects-count">0</span>
+                        <span class="stat-label">projets réalisés</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="stat-number" id="domains-count">0</span>
+                        <span class="stat-label">domaines maîtrisés</span>
+                    </div>
+                </div>
+                <p class="hero-location" id="localisation">📍 Lyon, Auvergne-Rhône-Alpes, France</p>
+                <div class="hero-buttons">
+                    <a href="#" onclick="downloadCV()" class="btn btn-primary">
+                        <i class="fas fa-download"></i> Télécharger CV
+                    </a>
+                    <a href="#rendezvous" class="btn btn-secondary">
+                        <i class="fas fa-envelope"></i> Me contacter
+                    </a>
+                    <a href="#experiences" class="btn btn-outline">
+                        <i class="fas fa-briefcase"></i> Voir mes expériences
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="profile-circle">
+                    <img id="profile-photo" src="" alt="Prince Noukounwoui" loading="eager">
+                    <i class="fas fa-user" style="display: none; font-size: 4rem; color: #007AFF;"></i>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- À propos -->
+    <section id="apropos" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title"><i class="fas fa-user"></i> À propos de moi</h2>
+            <div class="about-hero">
+                <div class="about-content">
+                    <div class="about-text">
+                        <div class="about-intro">
+                            <span class="about-badge">💡 Innovation</span>
+                            <span class="about-badge">⚡ Énergie</span>
+                            <span class="about-badge">📡 IoT</span>
+                        </div>
+                        <p id="resume-text" class="about-description"></p>
+
+                        <div class="about-highlights">
+                            <div class="highlight-item">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span>Master en Bâtiments Intelligents</span>
+                            </div>
+                            <div class="highlight-item">
+                                <i class="fas fa-briefcase"></i>
+                                <span>Alternant chez JEEDOM</span>
+                            </div>
+                            <div class="highlight-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Rennes, Bretagne</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-showcase">
+                        <div class="stats-grid">
+                            <div class="stat-item animated-stat" data-target="6">
+                                <div class="stat-icon">💼</div>
+                                <div class="stat-number" id="nb-experiences">0</div>
+                                <div class="stat-label">Ans D'Expériences</div>
+                                <div class="stat-description">professionnelles</div>
+                            </div>
+                            <div class="stat-item animated-stat" data-target="3">
+                                <div class="stat-icon">🚀</div>
+                                <div class="stat-number" id="nb-projets">0</div>
+                                <div class="stat-label">Projets</div>
+                                <div class="stat-description">réalisés</div>
+                            </div>
+                            <div class="stat-item animated-stat" data-target="10">
+                                <div class="stat-icon">🛠️</div>
+                                <div class="stat-number" id="nb-competences">0</div>
+                                <div class="stat-label">Compétences</div>
+                                <div class="stat-description">techniques</div>
+                            </div>
+                            <div class="stat-item animated-stat" data-target="3">
+                                <div class="stat-icon">📜</div>
+                                <div class="stat-number" id="nb-certifications">0</div>
+                                <div class="stat-label">Certifications</div>
+                                <div class="stat-description">obtenues</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Domaines d'expertise -->
+    <section id="experiences" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title"><i class="fas fa-briefcase"></i> Domaines d'expertise</h2>
+            <p class="section-subtitle">Découvrez mes expériences organisées par domaine de compétence</p>
+
+            <div class="cards-grid">
+                <!-- Les cartes de domaines seront ajoutées dynamiquement -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Compétences -->
+    <section id="competences" class="section skills-constellation-section">
+        <div class="skills-blueprint-bg">
+            <div class="blueprint-grid"></div>
+            <div class="blueprint-glow"></div>
+        </div>
+        <div class="container">
+            <div class="skills-header">
+                <span class="skills-label">/ Expertise technique</span>
+                <h2 class="skills-title">Compétences</h2>
+                <p class="skills-intro">Architecture IoT, énergies renouvelables et développement — une vision transversale du bâtiment intelligent.</p>
+            </div>
+
+            <!-- Skills Constellation -->
+            <div class="skills-constellation" id="skills-constellation">
+                <svg class="constellation-lines" id="constellation-lines" preserveAspectRatio="xMidYMid meet"></svg>
+                <div class="constellation-nodes" id="constellation-nodes"></div>
+                <div class="constellation-center">
+                    <div class="center-pulse"></div>
+                    <div class="center-core">
+                        <span class="center-icon"><i class="fas fa-microchip"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills Detail Panel -->
+            <div class="skills-detail-panel" id="skills-detail-panel">
+                <div class="detail-scan-line"></div>
+                <div class="detail-header">
+                    <div class="detail-badge" id="detail-badge">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="detail-titles">
+                        <h3 class="detail-domain-name" id="detail-domain-name">Smart Building</h3>
+                        <p class="detail-domain-desc" id="detail-domain-desc">GTB/GTC, KNX, Zigbee, Jeedom</p>
+                    </div>
+                </div>
+                <div class="detail-skills-grid" id="detail-skills-grid"></div>
+            </div>
+
+            <!-- Mobile Accordion Fallback -->
+            <div class="skills-accordion" id="skills-accordion"></div>
+        </div>
+    </section>
+
+    <!-- Projets -->
+    <section id="projets" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title"><i class="fas fa-rocket"></i> Projets</h2>
+            <div class="projects-grid" id="projets-grid">
+                <!-- Les projets seront ajoutés dynamiquement -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications -->
+    <section id="certifications" class="section">
+        <div class="container">
+            <h2 class="section-title"><i class="fas fa-award"></i> Certifications</h2>
+            <div class="certifications-grid" id="certifications-grid">
+                <!-- Les certifications seront ajoutées dynamiquement -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Formation -->
+    <section id="formation" class="section">
+        <div class="container">
+            <h2 class="section-title"><i class="fas fa-graduation-cap"></i> Formation</h2>
+            <div class="education-timeline" id="formation-timeline">
+                <!-- La formation sera ajoutée dynamiquement -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Prendre Rendez-vous -->
+    <section id="rendezvous" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Prendre Rendez-vous</h2>
+            <div class="appointment-content">
+                <div class="appointment-intro">
+                    <h3>Discutons de vos projets</h3>
+                    <p>Que ce soit pour une collaboration, un stage, ou simplement échanger sur les technologies IoT et
+                        les bâtiments intelligents, je serais ravi de vous rencontrer.</p>
+                    <div class="appointment-features">
+                        <div class="feature-item">
+                            <i class="fas fa-video"></i>
+                            <span>Visioconférence</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-coffee"></i>
+                            <span>Rencontre physique</span>
+                        </div>
+                        <div class="feature-item clickable" onclick="openCalendlyWidget()">
+                            <i class="fas fa-phone"></i>
+                            <span>Appel téléphonique</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="appointment-booking">
+                    <div class="contact-methods">
+                        <h4>Choisissez votre moyen de contact préféré</h4>
+                        <div class="contact-options-grid">
+                            <div class="contact-option" onclick="openCalendlyWidget()">
+                                <div class="contact-icon">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                                <h5>Prendre rendez-vous</h5>
+                                <p>Réservez un créneau pour un appel téléphonique</p>
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-phone"></i>
+                                    Calendly
+                                </button>
+                            </div>
+
+                            <div class="contact-option" onclick="contactViaLinkedIn()">
+                                <div class="contact-icon linkedin">
+                                    <i class="fab fa-linkedin"></i>
+                                </div>
+                                <h5>LinkedIn</h5>
+                                <p>Connectons-nous sur le réseau professionnel</p>
+                                <button class="btn btn-linkedin">
+                                    <i class="fab fa-linkedin"></i>
+                                    Me contacter
+                                </button>
+                            </div>
+
+                            <div class="contact-option" onclick="contactViaEmail()">
+                                <div class="contact-icon email">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <h5>Email</h5>
+                                <p>Envoyez-moi un message détaillé</p>
+                                <button class="btn btn-email">
+                                    <i class="fas fa-envelope"></i>
+                                    Écrire un mail
+                                </button>
+                            </div>
+
+                            <div class="contact-option" onclick="contactViaSMS()">
+                                <div class="contact-icon sms">
+                                    <i class="fas fa-sms"></i>
+                                </div>
+                                <h5>SMS</h5>
+                                <p>Message rapide par téléphone</p>
+                                <button class="btn btn-sms">
+                                    <i class="fas fa-sms"></i>
+                                    Envoyer SMS
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Prince Noukounwoui. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+
+    <!-- Phone Booking Modal -->
+    <div id="phone-booking-modal" class="modal-overlay">
+        <div class="modal-content phone-booking-container">
+            <div class="modal-header">
+                <h3>Réserver un appel téléphonique</h3>
+                <button class="close-btn" onclick="closePhoneBooking()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="booking-step" id="step-1">
+                    <h4>Choisissez votre créneau disponible</h4>
+                    <div class="calendar-view">
+                        <div class="calendar-header">
+                            <button class="calendar-nav" id="prev-month" onclick="navigateMonth(-1)">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <span class="calendar-title" id="calendar-title">Novembre 2024</span>
+                            <button class="calendar-nav" id="next-month" onclick="navigateMonth(1)">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div class="calendar-grid" id="calendar-grid">
+                            <!-- Le calendrier sera généré ici -->
+                        </div>
+                        <div class="availability-legend">
+                            <div class="legend-item">
+                                <div class="legend-color available"></div>
+                                <span>Disponible</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color busy"></div>
+                                <span>Occupé</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color unavailable"></div>
+                                <span>Passé</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color selected"></div>
+                                <span>Sélectionné</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="booking-step hidden" id="step-2">
+                    <h4>Confirmez votre créneau sélectionné</h4>
+                    <div class="selected-slot-info">
+                        <div class="slot-details">
+                            <i class="fas fa-calendar-check"></i>
+                            <div class="slot-text">
+                                <span class="slot-date" id="selected-slot-date"></span>
+                                <span class="slot-time" id="selected-slot-time"></span>
+                            </div>
+                        </div>
+                        <div class="slot-actions">
+                            <button class="btn btn-secondary btn-small" onclick="goBackToCalendar()">
+                                <i class="fas fa-arrow-left"></i>
+                                Modifier
+                            </button>
+                            <button class="btn btn-primary btn-small" onclick="proceedToBookingForm()">
+                                <i class="fas fa-arrow-right"></i>
+                                Continuer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="booking-step hidden" id="step-3">
+                    <h4>Étape 3 : Confirmez votre rendez-vous</h4>
+                    <div class="booking-summary">
+                        <div class="summary-item">
+                            <i class="fas fa-phone"></i>
+                            <span>Appel téléphonique</span>
+                        </div>
+                        <div class="summary-item">
+                            <i class="fas fa-calendar"></i>
+                            <span id="final-date-display"></span>
+                        </div>
+                        <div class="summary-item">
+                            <i class="fas fa-clock"></i>
+                            <span id="final-time-display"></span>
+                        </div>
+                        <div class="summary-item">
+                            <i class="fas fa-hourglass-half"></i>
+                            <span>Durée : 30 minutes</span>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-form">
+                        <div class="form-group">
+                            <label>Votre nom *</label>
+                            <input type="text" id="booking-name" required placeholder="Votre nom complet">
+                        </div>
+                        <div class="form-group">
+                            <label>Votre téléphone *</label>
+                            <input type="tel" id="booking-phone" required placeholder="06 12 34 56 78">
+                        </div>
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" id="booking-email" required placeholder="votre@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Sujet de l'appel</label>
+                            <textarea id="booking-subject"
+                                placeholder="Décrivez brièvement le sujet que vous souhaitez aborder..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="booking-actions">
+                        <button class="btn btn-secondary" onclick="goBackToCalendar()">
+                            <i class="fas fa-arrow-left"></i>
+                            Modifier le créneau
+                        </button>
+                        <button class="btn btn-primary" onclick="confirmBooking()">
+                            <i class="fas fa-check"></i>
+                            Confirmer le rendez-vous
+                        </button>
+                    </div>
+                </div>
+
+                <div class="booking-step hidden" id="step-4">
+                    <div class="booking-success">
+                        <i class="fas fa-check-circle"></i>
+                        <h4>Rendez-vous confirmé !</h4>
+                        <p>Votre demande de rendez-vous a été enregistrée. Vous recevrez une confirmation par email dans
+                            les minutes qui suivent.</p>
+                        <div class="success-actions">
+                            <button class="btn btn-primary" onclick="closePhoneBooking()">
+                                <i class="fas fa-times"></i>
+                                Fermer
+                            </button>
+                            <button class="btn btn-secondary" onclick="addToCalendar()">
+                                <i class="fas fa-calendar-plus"></i>
+                                Ajouter à mon agenda
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calendly Modal -->
+    <div id="calendly-modal" class="modal-overlay">
+        <div class="modal-content calendly-container">
+            <div class="modal-header">
+                <h3>Autres types de rendez-vous</h3>
+                <button class="close-btn" onclick="closeCalendly()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="meeting-types">
+                    <div class="meeting-type" onclick="openInbox('direct')">
+                        <i class="fas fa-video"></i>
+                        <h5>Visioconférence</h5>
+                        <p>Échange en visio via Teams, Zoom ou Google Meet</p>
+                    </div>
+                    <div class="meeting-type" onclick="openInbox('direct')">
+                        <i class="fas fa-coffee"></i>
+                        <h5>Rencontre physique</h5>
+                        <p>Rencontrons-nous à Rennes ou dans les environs</p>
+                    </div>
+                </div>
+                <div class="calendly-placeholder">
+                    <p>Pour d'autres types de rendez-vous, contactez-moi directement pour que nous organisions une
+                        rencontre personnalisée.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Experience Details Modal -->
+    <div id="experience-details-modal" class="modal-overlay">
+        <div class="modal-content experience-modal">
+            <div class="modal-header">
+                <h3 id="experience-title">Détails de l'expérience</h3>
+                <button class="close-btn" onclick="closeExperienceDetails()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="experience-details-content">
+                    <div class="experience-header">
+                        <div class="experience-company">
+                            <h2 id="detail-company">Entreprise</h2>
+                            <h3 id="detail-position">Poste</h3>
+                        </div>
+                        <div class="experience-meta">
+                            <div class="detail-period" id="detail-period">Période</div>
+                            <div class="detail-location" id="detail-location">Lieu</div>
+                        </div>
+                    </div>
+
+                    <div class="experience-sections">
+                        <div class="detail-section">
+                            <h4><i class="fas fa-tasks"></i> Missions principales</h4>
+                            <ul id="detail-missions" class="detail-list">
+                                <!-- Missions dynamiques -->
+                            </ul>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4><i class="fas fa-cogs"></i> Technologies utilisées</h4>
+                            <div id="detail-technologies" class="tech-badges">
+                                <!-- Technologies dynamiques -->
+                            </div>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4><i class="fas fa-trophy"></i> Réalisations clés</h4>
+                            <ul id="detail-realisations" class="detail-list achievements">
+                                <!-- Réalisations dynamiques -->
+                            </ul>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4><i class="fas fa-mountain"></i> Défis relevés</h4>
+                            <ul id="detail-defis" class="detail-list challenges">
+                                <!-- Défis dynamiques -->
+                            </ul>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4><i class="fas fa-users"></i> Environnement de travail</h4>
+                            <p id="detail-environnement" class="environment-text">
+                                <!-- Environnement dynamique -->
+                            </p>
+                        </div>
+
+                        <div class="detail-section impact-section">
+                            <h4><i class="fas fa-chart-line"></i> Impact et résultats</h4>
+                            <div id="detail-impact" class="impact-text">
+                                <!-- Impact dynamique -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Domain Side Panel -->
+    <div id="domain-side-panel" class="side-panel">
+        <div class="side-panel-overlay"></div>
+        <div class="side-panel-content">
+            <div class="side-panel-header">
+                <div class="domain-panel-header">
+                    <div class="domain-icon large">
+                        <i id="panel-domain-icon" class="fas fa-home"></i>
+                    </div>
+                    <div class="domain-info">
+                        <h2 id="panel-domain-name">Domaine</h2>
+                        <p id="panel-domain-description">Description</p>
+                    </div>
+                </div>
+                <button class="panel-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="side-panel-body">
+                <div class="domain-content">
+                    <!-- Technologies -->
+                    <div class="domain-section">
+                        <h3><i class="fas fa-cogs"></i> Technologies utilisées</h3>
+                        <div id="panel-technologies" class="technologies-grid">
+                            <!-- Technologies dynamiques -->
+                        </div>
+                    </div>
+
+                    <!-- Expériences -->
+                    <div class="domain-section">
+                        <h3><i class="fas fa-briefcase"></i> Expériences professionnelles</h3>
+                        <div id="panel-experiences" class="experiences-list">
+                            <!-- Expériences dynamiques -->
+                        </div>
+                    </div>
+
+                    <!-- Projets -->
+                    <div class="domain-section">
+                        <h3><i class="fas fa-rocket"></i> Projets réalisés</h3>
+                        <div id="panel-projects" class="projects-list">
+                            <!-- Projets dynamiques -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calendly widget JS -->
+    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js"></script>
+    <!-- Three.js for SkillSphere -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.min.js"></script>
+    <!-- SkillSphere - 3D Skills Constellation -->
+    <script src="skillsphere.js?v=20260206-3"></script>
+    <script src="script.js?v=20260206-4"></script>
+    <!-- Journey Animations - Voyage Immersif -->
+    <script src="journey-animations.js"></script>
+</body>
+
+</html>

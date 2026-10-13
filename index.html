@@ -1,651 +1,1535 @@
 <!DOCTYPE html>
-<html lang="fr">
-
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prince Noukounwoui - Portfolio</title>
-    <link rel="stylesheet" href="styles.css?v=20260206-4">
-    <!-- Journey Animations - Voyage Immersif -->
-    <link rel="stylesheet" href="journey-animations.css">
-    <!-- SkillSphere - 3D Skills Constellation -->
-    <link rel="stylesheet" href="skillsphere.css?v=20260206-3">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- JetBrains Mono for Tech Blueprint design -->
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Calendly widget CSS -->
-    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+<meta charset="utf-8">
+<title>Prince Noukounwoui — Ingénieur Smart Building & GTB</title>
+<meta name="description" content="Portfolio de Prince Noukounwoui : IoT, domotique, GTB, LoRaWAN, énergie renouvelable.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
 </head>
-
 <body>
-    <!-- Curseur personnalisé -->
-    <div class="custom-cursor" id="custom-cursor"></div>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Caprasimo&amp;family=Figtree:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<style>
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin:0; background:#f5ead8; color:#201e1d; font-family:"Figtree",system-ui,sans-serif; font-size:16px; line-height:1.55; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+  h1,h2,h3,h4 { font-family:"Caprasimo",system-ui,sans-serif; font-weight:400; line-height:1.05; letter-spacing:-0.015em; margin:0; }
+  a { color:#8c491a; text-decoration:none; }
+  a:hover { color:var(--pn-accent-600,#b2622d); }
+  ::selection { background:rgba(198,113,57,0.28); }
+  :focus-visible { outline:2px solid var(--pn-accent,#c67139); outline-offset:2px; }
+  @keyframes pnMarquee { from { transform:translateX(0) } to { transform:translateX(-50%) } }
+  @keyframes pnBlink { 0%,50%{opacity:1} 51%,100%{opacity:0} }
+  @keyframes pnFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+  .pn-mask > span { display:block; transform:translateY(108%); transition:transform 1s cubic-bezier(0.16,1,0.3,1); }
+  .pn-mask.pn-in > span { transform:translateY(0); }
+  .pn-rev { opacity:0; transform:translateY(26px); transition:opacity .9s cubic-bezier(0.16,1,0.3,1), transform .9s cubic-bezier(0.16,1,0.3,1); }
+  .pn-rev.pn-in { opacity:1; transform:translateY(0); }
+  @media (pointer:fine) and (min-width:1025px) { body, a, button { cursor:none; } }
+  @media (prefers-reduced-motion: reduce) {
+    body, a, button { cursor:auto !important; }
+    .pn-rev { opacity:1 !important; transform:none !important; transition:none !important; }
+    .pn-mask > span { transform:none !important; transition:none !important; }
+    [style*="pnMarquee"], [style*="pnFloat"] { animation:none !important; }
+  }
+  @media (max-width:900px) { .pn-hide-sm { display:none !important; } }
+  @media (max-width:760px) {
+    .pn-header { flex-wrap:wrap !important; row-gap:6px !important; padding:10px 16px 6px !important; }
+    .pn-nav { width:100%; flex-wrap:nowrap !important; justify-content:flex-start !important; overflow-x:auto; scrollbar-width:none; margin:0 -11px; }
+    .pn-nav::-webkit-scrollbar { display:none; }
+    .pn-nav > button { flex:0 0 auto; }
+    .pn-cta { display:none !important; }
+  }
+</style>
+</helmet>
 
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <span class="logo-text">PN</span>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="#accueil" class="nav-link"><i class="fas fa-home"></i> Accueil</a></li>
-                <li><a href="#apropos" class="nav-link"><i class="fas fa-user"></i> À propos</a></li>
-                <li><a href="#experiences" class="nav-link"><i class="fas fa-briefcase"></i> Expériences</a></li>
-                <li><a href="#competences" class="nav-link"><i class="fas fa-cogs"></i> Compétences</a></li>
-                <li><a href="#projets" class="nav-link"><i class="fas fa-rocket"></i> Projets</a></li>
-                <li><a href="#formation" class="nav-link"><i class="fas fa-graduation-cap"></i> Formation</a></li>
-                <li><a href="#rendezvous" class="nav-link"><i class="fas fa-calendar-alt"></i> Rendez-vous</a></li>
-            </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
+<div style="position:relative;min-height:100vh;background:#f5ead8;overflow:hidden">
+
+  <div ref="{{ curtainRef }}" style="position:fixed;inset:0;z-index:9000;background:#201e1d;transform:translateY(100%);pointer-events:none;display:flex;align-items:center;justify-content:center">
+    <span ref="{{ curtainLabelRef }}" style="font-family:'Caprasimo',serif;font-size:clamp(40px,7vw,96px);color:#f5ead8;opacity:0"></span>
+  </div>
+
+  <div ref="{{ cursorRef }}" class="pn-hide-sm" style="position: fixed; top: 80px; left: 129px; width: 14px; height: 14px; border-radius: 999px; background: var(--pn-accent,#c67139); z-index: 9500; pointer-events: none; transform: translate(-50%,-50%); transition: width .25s ease,height .25s ease,background .25s ease,opacity .25s ease; mix-blend-mode: multiply"></div>
+
+  <div ref="{{ peekRef }}" class="pn-hide-sm" style="position:fixed;top:0;left:0;width:300px;height:210px;border-radius:28px;overflow:hidden;z-index:8000;pointer-events:none;opacity:0;transform:translate(-50%,-50%) scale(.85);transition:opacity .4s ease,transform .5s cubic-bezier(0.16,1,0.3,1);box-shadow:0 12px 32px rgba(46,43,37,0.22);background:#ebddc5">
+    <img ref="{{ peekImgRef }}" alt="" style="width:100%;height:100%;object-fit:cover;filter:saturate(0.6) contrast(0.85) brightness(1.1)">
+  </div>
+
+  <header class="pn-header" style="position:fixed;top:0;left:0;right:0;z-index:7000;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px clamp(20px,4vw,56px);background:rgba(245,234,216,0.82);backdrop-filter:blur(18px) saturate(150%);border-bottom:1px solid rgba(32,30,29,0.1)">
+    <button onClick="{{ goHome }}" data-magnet="1" style="display:flex;align-items:center;gap:10px;background:none;border:none;padding:0;font:inherit;color:#201e1d">
+      <span style="width:34px;height:34px;border-radius:999px;background:var(--pn-accent,#c67139);color:#f5ead8;font-family:'Caprasimo',serif;font-size:15px;display:flex;align-items:center;justify-content:center">PN</span>
+      <span style="font-family:'Caprasimo',serif;font-size:19px">Prince Noukounwoui</span>
+    </button>
+    <nav class="pn-nav" style="display:flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;gap:2px">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="4">
+        <button onClick="{{ n.go }}" data-magnet="1" style="background:none;border:none;font:inherit;font-size:14px;font-weight:600;color:#201e1d;padding:8px 11px;border-radius:999px" style-hover="background:rgba(198,113,57,0.12);color:#8c491a">{{ n.label }}</button>
+      </sc-for>
+      <a class="pn-cta" href="mailto:noukounwouiprince@gmail.com" data-magnet="1" style="margin-left:8px;background:var(--pn-accent,#c67139);color:#f5ead8;font-weight:600;font-size:14px;padding:9px 17px;border-radius:999px" style-hover="background:var(--pn-accent-600,#b2622d);color:#f5ead8">Démarrer un projet</a>
     </nav>
+  </header>
 
-    <!-- Mobile menu overlay -->
-    <div class="mobile-menu-overlay"></div>
-
-    <!-- Hero Section -->
-    <section id="accueil" class="hero">
-        <canvas id="iot-background" class="iot-canvas"></canvas>
-        <div class="hero-content">
-            <div class="hero-text">
-                <div class="hero-greeting">
-                    <span class="greeting-text">Bonjour, je suis</span>
-                </div>
-                <h1 class="hero-title" id="nom-titre">
-                    <span class="name-part">Prince Noukounwoui</span>
-                </h1>
-                <div class="hero-dynamic-subtitle">
-                    <span class="subtitle-prefix">Spécialisé en</span>
-                    <span id="typewriter-text" class="typewriter"></span>
-                    <span class="cursor">|</span>
-                </div>
-                <div class="hero-stats">
-                    <div class="hero-stat">
-                        <span class="stat-number" id="years-experience">0</span>
-                        <span class="stat-label">ans d'expérience</span>
-                    </div>
-                    <div class="hero-stat">
-                        <span class="stat-number" id="projects-count">0</span>
-                        <span class="stat-label">projets réalisés</span>
-                    </div>
-                    <div class="hero-stat">
-                        <span class="stat-number" id="domains-count">0</span>
-                        <span class="stat-label">domaines maîtrisés</span>
-                    </div>
-                </div>
-                <p class="hero-location" id="localisation">📍 Lyon, Auvergne-Rhône-Alpes, France</p>
-                <div class="hero-buttons">
-                    <a href="#" onclick="downloadCV()" class="btn btn-primary">
-                        <i class="fas fa-download"></i> Télécharger CV
-                    </a>
-                    <a href="#rendezvous" class="btn btn-secondary">
-                        <i class="fas fa-envelope"></i> Me contacter
-                    </a>
-                    <a href="#experiences" class="btn btn-outline">
-                        <i class="fas fa-briefcase"></i> Voir mes expériences
-                    </a>
-                </div>
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <main>
+      <section style="position:relative;min-height:100vh;display:flex;align-items:center;padding:150px clamp(20px,4vw,56px) 80px;overflow:hidden">
+        <canvas ref="{{ canvasRef }}" style="position:absolute;inset:0;width:100%;height:100%;opacity:0.55;pointer-events:none"></canvas>
+        <div style="position:relative;z-index:2;width:100%;max-width:1280px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,0.55fr);gap:clamp(24px,5vw,72px);align-items:center">
+          <div>
+            <div class="pn-rev" data-rev="1" style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+              <span style="width:10px;height:10px;border-radius:999px;background:#7a8a5e"></span>
+              <span style="font-size:17px;color:#645c50">👋, je m'appelle Prince et je suis</span>
             </div>
-            <div class="hero-image">
-                <div class="profile-circle">
-                    <img id="profile-photo" src="" alt="Prince Noukounwoui" loading="eager">
-                    <i class="fas fa-user" style="display: none; font-size: 4rem; color: #007AFF;"></i>
-                </div>
+            <div style="overflow:hidden" class="pn-mask" data-mask="1">
+              <span><h1 style="font-size:clamp(44px,8.2vw,118px);color:#201e1d">Ingénieur smart</h1></span>
             </div>
+            <div style="overflow:hidden" class="pn-mask" data-mask="1" data-delay="120">
+              <span><h1 style="font-size:clamp(44px,8.2vw,118px);color:var(--pn-accent,#c67139)">building &amp; GTB</h1></span>
+            </div>
+            <div class="pn-rev" data-rev="1" data-delay="320" style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:22px;font-size:clamp(18px,2.2vw,26px);color:#474238">
+              <span>Avec des compétences en</span>
+              <span ref="{{ typeRef }}" style="font-weight:700;color:#56633f"></span>
+              <span style="animation:pnBlink 1s infinite;color:#7a8a5e">|</span>
+            </div>
+            <p class="pn-rev" data-rev="1" data-delay="420" style="margin:22px 0 0;max-width:560px;font-size:18px;color:#645c50">En alternance chez Jeedom, à Lyon. J'intègre des solutions Smart Home, Smart Building et Smart City — Zigbee, LoRaWAN, KNX, GTB — et je conçois les dashboards énergétiques qui vont avec.</p>
+            <div class="pn-rev" data-rev="1" data-delay="520" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:34px">
+              <button onClick="{{ goProjets }}" data-magnet="1" style="background:var(--pn-accent,#c67139);color:#f5ead8;border:none;font:inherit;font-weight:600;font-size:16px;padding:15px 28px;border-radius:999px" style-hover="background:var(--pn-accent-600,#b2622d)">Consultez mes projets →</button>
+              <button onClick="{{ downloadCV }}" data-magnet="1" style="background:transparent;color:#201e1d;border:1px solid rgba(32,30,29,0.22);font:inherit;font-weight:600;font-size:16px;padding:15px 28px;border-radius:999px" style-hover="background:rgba(32,30,29,0.06)">Télécharger mon CV</button>
+              <button onClick="{{ openCalendly }}" data-magnet="1" style="background:transparent;color:#56633f;border:1px solid rgba(122,138,94,0.5);font:inherit;font-weight:600;font-size:16px;padding:15px 28px;border-radius:999px" style-hover="background:rgba(122,138,94,0.12)">Prendre rendez-vous</button>
+            </div>
+          </div>
+          <div class="pn-rev" data-rev="1" data-delay="260" style="display:flex;justify-content:center">
+            <div data-parallax="0.08" style="position:relative;width:min(340px,70vw);aspect-ratio:1/1;border-radius:999px;overflow:hidden;background:#ebddc5;animation:pnFloat 7s ease-in-out infinite;box-shadow:0 12px 32px rgba(46,43,37,0.22)">
+              <img src="assets/images/profile.jpg" alt="Prince Noukounwoui" style="width:100%;height:100%;object-fit:cover;filter:saturate(0.6) contrast(0.85) brightness(1.1) opacity(0.96)">
+            </div>
+          </div>
         </div>
-        <div class="scroll-indicator">
-            <div class="scroll-arrow"></div>
+      </section>
+
+      <section style="padding:22px 0;border-top:1px solid rgba(32,30,29,0.12);border-bottom:1px solid rgba(32,30,29,0.12);overflow:hidden;background:#ebddc5">
+        <div style="display:flex;width:max-content;animation:pnMarquee 34s linear infinite">
+          <sc-for list="{{ logoLoop }}" as="l" hint-placeholder-count="12">
+            <div style="display:flex;align-items:center;gap:12px;padding:0 34px;opacity:0.75">
+              <img data-src="{{ l.src }}" alt="" style="height:34px;width:auto;object-fit:contain;filter:saturate(0.55) contrast(0.9)">
+              <span style="font-size:15px;font-weight:600;color:#474238;white-space:nowrap">{{ l.name }}</span>
+            </div>
+          </sc-for>
         </div>
-    </section>
+      </section>
 
-    <!-- À propos -->
-    <section id="apropos" class="section bg-light">
-        <div class="container">
-            <h2 class="section-title"><i class="fas fa-user"></i> À propos de moi</h2>
-            <div class="about-hero">
-                <div class="about-content">
-                    <div class="about-text">
-                        <div class="about-intro">
-                            <span class="about-badge">💡 Innovation</span>
-                            <span class="about-badge">⚡ Énergie</span>
-                            <span class="about-badge">📡 IoT</span>
-                        </div>
-                        <p id="resume-text" class="about-description"></p>
+      <section style="padding:clamp(56px,8vw,104px) clamp(20px,4vw,56px) clamp(40px,5vw,64px)">
+        <div style="max-width:1280px;margin:0 auto;background:#ebddc5;border-radius:28px;padding:clamp(28px,3.5vw,44px);display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:clamp(24px,3vw,40px)">
+          <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+            <div class="pn-rev" data-rev="1">
+              <div data-count="{{ s.n }}" style="font-family:'Caprasimo',serif;font-size:clamp(40px,4.6vw,58px);color:var(--pn-accent,#c67139);line-height:1">0</div>
+              <div style="font-weight:700;font-size:17px;margin-top:8px">{{ s.label }}</div>
+              <div style="font-size:15px;color:#645c50">{{ s.desc }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
 
-                        <div class="about-highlights">
-                            <div class="highlight-item">
-                                <i class="fas fa-graduation-cap"></i>
-                                <span>Master en Bâtiments Intelligents</span>
-                            </div>
-                            <div class="highlight-item">
-                                <i class="fas fa-briefcase"></i>
-                                <span>Alternant chez JEEDOM</span>
-                            </div>
-                            <div class="highlight-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Rennes, Bretagne</span>
-                            </div>
-                        </div>
-                    </div>
+      <section style="padding:0 clamp(20px,4vw,56px) clamp(64px,9vw,110px)">
+        <div style="max-width:1280px;margin:0 auto">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:30px">
+            <h2 class="pn-rev" data-rev="1" style="font-size:clamp(32px,4.6vw,58px);max-width:640px">Trois domaines d'expertise</h2>
+            <button onClick="{{ goExperiences }}" data-magnet="1" style="background:none;border:none;font:inherit;font-weight:600;font-size:17px;color:#8c491a;padding:8px 0">Voir le parcours complet →</button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px">
+            <sc-for list="{{ domains }}" as="d" hint-placeholder-count="3">
+              <button onClick="{{ d.goto }}" data-magnet="1" class="pn-rev" data-rev="1" style="text-align:left;background:#ebddc5;border:none;border-radius:28px;padding:0;overflow:hidden;font:inherit;color:#201e1d" style-hover="background:#e1eecc">
+                <span style="display:block;aspect-ratio:3/2;overflow:hidden;background:#f9f4ed">
+                  <img data-src="{{ d.image }}" alt="" style="width:100%;height:100%;object-fit:cover;filter:saturate(0.88) contrast(0.95)">
+                </span>
+                <span style="display:block;padding:24px 26px 26px">
+                  <span style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+                    <span style="width:12px;height:12px;border-radius:999px;background:{{ d.dot }}"></span>
+                    <h3 style="font-size:21px">{{ d.name }}</h3>
+                  </span>
+                  <span style="display:block;font-size:15px;color:#645c50">{{ d.description }}</span>
+                  <span style="display:block;margin-top:12px;font-size:15px;font-weight:600;color:#8c491a">{{ d.countLabel }} →</span>
+                </span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </section>
 
-                    <div class="stats-showcase">
-                        <div class="stats-grid">
-                            <div class="stat-item animated-stat" data-target="6">
-                                <div class="stat-icon">💼</div>
-                                <div class="stat-number" id="nb-experiences">0</div>
-                                <div class="stat-label">Ans D'Expériences</div>
-                                <div class="stat-description">professionnelles</div>
-                            </div>
-                            <div class="stat-item animated-stat" data-target="3">
-                                <div class="stat-icon">🚀</div>
-                                <div class="stat-number" id="nb-projets">0</div>
-                                <div class="stat-label">Projets</div>
-                                <div class="stat-description">réalisés</div>
-                            </div>
-                            <div class="stat-item animated-stat" data-target="10">
-                                <div class="stat-icon">🛠️</div>
-                                <div class="stat-number" id="nb-competences">0</div>
-                                <div class="stat-label">Compétences</div>
-                                <div class="stat-description">techniques</div>
-                            </div>
-                            <div class="stat-item animated-stat" data-target="3">
-                                <div class="stat-icon">📜</div>
-                                <div class="stat-number" id="nb-certifications">0</div>
-                                <div class="stat-label">Certifications</div>
-                                <div class="stat-description">obtenues</div>
-                            </div>
-                        </div>
-                    </div>
+      <section style="padding:clamp(56px,8vw,110px) clamp(20px,4vw,56px);background:#201e1d;color:#f5ead8">
+        <div style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:36px;align-items:center">
+          <div>
+            <h2 class="pn-rev" data-rev="1" style="font-size:clamp(32px,4.6vw,58px);color:#f5ead8">Vous avez besoin d'un ingénieur bâtiment intelligent&nbsp;?</h2>
+            <p class="pn-rev" data-rev="1" data-delay="120" style="margin:18px 0 0;font-size:18px;color:#dcd3c4;max-width:520px">Collaboration, alternance, mission GTB ou simple échange sur l'IoT — écrivez-moi ou réservez un créneau.</p>
+          </div>
+          <div class="pn-rev" data-rev="1" data-delay="200" style="display:flex;flex-wrap:wrap;gap:12px">
+            <button onClick="{{ openCalendly }}" data-magnet="1" style="background:var(--pn-accent,#c67139);color:#f5ead8;border:none;font:inherit;font-weight:600;font-size:16px;padding:15px 28px;border-radius:999px" style-hover="background:#f6a06b;color:#201e1d">Réserver un créneau</button>
+            <a href="mailto:noukounwouiprince@gmail.com" data-magnet="1" style="color:#f5ead8;border:1px solid rgba(245,234,216,0.34);font-weight:600;font-size:16px;padding:15px 28px;border-radius:999px" style-hover="background:rgba(245,234,216,0.1);color:#f5ead8">noukounwouiprince@gmail.com</a>
+          </div>
+        </div>
+      </section>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ isProjets }}" hint-placeholder-val="{{ true }}">
+    <main style="padding:150px clamp(20px,4vw,56px) clamp(64px,9vw,120px)">
+      <div style="max-width:1280px;margin:0 auto">
+        <div style="overflow:hidden" class="pn-mask" data-mask="1"><span><h1 style="font-size:clamp(44px,7.4vw,104px)">Projets</h1></span></div>
+        <p class="pn-rev" data-rev="1" data-delay="200" style="max-width:660px;font-size:19px;line-height:1.6;color:#645c50;margin:16px 0 34px">Six projets d'ingénierie, du décodage de trames LoRaWAN au biodigesteur. Chacun est né dans un cadre précis — un diplôme, un poste — et a produit quelque chose d'utilisable.</p>
+
+        <div class="pn-rev" data-rev="1" style="display:flex;flex-wrap:wrap;gap:9px;margin-bottom:clamp(26px,4vw,40px)">
+          <sc-for list="{{ projFilters }}" as="fl" hint-placeholder-count="4">
+            <button onClick="{{ fl.pick }}" data-magnet="1" style="font:inherit;font-size:15px;font-weight:700;padding:10px 18px;border-radius:999px;cursor:pointer;transition:background .25s ease,color .25s ease;border:1px solid {{ fl.border }};background:{{ fl.bg }};color:{{ fl.fg }}">{{ fl.label }}</button>
+          </sc-for>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:clamp(18px,2.5vw,26px)">
+          <sc-for list="{{ projets }}" as="p" hint-placeholder-count="6">
+            <article class="pn-rev" data-rev="1" style="border-radius:28px;background:#ebddc5;overflow:hidden;display:flex;flex-direction:column">
+              <div style="position:relative;width:100%;aspect-ratio:16/10;background:#f9f4ed">
+                <sc-if value="{{ p.hasImage }}" hint-placeholder-val="{{ false }}">
+                  <img data-src="{{ p.image }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(0.72) contrast(0.9) brightness(1.05)" />
+                </sc-if>
+                <sc-if value="{{ p.noImage }}" hint-placeholder-val="{{ true }}">
+                  <img data-src="{{ p.domImage }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(0.72) contrast(0.9) brightness(1.05)" />
+                </sc-if>
+                <span style="position:absolute;top:14px;left:16px;font-size:13px;font-weight:700;padding:6px 13px;border-radius:999px;background:#f5ead8;color:#474238">{{ p.num }}</span>
+                <span style="position:absolute;top:14px;right:16px;font-size:13px;font-weight:700;padding:6px 13px;border-radius:999px;background:{{ p.domColor }};color:#f5ead8">{{ p.domName }}</span>
+              </div>
+              <div style="padding:clamp(20px,2.6vw,28px);display:flex;flex-direction:column;gap:12px;flex:1">
+                <div style="font-size:14px;font-weight:700;color:#8c491a">{{ p.periode }} · {{ p.organisation }}</div>
+                <h3 style="font-size:clamp(21px,2.4vw,28px);line-height:1.12">{{ p.nom }}</h3>
+                <p style="margin:0;font-size:16px;line-height:1.55;color:#474238;text-wrap:pretty">{{ p.excerpt }}</p>
+                <div style="display:flex;flex-wrap:wrap;gap:8px">
+                  <sc-for list="{{ p.tags }}" as="t" hint-placeholder-count="4">
+                    <span style="font-size:13px;font-weight:600;padding:5px 12px;border-radius:999px;background:rgba(122,138,94,0.18);color:#3d472b">{{ t }}</span>
+                  </sc-for>
                 </div>
-            </div>
+                <button onClick="{{ p.goPage }}" data-peek="{{ p.image }}" data-magnet="1" style="margin-top:auto;align-self:flex-start;font:inherit;font-size:16px;font-weight:700;color:#8c491a;background:none;border:none;padding:0;cursor:pointer">Voir le projet →</button>
+              </div>
+            </article>
+          </sc-for>
         </div>
-    </section>
+      </div>
+    </main>
+  </sc-if>
 
-    <!-- Domaines d'expertise -->
-    <section id="experiences" class="section bg-light">
-        <div class="container">
-            <h2 class="section-title"><i class="fas fa-briefcase"></i> Domaines d'expertise</h2>
-            <p class="section-subtitle">Découvrez mes expériences organisées par domaine de compétence</p>
-
-            <div class="cards-grid">
-                <!-- Les cartes de domaines seront ajoutées dynamiquement -->
-            </div>
+  <sc-if value="{{ isProjDetail }}" hint-placeholder-val="{{ false }}">
+    <main style="padding:150px clamp(20px,4vw,56px) clamp(64px,9vw,120px)">
+      <div style="max-width:1080px;margin:0 auto">
+        <button onClick="{{ goProjets }}" data-magnet="1" style="font:inherit;font-size:16px;font-weight:700;color:#8c491a;background:none;border:none;padding:0;cursor:pointer;margin-bottom:28px">← Tous les projets</button>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;font-size:14px;font-weight:700;margin-bottom:18px">
+          <span style="padding:7px 15px;border-radius:999px;background:{{ proj.domColor }};color:#f5ead8">{{ proj.domName }}</span>
+          <span style="padding:7px 15px;border-radius:999px;background:#ebddc5;color:#474238">{{ proj.periode }}</span>
+          <span style="padding:7px 15px;border-radius:999px;background:#ebddc5;color:#474238">{{ proj.organisation }}</span>
         </div>
-    </section>
+        <div style="overflow:hidden" class="pn-mask" data-mask="1"><span><h1 style="font-size:clamp(34px,5.4vw,74px)">{{ proj.nom }}</h1></span></div>
+        <p class="pn-rev" data-rev="1" data-delay="160" style="font-size:clamp(18px,2vw,23px);color:#645c50;margin:12px 0 0;max-width:52ch">{{ proj.tagline }}</p>
 
-    <!-- Compétences -->
-    <section id="competences" class="section skills-constellation-section">
-        <div class="skills-blueprint-bg">
-            <div class="blueprint-grid"></div>
-            <div class="blueprint-glow"></div>
+        <div class="pn-rev" data-rev="1" style="margin-top:clamp(28px,4vw,44px);border-radius:28px;overflow:hidden;background:#ebddc5;position:relative;width:100%;aspect-ratio:21/9">
+          <sc-if value="{{ proj.hasImage }}" hint-placeholder-val="{{ false }}">
+            <img data-src="{{ proj.image }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(0.72) contrast(0.9) brightness(1.05)" />
+          </sc-if>
+          <sc-if value="{{ proj.noImage }}" hint-placeholder-val="{{ true }}">
+            <img data-src="{{ proj.domImage }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(0.72) contrast(0.9) brightness(1.05)" />
+          </sc-if>
         </div>
-        <div class="container">
-            <div class="skills-header">
-                <span class="skills-label">/ Expertise technique</span>
-                <h2 class="skills-title">Compétences</h2>
-                <p class="skills-intro">Architecture IoT, énergies renouvelables et développement — une vision transversale du bâtiment intelligent.</p>
-            </div>
 
-            <!-- Skills Constellation -->
-            <div class="skills-constellation" id="skills-constellation">
-                <svg class="constellation-lines" id="constellation-lines" preserveAspectRatio="xMidYMid meet"></svg>
-                <div class="constellation-nodes" id="constellation-nodes"></div>
-                <div class="constellation-center">
-                    <div class="center-pulse"></div>
-                    <div class="center-core">
-                        <span class="center-icon"><i class="fas fa-microchip"></i></span>
-                    </div>
+        <div style="display:flex;flex-wrap:wrap;gap:clamp(24px,4vw,48px);margin-top:clamp(32px,4vw,52px);align-items:flex-start">
+          <div class="pn-rev" data-rev="1" style="flex:2.2 1 460px;min-width:0">
+            <p style="font-size:19px;line-height:1.7;color:#2f2b26;margin:0;max-width:68ch;text-wrap:pretty">{{ proj.description }}</p>
+            <sc-if value="{{ proj.hasLinks }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:28px">
+                <sc-for list="{{ proj.links }}" as="l" hint-placeholder-count="0">
+                  <a href="{{ l.href }}" target="_blank" rel="noopener" data-magnet="1" style="background:var(--pn-accent,#c67139);color:#f5ead8;font-weight:700;font-size:16px;padding:14px 26px;border-radius:999px">{{ l.label }} ↗</a>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ proj.hasFrame }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:34px;border-radius:24px;background:#e1eecc;padding:clamp(20px,2.6vw,26px)">
+                <div style="font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#56633f;margin-bottom:6px">Mené dans le cadre de</div>
+                <div style="font-family:'Caprasimo',serif;font-size:clamp(19px,2.1vw,24px);line-height:1.15">{{ proj.frameTitle }}</div>
+                <div style="font-size:16px;color:#3d472b;margin-top:4px">{{ proj.frameMeta }}</div>
+                <button onClick="{{ proj.goFrame }}" data-magnet="1" style="margin-top:14px;font:inherit;font-size:15px;font-weight:700;color:#8c491a;background:none;border:none;padding:0;cursor:pointer">Voir dans le parcours →</button>
+              </div>
+            </sc-if>
+          </div>
+          <aside class="pn-rev" data-rev="1" data-delay="180" style="flex:1 1 300px;min-width:0;border-radius:28px;background:#ebddc5;padding:clamp(22px,3vw,30px)">
+            <div style="font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#8c491a;margin-bottom:12px">Compétences mobilisées</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px">
+              <sc-for list="{{ proj.competences }}" as="c" hint-placeholder-count="5">
+                <span style="font-size:14px;font-weight:600;padding:7px 14px;border-radius:999px;background:#f9f4ed;color:#3d472b">{{ c }}</span>
+              </sc-for>
+            </div>
+            <div style="font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#8c491a;margin-bottom:12px">Mots-clés</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <sc-for list="{{ proj.tags }}" as="t" hint-placeholder-count="4">
+                <span style="font-size:14px;font-weight:600;padding:7px 14px;border-radius:999px;background:#f9f4ed;color:#474238">{{ t }}</span>
+              </sc-for>
+            </div>
+          </aside>
+        </div>
+
+        <div class="pn-rev" data-rev="1" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;margin-top:clamp(40px,6vw,72px);border-top:1px solid rgba(32,30,29,0.16);padding-top:26px">
+          <sc-if value="{{ proj.hasPrev }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ proj.prev }}" data-magnet="1" style="text-align:left;font:inherit;background:none;border:none;padding:0;cursor:pointer;color:#201e1d">
+              <span style="display:block;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#8c491a">Projet précédent</span>
+              <span style="display:block;font-family:'Caprasimo',serif;font-size:21px;margin-top:4px">{{ proj.prevLabel }}</span>
+            </button>
+          </sc-if>
+          <sc-if value="{{ proj.hasNext }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ proj.next }}" data-magnet="1" style="text-align:right;font:inherit;background:none;border:none;padding:0;cursor:pointer;color:#201e1d;margin-left:auto">
+              <span style="display:block;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#8c491a">Projet suivant</span>
+              <span style="display:block;font-family:'Caprasimo',serif;font-size:21px;margin-top:4px">{{ proj.nextLabel }}</span>
+            </button>
+          </sc-if>
+        </div>
+      </div>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ isExperiences }}" hint-placeholder-val="{{ true }}">
+    <main style="padding:150px clamp(20px,4vw,56px) clamp(64px,9vw,120px)">
+      <div style="max-width:1280px;margin:0 auto">
+        <div style="overflow:hidden" class="pn-mask" data-mask="1"><span><h1 style="font-size:clamp(44px,7.4vw,104px)">Parcours</h1></span></div>
+        <p class="pn-rev" data-rev="1" data-delay="200" style="max-width:680px;font-size:19px;line-height:1.6;color:#645c50;margin:18px 0 12px">D'un atelier de rebobinage à Porto-Novo aux coffrets domotiques de Lyon : le fil est toujours le même — comprendre l'énergie qui circule, puis la rendre lisible. Voici le chemin, année par année.</p>
+        <div class="pn-rev" data-rev="1" data-delay="280" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:15px;color:#474238;margin-bottom:44px">
+          <span style="padding:7px 15px;border-radius:999px;background:#ebddc5;font-weight:700">{{ totalLabel }} d'expérience</span>
+          <span style="padding:7px 15px;border-radius:999px;background:#ebddc5;font-weight:700">Bénin → France</span>
+          <span style="padding:7px 15px;border-radius:999px;background:#ebddc5;font-weight:700">{{ jobCount }} postes · {{ schoolCount }} diplômes</span>
+        </div>
+
+        <div class="pn-rev" data-rev="1" style="background:#ebddc5;border-radius:28px;padding:clamp(20px,3vw,32px);margin-bottom:clamp(40px,6vw,72px)">
+          <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:baseline;justify-content:space-between;margin-bottom:22px">
+            <h2 style="font-size:clamp(22px,2.6vw,30px)">Vue d'ensemble</h2>
+            <div style="display:flex;flex-wrap:wrap;gap:14px;font-size:14px;font-weight:600;color:#474238">
+              <sc-for list="{{ legend }}" as="l" hint-placeholder-count="4">
+                <span style="display:flex;align-items:center;gap:7px"><span style="width:11px;height:11px;border-radius:999px;background:{{ l.color }}"></span>{{ l.label }}</span>
+              </sc-for>
+            </div>
+          </div>
+          <div style="overflow-x:auto;padding-bottom:6px">
+            <div style="min-width:640px">
+              <div style="display:grid;grid-template-columns:clamp(150px,18vw,210px) minmax(0,1fr);gap:14px;margin-bottom:8px">
+                <span></span>
+                <div style="display:flex;font-size:13px;font-weight:700;color:#8a8072">
+                  <sc-for list="{{ gantt.years }}" as="y" hint-placeholder-count="7">
+                    <span style="flex:1;min-width:0">{{ y }}</span>
+                  </sc-for>
                 </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <sc-for list="{{ gantt.groups }}" as="g" hint-placeholder-count="5">
+                  <div style="border-radius:18px;padding:{{ g.pad }};background:{{ g.wrapBg }};border:{{ g.wrapBorder }};display:flex;flex-direction:column;gap:7px">
+                    <div style="display:grid;grid-template-columns:clamp(150px,18vw,210px) minmax(0,1fr);gap:14px;align-items:center">
+                      <span style="font-size:14px;font-weight:700;color:#201e1d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ g.head.label }}</span>
+                      <div style="position:relative;height:26px;border-radius:999px;background:{{ gantt.grid }}">
+                        <div title="{{ g.head.title }}" style="position:absolute;top:4px;height:18px;border-radius:999px;background:{{ g.head.color }};left:{{ g.head.left }};width:{{ g.head.width }};min-width:8px;opacity:{{ g.head.opacity }}"></div>
+                      </div>
+                    </div>
+                    <sc-for list="{{ g.children }}" as="r" hint-placeholder-count="0">
+                      <div style="display:grid;grid-template-columns:clamp(150px,18vw,210px) minmax(0,1fr);gap:14px;align-items:center">
+                        <span style="font-size:13px;font-weight:600;color:#474238;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:16px;border-left:2px solid rgba(122,138,94,0.55)">{{ r.label }}</span>
+                        <div style="position:relative;height:22px;border-radius:999px;background:{{ gantt.grid }}">
+                          <div title="{{ r.title }}" style="position:absolute;top:3px;height:16px;border-radius:999px;background:{{ r.color }};left:{{ r.left }};width:{{ r.width }};min-width:8px;opacity:{{ r.opacity }}"></div>
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-for>
+              </div>
             </div>
+          </div>
+        </div>
 
-            <!-- Skills Detail Panel -->
-            <div class="skills-detail-panel" id="skills-detail-panel">
-                <div class="detail-scan-line"></div>
-                <div class="detail-header">
-                    <div class="detail-badge" id="detail-badge">
-                        <i class="fas fa-building"></i>
-                    </div>
-                    <div class="detail-titles">
-                        <h3 class="detail-domain-name" id="detail-domain-name">Smart Building</h3>
-                        <p class="detail-domain-desc" id="detail-domain-desc">GTB/GTC, KNX, Zigbee, Jeedom</p>
-                    </div>
+        <div class="pn-rev" data-rev="1" style="display:flex;flex-wrap:wrap;gap:9px;margin-bottom:clamp(28px,4vw,44px)">
+          <sc-for list="{{ filters }}" as="fl" hint-placeholder-count="5">
+            <button onClick="{{ fl.pick }}" data-magnet="1" style="font:inherit;font-size:15px;font-weight:700;padding:10px 18px;border-radius:999px;cursor:pointer;transition:background .25s ease,color .25s ease;border:1px solid {{ fl.border }};background:{{ fl.bg }};color:{{ fl.fg }}">{{ fl.label }}</button>
+          </sc-for>
+        </div>
+
+        <div style="position:relative;padding-left:clamp(26px,4vw,44px);border-left:2px solid rgba(32,30,29,0.14);display:flex;flex-direction:column;gap:clamp(22px,3vw,34px)">
+          <sc-for list="{{ timeline }}" as="g" hint-placeholder-count="5">
+            <div class="pn-rev" data-rev="1" style="position:relative">
+              <span style="position:absolute;top:26px;left:calc(-1 * clamp(26px,4vw,44px) - 9px);width:16px;height:16px;border-radius:999px;border:3px solid #f5ead8;background:{{ g.head.color }}"></span>
+              <article style="border-radius:28px;padding:clamp(22px,3vw,32px);background:{{ g.head.bg }};border:1px solid {{ g.head.stroke }}">
+                <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-bottom:14px">
+                  <sc-if value="{{ g.head.hasLogo }}" hint-placeholder-val="{{ false }}">
+                    <span style="width:52px;height:52px;border-radius:16px;background:#f9f4ed;display:flex;align-items:center;justify-content:center;padding:8px;flex:none">
+                      <img data-src="{{ g.head.logo }}" alt="" style="max-width:100%;max-height:100%;object-fit:contain">
+                    </span>
+                  </sc-if>
+                  <sc-if value="{{ g.head.noLogo }}" hint-placeholder-val="{{ false }}">
+                    <span style="width:52px;height:52px;border-radius:16px;background:#f9f4ed;display:flex;align-items:center;justify-content:center;font-family:'Caprasimo',serif;font-size:19px;color:#8c491a;flex:none">{{ g.head.mono }}</span>
+                  </sc-if>
+                  <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px;font-weight:700">
+                    <span style="padding:6px 13px;border-radius:999px;background:var(--pn-accent,#c67139);color:#f5ead8">{{ g.head.periode }}</span>
+                    <span style="padding:6px 13px;border-radius:999px;background:#f9f4ed;color:#474238">{{ g.head.duration }}</span>
+                    <span style="padding:6px 13px;border-radius:999px;background:#f9f4ed;color:#474238">{{ g.head.lieu }}</span>
+                    <span style="padding:6px 13px;border-radius:999px;background:#f9f4ed;color:#474238">{{ g.head.kindLabel }}</span>
+                  </div>
                 </div>
-                <div class="detail-skills-grid" id="detail-skills-grid"></div>
-            </div>
+                <h3 style="font-size:clamp(22px,2.6vw,32px);line-height:1.1">{{ g.head.title }}</h3>
+                <div style="font-size:17px;color:#645c50;margin-top:6px">{{ g.head.subtitle }}</div>
+                <p style="font-size:17px;line-height:1.65;color:#474238;margin:16px 0 0;max-width:70ch;text-wrap:pretty">{{ g.head.recit }}</p>
+                <sc-if value="{{ g.head.hasSkills }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:18px">
+                    <sc-for list="{{ g.head.skills }}" as="sk" hint-placeholder-count="4">
+                      <span style="font-size:14px;font-weight:600;padding:6px 13px;border-radius:999px;background:#f9f4ed;color:#3d472b">{{ sk }}</span>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ g.head.isJob }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ g.head.open }}" data-magnet="1" style="margin-top:22px;font:inherit;font-size:16px;font-weight:700;color:#8c491a;background:none;border:none;padding:0;cursor:pointer;display:inline-flex;align-items:center;gap:8px" style-hover="gap:14px">Lire le détail du poste →</button>
+                </sc-if>
 
-            <!-- Mobile Accordion Fallback -->
-            <div class="skills-accordion" id="skills-accordion"></div>
-        </div>
-    </section>
-
-    <!-- Projets -->
-    <section id="projets" class="section bg-light">
-        <div class="container">
-            <h2 class="section-title"><i class="fas fa-rocket"></i> Projets</h2>
-            <div class="projects-grid" id="projets-grid">
-                <!-- Les projets seront ajoutés dynamiquement -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Certifications -->
-    <section id="certifications" class="section">
-        <div class="container">
-            <h2 class="section-title"><i class="fas fa-award"></i> Certifications</h2>
-            <div class="certifications-grid" id="certifications-grid">
-                <!-- Les certifications seront ajoutées dynamiquement -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Formation -->
-    <section id="formation" class="section">
-        <div class="container">
-            <h2 class="section-title"><i class="fas fa-graduation-cap"></i> Formation</h2>
-            <div class="education-timeline" id="formation-timeline">
-                <!-- La formation sera ajoutée dynamiquement -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Prendre Rendez-vous -->
-    <section id="rendezvous" class="section bg-light">
-        <div class="container">
-            <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Prendre Rendez-vous</h2>
-            <div class="appointment-content">
-                <div class="appointment-intro">
-                    <h3>Discutons de vos projets</h3>
-                    <p>Que ce soit pour une collaboration, un stage, ou simplement échanger sur les technologies IoT et
-                        les bâtiments intelligents, je serais ravi de vous rencontrer.</p>
-                    <div class="appointment-features">
-                        <div class="feature-item">
-                            <i class="fas fa-video"></i>
-                            <span>Visioconférence</span>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-coffee"></i>
-                            <span>Rencontre physique</span>
-                        </div>
-                        <div class="feature-item clickable" onclick="openCalendlyWidget()">
-                            <i class="fas fa-phone"></i>
-                            <span>Appel téléphonique</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="appointment-booking">
-                    <div class="contact-methods">
-                        <h4>Choisissez votre moyen de contact préféré</h4>
-                        <div class="contact-options-grid">
-                            <div class="contact-option" onclick="openCalendlyWidget()">
-                                <div class="contact-icon">
-                                    <i class="fas fa-calendar-alt"></i>
-                                </div>
-                                <h5>Prendre rendez-vous</h5>
-                                <p>Réservez un créneau pour un appel téléphonique</p>
-                                <button class="btn btn-primary">
-                                    <i class="fas fa-phone"></i>
-                                    Calendly
-                                </button>
-                            </div>
-
-                            <div class="contact-option" onclick="contactViaLinkedIn()">
-                                <div class="contact-icon linkedin">
-                                    <i class="fab fa-linkedin"></i>
-                                </div>
-                                <h5>LinkedIn</h5>
-                                <p>Connectons-nous sur le réseau professionnel</p>
-                                <button class="btn btn-linkedin">
-                                    <i class="fab fa-linkedin"></i>
-                                    Me contacter
-                                </button>
-                            </div>
-
-                            <div class="contact-option" onclick="contactViaEmail()">
-                                <div class="contact-icon email">
-                                    <i class="fas fa-envelope"></i>
-                                </div>
-                                <h5>Email</h5>
-                                <p>Envoyez-moi un message détaillé</p>
-                                <button class="btn btn-email">
-                                    <i class="fas fa-envelope"></i>
-                                    Écrire un mail
-                                </button>
-                            </div>
-
-                            <div class="contact-option" onclick="contactViaSMS()">
-                                <div class="contact-icon sms">
-                                    <i class="fas fa-sms"></i>
-                                </div>
-                                <h5>SMS</h5>
-                                <p>Message rapide par téléphone</p>
-                                <button class="btn btn-sms">
-                                    <i class="fas fa-sms"></i>
-                                    Envoyer SMS
-                                </button>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Prince Noukounwoui. Tous droits réservés.</p>
-        </div>
-    </footer>
-
-
-    <!-- Phone Booking Modal -->
-    <div id="phone-booking-modal" class="modal-overlay">
-        <div class="modal-content phone-booking-container">
-            <div class="modal-header">
-                <h3>Réserver un appel téléphonique</h3>
-                <button class="close-btn" onclick="closePhoneBooking()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="booking-step" id="step-1">
-                    <h4>Choisissez votre créneau disponible</h4>
-                    <div class="calendar-view">
-                        <div class="calendar-header">
-                            <button class="calendar-nav" id="prev-month" onclick="navigateMonth(-1)">
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                            <span class="calendar-title" id="calendar-title">Novembre 2024</span>
-                            <button class="calendar-nav" id="next-month" onclick="navigateMonth(1)">
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </div>
-                        <div class="calendar-grid" id="calendar-grid">
-                            <!-- Le calendrier sera généré ici -->
-                        </div>
-                        <div class="availability-legend">
-                            <div class="legend-item">
-                                <div class="legend-color available"></div>
-                                <span>Disponible</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color busy"></div>
-                                <span>Occupé</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color unavailable"></div>
-                                <span>Passé</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color selected"></div>
-                                <span>Sélectionné</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="booking-step hidden" id="step-2">
-                    <h4>Confirmez votre créneau sélectionné</h4>
-                    <div class="selected-slot-info">
-                        <div class="slot-details">
-                            <i class="fas fa-calendar-check"></i>
-                            <div class="slot-text">
-                                <span class="slot-date" id="selected-slot-date"></span>
-                                <span class="slot-time" id="selected-slot-time"></span>
-                            </div>
-                        </div>
-                        <div class="slot-actions">
-                            <button class="btn btn-secondary btn-small" onclick="goBackToCalendar()">
-                                <i class="fas fa-arrow-left"></i>
-                                Modifier
-                            </button>
-                            <button class="btn btn-primary btn-small" onclick="proceedToBookingForm()">
-                                <i class="fas fa-arrow-right"></i>
-                                Continuer
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="booking-step hidden" id="step-3">
-                    <h4>Étape 3 : Confirmez votre rendez-vous</h4>
-                    <div class="booking-summary">
-                        <div class="summary-item">
-                            <i class="fas fa-phone"></i>
-                            <span>Appel téléphonique</span>
-                        </div>
-                        <div class="summary-item">
-                            <i class="fas fa-calendar"></i>
-                            <span id="final-date-display"></span>
-                        </div>
-                        <div class="summary-item">
-                            <i class="fas fa-clock"></i>
-                            <span id="final-time-display"></span>
-                        </div>
-                        <div class="summary-item">
-                            <i class="fas fa-hourglass-half"></i>
-                            <span>Durée : 30 minutes</span>
-                        </div>
-                    </div>
-
-                    <div class="contact-info-form">
-                        <div class="form-group">
-                            <label>Votre nom *</label>
-                            <input type="text" id="booking-name" required placeholder="Votre nom complet">
-                        </div>
-                        <div class="form-group">
-                            <label>Votre téléphone *</label>
-                            <input type="tel" id="booking-phone" required placeholder="06 12 34 56 78">
-                        </div>
-                        <div class="form-group">
-                            <label>Email *</label>
-                            <input type="email" id="booking-email" required placeholder="votre@email.com">
-                        </div>
-                        <div class="form-group">
-                            <label>Sujet de l'appel</label>
-                            <textarea id="booking-subject"
-                                placeholder="Décrivez brièvement le sujet que vous souhaitez aborder..."></textarea>
-                        </div>
-                    </div>
-
-                    <div class="booking-actions">
-                        <button class="btn btn-secondary" onclick="goBackToCalendar()">
-                            <i class="fas fa-arrow-left"></i>
-                            Modifier le créneau
+                <sc-if value="{{ g.head.hasProjects }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:24px;padding-top:20px;border-top:1px solid rgba(122,138,94,0.35)">
+                    <div style="font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#56633f;margin-bottom:10px">{{ g.head.projectsLabel }}</div>
+                    <div style="display:flex;flex-direction:column">
+                      <sc-for list="{{ g.head.projects }}" as="p" hint-placeholder-count="0">
+                        <button onClick="{{ p.open }}" data-peek="{{ p.image }}" data-magnet="1" style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;text-align:left;background:none;border:none;border-top:1px solid rgba(32,30,29,0.14);padding:15px 2px;font:inherit;cursor:pointer;color:#201e1d" style-hover="background:rgba(198,113,57,0.07)">
+                          <span>
+                            <span style="display:block;font-size:17px;font-weight:700">{{ p.nom }}</span>
+                            <span style="display:block;font-size:15px;color:#645c50;margin-top:2px">{{ p.tagline }}</span>
+                          </span>
+                          <span style="font-size:14px;color:#645c50;white-space:nowrap">{{ p.periode }}</span>
                         </button>
-                        <button class="btn btn-primary" onclick="confirmBooking()">
-                            <i class="fas fa-check"></i>
-                            Confirmer le rendez-vous
-                        </button>
+                      </sc-for>
                     </div>
-                </div>
+                  </div>
+                </sc-if>
 
-                <div class="booking-step hidden" id="step-4">
-                    <div class="booking-success">
-                        <i class="fas fa-check-circle"></i>
-                        <h4>Rendez-vous confirmé !</h4>
-                        <p>Votre demande de rendez-vous a été enregistrée. Vous recevrez une confirmation par email dans
-                            les minutes qui suivent.</p>
-                        <div class="success-actions">
-                            <button class="btn btn-primary" onclick="closePhoneBooking()">
-                                <i class="fas fa-times"></i>
-                                Fermer
-                            </button>
-                            <button class="btn btn-secondary" onclick="addToCalendar()">
-                                <i class="fas fa-calendar-plus"></i>
-                                Ajouter à mon agenda
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Calendly Modal -->
-    <div id="calendly-modal" class="modal-overlay">
-        <div class="modal-content calendly-container">
-            <div class="modal-header">
-                <h3>Autres types de rendez-vous</h3>
-                <button class="close-btn" onclick="closeCalendly()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="meeting-types">
-                    <div class="meeting-type" onclick="openInbox('direct')">
-                        <i class="fas fa-video"></i>
-                        <h5>Visioconférence</h5>
-                        <p>Échange en visio via Teams, Zoom ou Google Meet</p>
-                    </div>
-                    <div class="meeting-type" onclick="openInbox('direct')">
-                        <i class="fas fa-coffee"></i>
-                        <h5>Rencontre physique</h5>
-                        <p>Rencontrons-nous à Rennes ou dans les environs</p>
-                    </div>
-                </div>
-                <div class="calendly-placeholder">
-                    <p>Pour d'autres types de rendez-vous, contactez-moi directement pour que nous organisions une
-                        rencontre personnalisée.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Experience Details Modal -->
-    <div id="experience-details-modal" class="modal-overlay">
-        <div class="modal-content experience-modal">
-            <div class="modal-header">
-                <h3 id="experience-title">Détails de l'expérience</h3>
-                <button class="close-btn" onclick="closeExperienceDetails()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="experience-details-content">
-                    <div class="experience-header">
-                        <div class="experience-company">
-                            <h2 id="detail-company">Entreprise</h2>
-                            <h3 id="detail-position">Poste</h3>
-                        </div>
-                        <div class="experience-meta">
-                            <div class="detail-period" id="detail-period">Période</div>
-                            <div class="detail-location" id="detail-location">Lieu</div>
-                        </div>
-                    </div>
-
-                    <div class="experience-sections">
-                        <div class="detail-section">
-                            <h4><i class="fas fa-tasks"></i> Missions principales</h4>
-                            <ul id="detail-missions" class="detail-list">
-                                <!-- Missions dynamiques -->
-                            </ul>
-                        </div>
-
-                        <div class="detail-section">
-                            <h4><i class="fas fa-cogs"></i> Technologies utilisées</h4>
-                            <div id="detail-technologies" class="tech-badges">
-                                <!-- Technologies dynamiques -->
+                <sc-if value="{{ g.hasChildren }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:26px;padding-top:22px;border-top:1px solid rgba(122,138,94,0.35)">
+                    <div style="font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#56633f;margin-bottom:14px">{{ g.childLabel }}</div>
+                    <div style="display:flex;flex-direction:column;gap:14px;padding-left:clamp(14px,2vw,22px);border-left:2px solid rgba(122,138,94,0.45)">
+                      <sc-for list="{{ g.children }}" as="c" hint-placeholder-count="0">
+                        <div style="border-radius:22px;background:#f9f4ed;padding:clamp(18px,2.4vw,24px)">
+                          <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:12px">
+                            <sc-if value="{{ c.hasLogo }}" hint-placeholder-val="{{ false }}">
+                              <span style="width:42px;height:42px;border-radius:14px;background:#ebddc5;display:flex;align-items:center;justify-content:center;padding:7px;flex:none">
+                                <img data-src="{{ c.logo }}" alt="" style="max-width:100%;max-height:100%;object-fit:contain">
+                              </span>
+                            </sc-if>
+                            <sc-if value="{{ c.noLogo }}" hint-placeholder-val="{{ false }}">
+                              <span style="width:42px;height:42px;border-radius:14px;background:#ebddc5;display:flex;align-items:center;justify-content:center;font-family:'Caprasimo',serif;font-size:16px;color:#8c491a;flex:none">{{ c.mono }}</span>
+                            </sc-if>
+                            <div style="display:flex;flex-wrap:wrap;gap:7px;font-size:13px;font-weight:700">
+                              <span style="padding:5px 12px;border-radius:999px;background:var(--pn-accent,#c67139);color:#f5ead8">{{ c.periode }}</span>
+                              <span style="padding:5px 12px;border-radius:999px;background:#ebddc5;color:#474238">{{ c.duration }}</span>
+                              <span style="padding:5px 12px;border-radius:999px;background:#ebddc5;color:#474238">{{ c.lieu }}</span>
                             </div>
+                          </div>
+                          <h4 style="font-family:'Caprasimo',serif;font-size:clamp(19px,2.1vw,24px);line-height:1.12;margin:0">{{ c.title }}</h4>
+                          <div style="font-size:16px;color:#645c50;margin-top:4px">{{ c.subtitle }}</div>
+                          <p style="font-size:16px;line-height:1.6;color:#474238;margin:12px 0 0;max-width:66ch;text-wrap:pretty">{{ c.recit }}</p>
+                          <button onClick="{{ c.open }}" data-magnet="1" style="margin-top:16px;font:inherit;font-size:15px;font-weight:700;color:#8c491a;background:none;border:none;padding:0;cursor:pointer">Lire le détail du poste →</button>
                         </div>
-
-                        <div class="detail-section">
-                            <h4><i class="fas fa-trophy"></i> Réalisations clés</h4>
-                            <ul id="detail-realisations" class="detail-list achievements">
-                                <!-- Réalisations dynamiques -->
-                            </ul>
-                        </div>
-
-                        <div class="detail-section">
-                            <h4><i class="fas fa-mountain"></i> Défis relevés</h4>
-                            <ul id="detail-defis" class="detail-list challenges">
-                                <!-- Défis dynamiques -->
-                            </ul>
-                        </div>
-
-                        <div class="detail-section">
-                            <h4><i class="fas fa-users"></i> Environnement de travail</h4>
-                            <p id="detail-environnement" class="environment-text">
-                                <!-- Environnement dynamique -->
-                            </p>
-                        </div>
-
-                        <div class="detail-section impact-section">
-                            <h4><i class="fas fa-chart-line"></i> Impact et résultats</h4>
-                            <div id="detail-impact" class="impact-text">
-                                <!-- Impact dynamique -->
-                            </div>
-                        </div>
+                      </sc-for>
                     </div>
-                </div>
+                  </div>
+                </sc-if>
+              </article>
             </div>
+          </sc-for>
         </div>
-    </div>
 
-    <!-- Domain Side Panel -->
-    <div id="domain-side-panel" class="side-panel">
-        <div class="side-panel-overlay"></div>
-        <div class="side-panel-content">
-            <div class="side-panel-header">
-                <div class="domain-panel-header">
-                    <div class="domain-icon large">
-                        <i id="panel-domain-icon" class="fas fa-home"></i>
-                    </div>
-                    <div class="domain-info">
-                        <h2 id="panel-domain-name">Domaine</h2>
-                        <p id="panel-domain-description">Description</p>
-                    </div>
-                </div>
-                <button class="panel-close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-
-            <div class="side-panel-body">
-                <div class="domain-content">
-                    <!-- Technologies -->
-                    <div class="domain-section">
-                        <h3><i class="fas fa-cogs"></i> Technologies utilisées</h3>
-                        <div id="panel-technologies" class="technologies-grid">
-                            <!-- Technologies dynamiques -->
-                        </div>
-                    </div>
-
-                    <!-- Expériences -->
-                    <div class="domain-section">
-                        <h3><i class="fas fa-briefcase"></i> Expériences professionnelles</h3>
-                        <div id="panel-experiences" class="experiences-list">
-                            <!-- Expériences dynamiques -->
-                        </div>
-                    </div>
-
-                    <!-- Projets -->
-                    <div class="domain-section">
-                        <h3><i class="fas fa-rocket"></i> Projets réalisés</h3>
-                        <div id="panel-projects" class="projects-list">
-                            <!-- Projets dynamiques -->
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="pn-rev" data-rev="1" style="margin-top:clamp(40px,6vw,72px)">
+          <h2 style="font-size:clamp(22px,2.6vw,30px);margin-bottom:6px">Certifications</h2>
+          <p style="font-size:17px;color:#645c50;margin:0 0 20px">Trois certifications obtenues en parallèle, toutes orientées supervision à distance et réseaux longue portée.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:10px">
+            <sc-for list="{{ certifications }}" as="c" hint-placeholder-count="3">
+              <span style="font-size:15px;font-weight:600;padding:11px 19px;border-radius:999px;background:#e1eecc;color:#3d472b">{{ c }}</span>
+            </sc-for>
+          </div>
         </div>
-    </div>
+      </div>
+    </main>
+  </sc-if>
 
-    <!-- Calendly widget JS -->
-    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js"></script>
-    <!-- Three.js for SkillSphere -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.min.js"></script>
-    <!-- SkillSphere - 3D Skills Constellation -->
-    <script src="skillsphere.js?v=20260206-3"></script>
-    <script src="script.js?v=20260206-4"></script>
-    <!-- Journey Animations - Voyage Immersif -->
-    <script src="journey-animations.js"></script>
+  <sc-if value="{{ isExpDetail }}" hint-placeholder-val="{{ false }}">
+    <main style="padding:150px clamp(20px,4vw,56px) clamp(64px,9vw,120px)">
+      <div style="max-width:1080px;margin:0 auto">
+        <button onClick="{{ goExperiences }}" data-magnet="1" style="font:inherit;font-size:16px;font-weight:700;color:#8c491a;background:none;border:none;padding:0;cursor:pointer;margin-bottom:28px">← Retour au parcours</button>
+        <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-bottom:18px">
+          <sc-if value="{{ exp.hasLogo }}" hint-placeholder-val="{{ false }}">
+            <span style="width:66px;height:66px;border-radius:20px;background:#ebddc5;display:flex;align-items:center;justify-content:center;padding:10px;flex:none">
+              <img data-src="{{ exp.logo }}" alt="" style="max-width:100%;max-height:100%;object-fit:contain">
+            </span>
+          </sc-if>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;font-size:14px;font-weight:700">
+            <span style="padding:7px 15px;border-radius:999px;background:var(--pn-accent,#c67139);color:#f5ead8">{{ exp.periode }}</span>
+            <span style="padding:7px 15px;border-radius:999px;background:#ebddc5;color:#474238">{{ exp.duration }}</span>
+            <span style="padding:7px 15px;border-radius:999px;background:#ebddc5;color:#474238">{{ exp.lieu }}</span>
+            <span style="padding:7px 15px;border-radius:999px;background:#e1eecc;color:#3d472b">{{ exp.domName }}</span>
+          </div>
+        </div>
+        <div style="overflow:hidden" class="pn-mask" data-mask="1"><span><h1 style="font-size:clamp(38px,6vw,82px)">{{ exp.entreprise }}</h1></span></div>
+        <p class="pn-rev" data-rev="1" data-delay="160" style="font-size:clamp(19px,2.2vw,25px);color:#645c50;margin:12px 0 0;max-width:50ch">{{ exp.poste }}</p>
+
+        <div style="display:flex;flex-wrap:wrap;gap:clamp(24px,4vw,48px);margin-top:clamp(36px,5vw,60px);align-items:flex-start">
+          <div class="pn-rev" data-rev="1" style="flex:2.2 1 460px;min-width:0">
+            <p style="font-size:19px;line-height:1.7;color:#2f2b26;margin:0;max-width:68ch;text-wrap:pretty">{{ exp.recit }}</p>
+            <sc-if value="{{ exp.hasChiffres }}" hint-placeholder-val="{{ false }}">
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:30px">
+                <sc-for list="{{ exp.chiffres }}" as="ch" hint-placeholder-count="0">
+                  <div style="border-radius:22px;background:#ebddc5;padding:20px">
+                    <div style="font-family:'Caprasimo',serif;font-size:clamp(30px,3.4vw,40px);line-height:1;color:var(--pn-accent,#c67139)">{{ ch.n }}</div>
+                    <div style="font-size:15px;color:#474238;margin-top:8px">{{ ch.label }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <h2 style="font-size:clamp(20px,2.3vw,26px);margin:36px 0 4px">Au quotidien</h2>
+            <div style="display:flex;flex-direction:column">
+              <sc-for list="{{ exp.missions }}" as="m" hint-placeholder-count="4">
+                <div style="border-top:1px solid rgba(32,30,29,0.16);padding:15px 2px;font-size:17px;color:#474238">{{ m }}</div>
+              </sc-for>
+            </div>
+            <h2 style="font-size:clamp(20px,2.3vw,26px);margin:36px 0 12px">Ce que ce poste m'a appris</h2>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ exp.apports }}" as="ap" hint-placeholder-count="3">
+                <div style="border-radius:20px;background:#ebddc5;padding:16px 20px;font-size:17px;color:#2f2b26">{{ ap }}</div>
+              </sc-for>
+            </div>
+          </div>
+          <aside class="pn-rev" data-rev="1" data-delay="180" style="flex:1 1 300px;border-radius:28px;background:#ebddc5;padding:clamp(22px,3vw,30px);min-width:0">
+            <div style="font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#8c491a;margin-bottom:12px">Compétences acquises</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px">
+              <sc-for list="{{ exp.competences }}" as="c" hint-placeholder-count="5">
+                <span style="font-size:14px;font-weight:600;padding:7px 14px;border-radius:999px;background:#f9f4ed;color:#3d472b">{{ c }}</span>
+              </sc-for>
+            </div>
+            <div style="font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#8c491a;margin-bottom:12px">Technologies</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px">
+              <sc-for list="{{ exp.techs }}" as="tc" hint-placeholder-count="4">
+                <span style="font-size:14px;font-weight:600;padding:7px 14px;border-radius:999px;background:#f9f4ed;color:#474238">{{ tc }}</span>
+              </sc-for>
+            </div>
+            <sc-if value="{{ exp.hasProjects }}" hint-placeholder-val="{{ false }}">
+              <div>
+                <div style="font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#8c491a;margin-bottom:6px">Projets du même domaine</div>
+                <div style="display:flex;flex-direction:column">
+                  <sc-for list="{{ exp.projects }}" as="p" hint-placeholder-count="2">
+                    <button onClick="{{ p.open }}" data-peek="{{ p.image }}" data-magnet="1" style="text-align:left;background:none;border:none;border-top:1px solid rgba(32,30,29,0.16);padding:14px 2px;font:inherit;cursor:pointer;color:#201e1d">
+                      <span style="display:block;font-size:16px;font-weight:700">{{ p.nom }}</span>
+                      <span style="display:block;font-size:14px;color:#645c50;margin-top:2px">{{ p.tagline }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </aside>
+        </div>
+
+        <div class="pn-rev" data-rev="1" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;margin-top:clamp(40px,6vw,72px);border-top:1px solid rgba(32,30,29,0.16);padding-top:26px">
+          <sc-if value="{{ exp.hasPrev }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ exp.prev }}" data-magnet="1" style="text-align:left;font:inherit;background:none;border:none;padding:0;cursor:pointer;color:#201e1d">
+              <span style="display:block;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#8c491a">Poste suivant</span>
+              <span style="display:block;font-family:'Caprasimo',serif;font-size:21px;margin-top:4px">{{ exp.prevLabel }}</span>
+            </button>
+          </sc-if>
+          <sc-if value="{{ exp.hasNext }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ exp.next }}" data-magnet="1" style="text-align:right;font:inherit;background:none;border:none;padding:0;cursor:pointer;color:#201e1d;margin-left:auto">
+              <span style="display:block;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#8c491a">Poste précédent</span>
+              <span style="display:block;font-family:'Caprasimo',serif;font-size:21px;margin-top:4px">{{ exp.nextLabel }}</span>
+            </button>
+          </sc-if>
+        </div>
+      </div>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ isApropos }}" hint-placeholder-val="{{ true }}">
+    <main style="padding:150px clamp(20px,4vw,56px) clamp(64px,9vw,120px)">
+      <div style="max-width:1280px;margin:0 auto">
+        <div style="overflow:hidden" class="pn-mask" data-mask="1"><span><h1 style="font-size:clamp(44px,7.4vw,104px)">À propos</h1></span></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(28px,5vw,64px);align-items:start;margin-top:48px">
+          <div class="pn-rev" data-rev="1">
+            <div data-parallax="0.06" style="border-radius:28px;overflow:hidden;background:#ebddc5">
+              <img src="assets/images/profile.jpg" alt="Prince Noukounwoui" style="width:100%;aspect-ratio:4/5;object-fit:cover;filter:saturate(0.6) contrast(0.85) brightness(1.1) opacity(0.96)">
+            </div>
+          </div>
+          <div>
+            <p class="pn-rev" data-rev="1" style="font-size:clamp(19px,2.1vw,26px);color:#201e1d;margin:0 0 20px">Étudiant en Master 2 Ingénierie Durable des Bâtiments Communicants Intelligents (ISTIC Rennes), en alternance chez Jeedom à Lyon.</p>
+            <p class="pn-rev" data-rev="1" data-delay="120" style="font-size:17px;color:#645c50">{{ resume }}</p>
+            <div class="pn-rev" data-rev="1" data-delay="200" style="display:flex;flex-direction:column;gap:10px;margin-top:26px">
+              <sc-for list="{{ highlights }}" as="h" hint-placeholder-count="3">
+                <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:16px;background:#ebddc5">
+                  <span style="width:8px;height:8px;border-radius:999px;background:#7a8a5e;flex:none"></span>
+                  <span style="font-weight:600">{{ h }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div class="pn-rev" data-rev="1" data-delay="280" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:26px">
+              <button onClick="{{ downloadCV }}" data-magnet="1" style="background:var(--pn-accent,#c67139);color:#f5ead8;border:none;font:inherit;font-weight:600;font-size:16px;padding:14px 26px;border-radius:999px" style-hover="background:var(--pn-accent-600,#b2622d)">Télécharger mon CV</button>
+              <button onClick="{{ openCalendly }}" data-magnet="1" style="background:transparent;color:#56633f;border:1px solid rgba(122,138,94,0.5);font:inherit;font-weight:600;font-size:16px;padding:14px 26px;border-radius:999px" style-hover="background:rgba(122,138,94,0.12)">Prendre rendez-vous</button>
+              <a href="https://www.linkedin.com/in/prince-noukounwoui-ba1978217" target="_blank" rel="noopener" data-magnet="1" style="color:#201e1d;border:1px solid rgba(32,30,29,0.22);font-weight:600;font-size:16px;padding:14px 26px;border-radius:999px" style-hover="background:rgba(32,30,29,0.06);color:#201e1d">LinkedIn</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ isCompetences }}" hint-placeholder-val="{{ false }}">
+    <main style="padding:150px clamp(20px,4vw,56px) clamp(64px,9vw,120px)">
+      <div style="max-width:1280px;margin:0 auto">
+        <div style="overflow:hidden" class="pn-mask" data-mask="1"><span><h1 style="font-size:clamp(44px,7.4vw,104px)">Compétences</h1></span></div>
+        <p class="pn-rev" data-rev="1" data-delay="200" style="max-width:660px;font-size:19px;line-height:1.6;color:#645c50;margin:16px 0 40px">Une liste de technologies ne prouve rien. Choisissez-en une : je vous montre où je l'ai pratiquée, combien de temps, et sur quels projets.</p>
+
+        <div style="display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start">
+          <div style="flex:1.5 1 420px;min-width:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px">
+            <sc-for list="{{ skillGroups }}" as="g" hint-placeholder-count="3">
+              <div class="pn-rev" data-rev="1" style="background:#ebddc5;border-radius:28px;padding:28px">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+                  <span style="width:12px;height:12px;border-radius:999px;background:{{ g.dot }}"></span>
+                  <h3 style="font-size:20px">{{ g.name }}</h3>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:10px">
+                  <sc-for list="{{ g.skills }}" as="s" hint-placeholder-count="6">
+                    <button onClick="{{ s.pick }}" data-magnet="1" style="display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:9px 15px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:background .22s ease,color .22s ease;border:1px solid {{ s.border }};background:{{ s.bg }};color:{{ s.fg }}">
+                      <sc-if value="{{ s.logo }}" hint-placeholder-val="{{ false }}"><img data-src="{{ s.logo }}" alt="" style="width:20px;height:20px;object-fit:contain"></sc-if>
+                      {{ s.name }}
+                      <span style="font-size:13px;opacity:0.7">{{ s.countLabel }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <aside class="pn-rev" data-rev="1" data-delay="160" style="flex:1 1 330px;min-width:0;border-radius:28px;background:#e1eecc;padding:clamp(24px,3vw,32px)">
+            <div style="font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#56633f;margin-bottom:10px">Où je l'ai pratiquée</div>
+            <h2 style="font-size:clamp(24px,3vw,34px);line-height:1.1">{{ usage.title }}</h2>
+            <p style="font-size:17px;line-height:1.6;color:#3d472b;margin:12px 0 0">{{ usage.summary }}</p>
+            <sc-if value="{{ usage.hasJobs }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:24px">
+                <div style="font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#56633f;margin-bottom:4px">Postes</div>
+                <div style="display:flex;flex-direction:column">
+                  <sc-for list="{{ usage.jobs }}" as="j" hint-placeholder-count="0">
+                    <button onClick="{{ j.open }}" data-magnet="1" style="text-align:left;background:none;border:none;border-top:1px solid rgba(122,138,94,0.4);padding:14px 2px;font:inherit;cursor:pointer;color:#201e1d">
+                      <span style="display:block;font-size:16px;font-weight:700">{{ j.entreprise }}</span>
+                      <span style="display:block;font-size:14px;color:#56633f;margin-top:2px">{{ j.meta }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ usage.hasProjects }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:24px">
+                <div style="font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#56633f;margin-bottom:4px">Projets</div>
+                <div style="display:flex;flex-direction:column">
+                  <sc-for list="{{ usage.projects }}" as="p" hint-placeholder-count="0">
+                    <button onClick="{{ p.open }}" data-peek="{{ p.image }}" data-magnet="1" style="text-align:left;background:none;border:none;border-top:1px solid rgba(122,138,94,0.4);padding:14px 2px;font:inherit;cursor:pointer;color:#201e1d">
+                      <span style="display:block;font-size:16px;font-weight:700">{{ p.nom }}</span>
+                      <span style="display:block;font-size:14px;color:#56633f;margin-top:2px">{{ p.tagline }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </aside>
+        </div>
+      </div>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ isRendezvous }}" hint-placeholder-val="{{ false }}">
+    <main style="padding:150px clamp(20px,4vw,56px) clamp(64px,9vw,120px)">
+      <div style="max-width:1280px;margin:0 auto">
+        <div style="overflow:hidden" class="pn-mask" data-mask="1"><span><h1 style="font-size:clamp(44px,7.4vw,104px)">Rendez-vous</h1></span></div>
+        <p class="pn-rev" data-rev="1" data-delay="200" style="max-width:620px;font-size:18px;color:#645c50;margin:16px 0 48px">Collaboration, alternance, mission GTB ou simple échange sur l'IoT — choisissez votre moyen de contact.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px">
+          <sc-for list="{{ contactOptions }}" as="c" hint-placeholder-count="4">
+            <button onClick="{{ c.go }}" data-magnet="1" class="pn-rev" data-rev="1" style="text-align:left;background:#ebddc5;border:none;border-radius:28px;padding:28px;font:inherit;color:#201e1d" style-hover="background:#e1eecc">
+              <span style="display:inline-flex;width:44px;height:44px;border-radius:999px;background:var(--pn-accent,#c67139);margin-bottom:16px"></span>
+              <h3 style="font-size:21px">{{ c.title }}</h3>
+              <p style="margin:8px 0 0;font-size:15px;color:#645c50">{{ c.desc }}</p>
+              <span style="display:inline-block;margin-top:14px;font-size:15px;font-weight:600;color:#8c491a">{{ c.cta }} →</span>
+            </button>
+          </sc-for>
+        </div>
+        <div class="pn-rev" data-rev="1" style="margin-top:48px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px">
+          <div style="border-radius:28px;padding:26px;border:1px solid rgba(32,30,29,0.18)">
+            <div style="font-size:14px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#8c491a;margin-bottom:8px">Visioconférence</div>
+            <p style="margin:0;font-size:16px;color:#474238">Teams, Zoom ou Google Meet — 30 minutes.</p>
+          </div>
+          <div style="border-radius:28px;padding:26px;border:1px solid rgba(32,30,29,0.18)">
+            <div style="font-size:14px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#8c491a;margin-bottom:8px">Rencontre physique</div>
+            <p style="margin:0;font-size:16px;color:#474238">À Lyon ou dans les environs.</p>
+          </div>
+          <div style="border-radius:28px;padding:26px;border:1px solid rgba(32,30,29,0.18)">
+            <div style="font-size:14px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#8c491a;margin-bottom:8px">Appel téléphonique</div>
+            <p style="margin:0;font-size:16px;color:#474238">06 12 71 99 03 — du lundi au vendredi.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </sc-if>
+
+  <footer style="padding:48px clamp(20px,4vw,56px);border-top:1px solid rgba(32,30,29,0.14);display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between">
+    <span style="font-size:15px;color:#645c50">© 2026 Prince Noukounwoui — Lyon, France</span>
+    <div style="display:flex;gap:18px;font-size:15px;font-weight:600">
+      <a href="mailto:noukounwouiprince@gmail.com" data-magnet="1">Email</a>
+      <a href="tel:+33612719903" data-magnet="1">06 12 71 99 03</a>
+      <a href="https://www.linkedin.com/in/prince-noukounwoui-ba1978217" target="_blank" rel="noopener" data-magnet="1">LinkedIn</a>
+    </div>
+  </footer>
+
+  <sc-if value="{{ modal }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeModal }}" style="position:fixed;inset:0;z-index:9200;background:rgba(32,30,29,0.55);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:clamp(16px,4vw,48px)">
+      <div onClick="{{ stop }}" style="width:min(680px,100%);max-height:86vh;overflow-y:auto;background:#f5ead8;border-radius:28px;padding:clamp(24px,4vw,44px);box-shadow:0 12px 32px rgba(46,43,37,0.3)">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px">
+          <div>
+            <div style="font-size:14px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#8c491a">{{ modal.kicker }}</div>
+            <h2 style="font-size:clamp(26px,3.4vw,40px);margin-top:8px">{{ modal.title }}</h2>
+            <div style="font-size:16px;color:#645c50;margin-top:6px">{{ modal.meta }}</div>
+          </div>
+          <button onClick="{{ closeModal }}" data-magnet="1" style="flex:none;width:44px;height:44px;border-radius:999px;border:1px solid rgba(32,30,29,0.2);background:none;font:inherit;font-size:18px;color:#201e1d" style-hover="background:rgba(32,30,29,0.08)">✕</button>
+        </div>
+        <sc-if value="{{ modal.image }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:24px;border-radius:28px;overflow:hidden;background:#ebddc5">
+            <img data-src="{{ modal.image }}" alt="" style="width:100%;aspect-ratio:16/10;object-fit:cover;filter:saturate(0.6) contrast(0.85) brightness(1.1)">
+          </div>
+        </sc-if>
+        <sc-if value="{{ modal.body }}" hint-placeholder-val="{{ false }}">
+          <p style="margin-top:24px;font-size:17px;color:#474238">{{ modal.body }}</p>
+        </sc-if>
+        <sc-for list="{{ modal.sections }}" as="s" hint-placeholder-count="2">
+          <div style="margin-top:30px">
+            <h3 style="font-size:19px;margin-bottom:12px">{{ s.title }}</h3>
+            <ul style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ s.items }}" as="i" hint-placeholder-count="4">
+                <li style="font-size:16px;color:#474238">{{ i }}</li>
+              </sc-for>
+            </ul>
+          </div>
+        </sc-for>
+        <sc-for list="{{ modal.chipGroups }}" as="g" hint-placeholder-count="1">
+          <div style="margin-top:30px">
+            <h3 style="font-size:19px;margin-bottom:12px">{{ g.title }}</h3>
+            <div style="display:flex;flex-wrap:wrap;gap:10px">
+              <sc-for list="{{ g.items }}" as="i" hint-placeholder-count="5">
+                <span style="font-size:14px;font-weight:600;padding:8px 14px;border-radius:999px;background:rgba(122,138,94,0.2);color:#3d472b">{{ i }}</span>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+        <sc-for list="{{ modal.links }}" as="l" hint-placeholder-count="0">
+          <a href="{{ l.href }}" target="_blank" rel="noopener" data-magnet="1" style="display:inline-block;margin:24px 12px 0 0;background:var(--pn-accent,#c67139);color:#f5ead8;font-weight:600;padding:13px 24px;border-radius:999px" style-hover="background:var(--pn-accent-600,#b2622d);color:#f5ead8">{{ l.label }} →</a>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#c67139&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#c67139&quot;,&quot;#7a8a5e&quot;,&quot;#007AFF&quot;],&quot;section&quot;:&quot;Identité&quot;},&quot;magneticCursor&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Interactions&quot;},&quot;smoothScroll&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Interactions&quot;}}">
+const DATA = {
+  resume: "Actuellement en alternance chez JEEDOM, je travaille sur l'intégration de solutions Smarthome, Smartbuilding et Smartcity, en mettant l'accent sur les technologies Zigbee et LoRaWAN. Mes tâches incluent le choix et les tests de produits, la création de dashboards énergétiques, ainsi que le support d'installations GTB. Mes expériences précédentes, notamment chez Qotto et Golf Business Company, m'ont permis de développer des compétences solides en maintenance photovoltaïque, analyse de données IoT et optimisation des infrastructures électriques.",
+  highlights: ["Master Ingénierie Durable des Bâtiments Communicants Intelligents", "Alternant intégrateur chez Jeedom, Lyon", "Zigbee · LoRaWAN · KNX · GTB/GTC"],
+  expSpans: {
+    "Juil. — Sept. 2021": ["2021-07", "2021-09"],
+    "Avr. — Juin 2022": ["2022-04", "2022-06"],
+    "Juil. 2022 — Mars 2023": ["2022-07", "2023-03"],
+    "Avr. — Août 2023": ["2023-04", "2023-08"],
+    "Mai — Août 2025": ["2025-05", "2025-08"],
+    "Sept. 2025 — Présent": ["2025-09", null]
+  },
+  stats: [
+    { n: 0, label: "Ans d'expériences", desc: "professionnelles" },
+    { n: 6, label: "Projets", desc: "réalisés" },
+    { n: 18, label: "Compétences", desc: "techniques" },
+    { n: 3, label: "Certifications", desc: "obtenues" }
+  ],
+  logos: [
+    { name: "Zigbee", src: "assets/logos/zigbee.png" },
+    { name: "LoRaWAN", src: "assets/logos/LoRaWAN.png" },
+    { name: "Jeedom", src: "assets/logos/jeedom.png" },
+    { name: "Victron", src: "assets/logos/Victron.png" },
+    { name: "PVsyst", src: "assets/logos/PVsyst.png" },
+    { name: "AutoCAD", src: "assets/logos/Autocad.png" },
+    { name: "ArchiCAD", src: "assets/logos/archicad.png" },
+    { name: "LoRa", src: "assets/logos/lora.png" }
+  ],
+  projets: [
+    { dom: "iot", nom: "LoRaWAN Plug and Play", tagline: "Bibliothèque Python · IoT", periode: "Nov. 2024 — Avr. 2025", organisation: "Université de Rennes", image: "assets/images/projects/lorawan-project.jpg",
+      description: "Développement d'une bibliothèque Python pour décoder les trames LoRaWAN. Elle extrait automatiquement les informations des capteurs (fabricant, modèle, données mesurées) et reconnaît les capteurs grâce à l'analyse des trames, pour faciliter leur intégration dans des systèmes IoT.",
+      tags: ["Python", "IoT", "LoRaWAN", "Capteurs", "Chirpstack"],
+      competences: ["Internet of Things (IoT)", "Bases de données", "Network server", "LoRaWAN", "Réseaux de capteurs sans fil", "Python", "Cloud", "Linux", "SSH", "Gestion d'équipe"],
+      links: [{ label: "Voir le projet", href: "https://princeddn.github.io/chirp-api/" }] },
+    { dom: "elec", nom: "Modélisation et stabilisation d'un pendule inversé", tagline: "Automatique · MATLAB", periode: "2023 — 2024", organisation: "UFR STGI – Université de Franche-Comté", image: "",
+      description: "Modélisation dynamique et stabilisation d'un pendule inversé monté sur chariot : équations du mouvement par la méthode de Lagrange, linéarisation autour de l'équilibre vertical, fonctions de transfert et représentation en espace d'état. Une commande PID a ensuite été conçue et réglée sous MATLAB/Simulink.",
+      tags: ["Automatique", "PID", "Modélisation", "MATLAB", "Contrôle"],
+      competences: ["Modélisation de systèmes dynamiques", "Méthode de Lagrange", "Conception de contrôleur PID", "Analyse en espace d'état", "MATLAB / Simulink", "Analyse de stabilité"], links: [] },
+    { dom: "iot", nom: "Mini station météo Arduino", tagline: "Électronique embarquée", periode: "Juil. — Août 2021", organisation: "Esmer", image: "",
+      description: "Mini station météo Arduino intégrant des capteurs de vitesse du vent (anémomètre) et de précipitations (pluviomètre). Les données sont affichées en temps réel sur un écran LCD, avec une programmation optimisée — une solution compacte et accessible pour surveiller les conditions météo locales.",
+      tags: ["Arduino", "IoT", "Capteurs", "LCD"],
+      competences: ["Internet of Things (IoT)", "Capteurs", "Arduino", "Électronique embarquée", "Arduino IDE"], links: [] },
+    { dom: "energy", nom: "Logiciel de dimensionnement photovoltaïque", tagline: "Python · Énergie solaire", periode: "Janv. — Févr. 2020", organisation: "Esmer", image: "",
+      description: "Logiciel complet de dimensionnement des systèmes photovoltaïques : calcul de la taille optimale des installations selon les besoins énergétiques, l'irradiation solaire locale et les contraintes techniques. Interface graphique Python pensée pour les professionnels du secteur.",
+      tags: ["Python", "Énergie", "Interface", "Photovoltaïque"],
+      competences: ["Python", "Conception d'interface graphique", "Énergies renouvelables", "Dimensionnement photovoltaïque"], links: [] },
+    { dom: "elec", nom: "Progiciel de dimensionnement de réseau BT", tagline: "VBA Excel · Réseaux électriques", periode: "Févr. — Juil. 2022", organisation: "Esmer", image: "",
+      description: "Logiciel de dimensionnement des réseaux électriques basse tension : sections de câbles, chutes de tension et dimensionnement des équipements de protection. Interface développée en VBA Excel pour une utilisation pratique par les électriciens et ingénieurs.",
+      tags: ["VBA", "Excel", "Électrique", "Dimensionnement"],
+      competences: ["VBA Excel", "Conception d'interface graphique", "Réseau électrique basse tension", "Dimensionnement réseau électrique"], links: [] },
+    { dom: "energy", nom: "Biodigesteur pour la production de biogaz", tagline: "Biomasse · Comsol", periode: "Mars — Juin 2021", organisation: "Esmer", image: "",
+      description: "Conception d'un biodigesteur produisant du biogaz à partir de déchets organiques : dimensionnement du réacteur, étude de faisabilité technique et économique, analyse des performances énergétiques et simulation des processus de fermentation anaérobie sous Comsol.",
+      tags: ["Biomasse", "Comsol", "Énergie", "Biodigesteur"],
+      competences: ["Énergies renouvelables", "Biomasse", "Comsol", "Dimensionnement énergétique", "Analyse économique"], links: [] }
+  ],
+  experiences: [
+    { entreprise: "JEEDOM", poste: "Alternant intégrateur smarthome, smartbuilding et smartcity", periode: "Sept. 2025 — Présent", lieu: "Lyon, France", missions: ["Choix et tests des produits (Zigbee & LoRaWAN)", "Intégration des décodeurs", "Appairage et réalisation de coffrets domotiques", "Création de dashboards énergétiques et widgets", "Suivi et support d'installations GTB", "Prise en main du KNX sur Jeedom", "Étude d'intégration de protocole domotique dans un automate programmable industriel"] },
+    { entreprise: "JEEDOM", poste: "Stagiaire en intégration smarthome, smartbuilding et smartcity", periode: "Mai — Août 2025", lieu: "Lyon, France", missions: ["Choix et tests des produits (Zigbee & LoRaWAN)", "Intégration des décodeurs", "Appairage et réalisation de coffrets domotiques", "Création de dashboards énergétiques et widgets", "Suivi et support d'installations GTB", "Prise en main du KNX sur Jeedom"] },
+    { entreprise: "Qotto", poste: "Stagiaire Analyste Junior – Maintenance et Intervention Photovoltaïque", periode: "Avr. — Août 2023", lieu: "Cotonou, Bénin", missions: ["Surveillance à distance des kits solaires via plateforme IoT", "Maintenance préventive et curative à distance", "Analyse des données de production et de charge", "Coordination des interventions terrain via Google Sheets"] },
+    { entreprise: "Golf Business Company", poste: "Chargé d'Études en Infrastructures Électriques", periode: "Juil. 2022 — Mars 2023", lieu: "Cotonou, Bénin", missions: ["Cartographie réseaux électriques et traitement de données GPS (QGIS, ArcGIS)", "Plans géoréférencés pour optimisation d'infrastructures", "Rapports techniques (sécurité, coûts, faisabilité)", "Contribution à l'électrification rurale"] },
+    { entreprise: "ASEMI SA", poste: "Technicien Électrotechnicien – Réseaux Basse Tension", periode: "Avr. — Juin 2022", lieu: "Cotonou, Bénin", missions: ["Construction et déploiement de réseaux BT souterrains", "Maintenance postes HT/BT", "Analyse de performances et supervision"] },
+    { entreprise: "Songhaï Centre", poste: "Technicien Électrotechnique", periode: "Juil. — Sept. 2021", lieu: "Porto-Novo, Bénin", missions: ["Rebobinage de moteurs AC triphasés", "Installation et entretien d'équipements électrotechniques", "Mise en place de procédures de test et diagnostic"] }
+  ],
+  formation: [
+    { ecole: "Université de Rennes  (ISTIC)", diplome: "Master Ingénierie Durable des Bâtiments Communicants Intelligents", periode: "Sept. 2024 — Juin 2026" },
+    { ecole: "Université de Franche-Comté", diplome: "Licence Ingénierie électrique et énergie", periode: "Sept. 2023 — Juin 2024" },
+    { ecole: "Esmer — École Supérieure des Métiers des Énergies Renouvelables", diplome: "Licence professionnelle Génie électrique et énergie renouvelable", periode: "Nov. 2020 — Juin 2022" }
+  ],
+  expMeta: {
+    "Sept. 2025 — Présent": { dom: "iot", logo: "assets/logos/jeedom.png",
+      recit: "Après le stage, Jeedom m'a gardé en alternance avec un périmètre plus large : je ne teste plus seulement du matériel, je fabrique les briques qui le rendent exploitable — décodeurs, coffrets, dashboards. Le fil rouge de l'année, c'est l'ouverture de la domotique vers l'industriel : j'étudie l'intégration d'un protocole domotique dans un automate programmable, pour faire parler le bâtiment et la machine dans la même langue. Au total, plus de 70 capteurs LoRaWAN de 16 constructeurs sont passés entre mes mains — Milesight et Dragino en tête.",
+      chiffres: [{ n: "70+", label: "capteurs LoRaWAN intégrés" }, { n: "16", label: "constructeurs couverts" }, { n: "27", label: "modèles Milesight" }, { n: "19", label: "modèles Dragino" }],
+      apports: ["Passer du test produit à l'intégration complète : décodeur, appairage, coffret, dashboard", "Lire une installation GTB à distance et accompagner l'installateur au téléphone", "Traduire un besoin d'exploitant en widget énergétique utile, pas en graphique de plus"],
+      competences: ["Zigbee", "LoRaWAN", "KNX", "GTB/GTC", "Décodage de trames", "Dashboards énergétiques", "Support client"],
+      techs: ["Jeedom", "Zigbee", "LoRaWAN", "KNX", "Automate programmable", "JavaScript"] },
+    "Mai — Août 2025": { dom: "iot", logo: "assets/logos/jeedom.png",
+      recit: "Mon entrée dans la domotique professionnelle. Quatre mois à éprouver du matériel Zigbee et LoRaWAN avant de l'intégrer : appairage, portée, vérification des décodeurs, puis premiers coffrets et premiers dashboards. C'est là que j'ai appris à transformer une fiche technique en intégration qui tient en production — et à répondre quand une installation GTB tousse.",
+      chiffres: [{ n: "70+", label: "capteurs LoRaWAN éprouvés" }, { n: "16", label: "constructeurs (Milesight, Dragino, Senlab, Nexelec…)" }],
+      apports: ["Méthode de test produit avant mise en catalogue", "Premiers coffrets domotiques réalisés de bout en bout", "Découverte du KNX et de son articulation avec Jeedom"],
+      competences: ["Zigbee", "LoRaWAN", "Tests produit", "Appairage", "KNX", "Widgets"],
+      techs: ["Jeedom", "Zigbee", "LoRaWAN", "KNX"] },
+    "Avr. — Août 2023": { dom: "energy", logo: "assets/logos/qotto.png",
+      recit: "Chez Qotto, des kits solaires alimentent des foyers hors réseau au Bénin. Mon poste : les surveiller depuis une plateforme IoT et diagnostiquer à distance avant d'envoyer qui que ce soit sur le terrain. J'ai passé ces mois à lire des courbes de production et de charge pour distinguer une batterie en fin de vie d'un usage inhabituel, puis à coordonner les interventions avec les techniciens.",
+      apports: ["Diagnostiquer une installation solaire sans la voir, à partir de ses seules données", "Arbitrer entre maintenance préventive et déplacement terrain", "Coordonner des interventions dispersées avec des outils simples et partagés"],
+      competences: ["Supervision IoT", "Maintenance photovoltaïque", "Analyse de données de production", "VRM", "Coordination terrain"],
+      techs: ["Plateforme IoT", "Victron VRM", "Google Sheets"] },
+    "Juil. 2022 — Mars 2023": { dom: "elec", logo: "",
+      recit: "Neuf mois entre le terrain et le SIG : relever les réseaux électriques au GPS, les remettre en forme sous QGIS et ArcGIS, produire des plans géoréférencés exploitables par les équipes travaux. Ces plans nourrissaient des dossiers d'électrification rurale — chaque rapport technique pesait sur une décision de sécurité, de coût ou de faisabilité.",
+      apports: ["Chaîne complète relevé GPS → base de données → plan géoréférencé", "Rédaction de rapports techniques destinés à la décision", "Vision concrète de ce que l'électrification rurale demande comme préparation"],
+      competences: ["QGIS", "ArcGIS", "Traitement de données GPS", "Cartographie réseau", "Rapports techniques"],
+      techs: ["QGIS", "ArcGIS", "GlobalMapper", "AutoCAD"] },
+    "Avr. — Juin 2022": { dom: "elec", logo: "",
+      recit: "Premier contact avec le réseau pour de vrai : tranchées, câbles basse tension souterrains, postes HT/BT à maintenir. Trois mois utiles pour comprendre ce que le dimensionnement fait subir au matériel, et pour prendre le réflexe de mesurer avant de supposer.",
+      apports: ["Déploiement de réseaux BT souterrains, du plan à la mise en service", "Maintenance de postes HT/BT en conditions réelles", "Réflexe de la mesure et de la supervision avant l'hypothèse"],
+      competences: ["Réseaux BT/HT", "Maintenance de postes", "Supervision", "Sécurité électrique"],
+      techs: ["Réseaux BT souterrains", "Postes HT/BT"] },
+    "Juil. — Sept. 2021": { dom: "elec", logo: "assets/logos/Logo_Songhaï.png",
+      recit: "Mon tout premier poste, à l'atelier : rebobiner des moteurs AC triphasés, remonter, tester, recommencer. J'y ai appris la rigueur du diagnostic — une procédure de test écrite vaut mieux qu'une intuition — et l'envie de remonter du moteur vers le système qui le commande.",
+      apports: ["Rebobinage et remise en service de moteurs AC triphasés", "Écriture de procédures de test et de diagnostic", "Goût du geste technique propre, vérifié avant livraison"],
+      competences: ["Électrotechnique", "Moteurs AC triphasés", "Diagnostic", "Procédures de test"],
+      techs: ["Moteurs AC", "Bancs de test", "Outillage atelier"] }
+  },
+  eduMeta: {
+    "Sept. 2024 — Juin 2026": { span: ["2024-09", "2026-06"], logo: "assets/logos/istic.png", orgs: ["Université de Rennes"],
+      recit: "Le master qui relie tout : bâtiment, réseaux, protocoles. Il se déroule en alternance chez Jeedom, donc chaque notion vue en cours repart en atelier la semaine suivante." },
+    "Sept. 2023 — Juin 2024": { span: ["2023-09", "2024-06"], logo: "assets/logos/universiteMLP.png", orgs: ["UFR STGI – Université de Franche-Comté"],
+      recit: "L'année d'arrivée en France et de consolidation théorique : automatique, électronique de puissance, modélisation — c'est là qu'est né le projet de pendule inversé." },
+    "Nov. 2020 — Juin 2022": { span: ["2020-11", "2022-06"], logo: "assets/logos/esmer.png", orgs: ["Esmer"],
+      recit: "La base : génie électrique et énergies renouvelables, avec des projets logiciels très concrets — dimensionnement photovoltaïque, réseau BT, biodigesteur." }
+  },
+  certifications: ["Certificat Solutions Victron Energy pour les télécoms", "LoRa et LoRaWAN pour l'Internet des Objets", "Analyse et dépannage à distance par VRM"],
+  domains: [
+    { key: "iot", name: "IoT & Domotique", description: "Smart Home, Smart Building, Smart City", dot: "var(--pn-accent,#c67139)", image: "assets/images/domains/iot.png", technologies: ["Zigbee", "LoRaWAN", "KNX", "Jeedom", "GTB/GTC", "Meshtastic"], companies: ["JEEDOM"] },
+    { key: "energy", name: "Énergie renouvelable", description: "Systèmes solaires, monitoring énergétique", dot: "#7a8a5e", image: "assets/images/domains/energie.png", technologies: ["Photovoltaïque", "Monitoring IoT", "Analyse de données", "VRM", "PVSYST"], companies: ["Qotto"] },
+    { key: "elec", name: "Réseaux électriques & Électrotechnique", description: "Réseaux électriques, cartographie, maintenance industrielle", dot: "#8c491a", image: "assets/images/domains/reseaux.png", technologies: ["QGIS", "ArcGIS", "Réseaux BT/HT", "Moteurs AC", "Cartographie GPS", "GlobalMapper"], companies: ["Golf Business Company", "ASEMI SA", "Songhaï Centre"] }
+  ],
+  skillGroups: [
+    { name: "IoT & Domotique", dot: "var(--pn-accent,#c67139)", skills: [
+      { name: "ZigBee", logo: "assets/logos/zigbee.png" }, { name: "LoRa", logo: "assets/logos/lora.png" },
+      { name: "LoRaWAN", logo: "assets/logos/LoRaWAN.png" }, { name: "KNX", logo: "" },
+      { name: "GTB/GTC", logo: "assets/logos/jeedom.png" }, { name: "Analyse de données IoT", logo: "" },
+      { name: "JavaScript", logo: "" }, { name: "Python", logo: "" }] },
+    { name: "Énergie renouvelable", dot: "#7a8a5e", skills: [
+      { name: "Maintenance photovoltaïque", logo: "assets/logos/Victron.png" },
+      { name: "PVSYST", logo: "assets/logos/PVsyst.png" }, { name: "Comsol", logo: "" }, { name: "MatLab", logo: "" }] },
+    { name: "Réseaux & Électrotechnique", dot: "#8c491a", skills: [
+      { name: "Électrotechnique", logo: "" }, { name: "QGIS / ArcGIS", logo: "" },
+      { name: "Autocad", logo: "assets/logos/Autocad.png" }, { name: "ArchiCAD", logo: "assets/logos/archicad.png" },
+      { name: "VBA Excel", logo: "" }, { name: "GlobalMapper", logo: "" }] }
+  ]
+};
+
+const TYPED = ["Smart Building", "GTB / GTC", "IoT & LoRaWAN", "énergie renouvelable"];
+
+class Component extends DCLogic {
+  state = { page: "home", modal: null, domain: "iot", expIdx: 0, tlFilter: "all", skill: "LoRaWAN", projFilter: "all", projIdx: 0 };
+
+  constructor(props) {
+    super(props);
+    this.curtainRef = React.createRef();
+    this.curtainLabelRef = React.createRef();
+    this.cursorRef = React.createRef();
+    this.peekRef = React.createRef();
+    this.peekImgRef = React.createRef();
+    this.canvasRef = React.createRef();
+    this.typeRef = React.createRef();
+    this.mouse = { x: -200, y: -200 };
+    this.pointer = { x: -200, y: -200 };
+  }
+
+  applyAccent() {
+    const pairs = { "#c67139": "#b2622d", "#7a8a5e": "#728157", "#007AFF": "#0051D5", "#201e1d": "#474238" };
+    const a = this.props.accent || "#c67139";
+    const root = document.documentElement;
+    root.style.setProperty("--pn-accent", a);
+    root.style.setProperty("--pn-accent-600", pairs[a] || a);
+  }
+
+  componentDidMount() {
+    this.applyAccent();
+    this.initCursor();
+    this.initTyped();
+    this.initScene();
+    this.startSmoothScroll();
+  }
+
+  componentDidUpdate(prev) {
+    this.applyAccent();
+    if (prev.page !== this.state.page || prev.modal !== this.state.modal) this.initScene();
+  }
+
+  componentWillUnmount() {
+    this.stopped = true;
+    if (this.io) this.io.disconnect();
+    if (this.typeTimer) clearTimeout(this.typeTimer);
+    if (this.keepTimer) clearInterval(this.keepTimer);
+  }
+
+  /* ——— magnetic cursor + project image peek ——— */
+  initCursor() {
+    if (this.cursorBound) return;
+    this.cursorBound = true;
+    const fine = window.matchMedia("(pointer:fine)").matches && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!fine) { if (this.cursorRef.current) this.cursorRef.current.style.display = "none"; return; }
+    document.addEventListener("pointermove", (e) => {
+      this.mouse.x = e.clientX; this.mouse.y = e.clientY;
+      const t = e.target.closest ? e.target.closest("[data-magnet],[data-peek]") : null;
+      const cur = this.cursorRef.current;
+      if (cur && this.props.magneticCursor !== false) {
+        const big = !!t;
+        cur.style.width = big ? "54px" : "14px";
+        cur.style.height = big ? "54px" : "14px";
+        cur.style.background = big ? "rgba(198,113,57,0.28)" : "var(--pn-accent,#c67139)";
+      }
+      const peekEl = e.target.closest ? e.target.closest("[data-peek]") : null;
+      const peek = this.peekRef.current, img = this.peekImgRef.current;
+      if (peek && img) {
+        const src = peekEl && peekEl.getAttribute("data-peek");
+        if (src) {
+          if (img.getAttribute("src") !== src) img.setAttribute("src", src);
+          peek.style.opacity = "1";
+          peek.style.transform = "translate(-50%,-50%) scale(1)";
+        } else {
+          peek.style.opacity = "0";
+          peek.style.transform = "translate(-50%,-50%) scale(.85)";
+        }
+      }
+    });
+    const loop = () => {
+      if (this.stopped) return;
+      this.pointer.x += (this.mouse.x - this.pointer.x) * 0.18;
+      this.pointer.y += (this.mouse.y - this.pointer.y) * 0.18;
+      const cur = this.cursorRef.current;
+      if (cur) { cur.style.left = this.mouse.x + "px"; cur.style.top = this.mouse.y + "px"; }
+      const peek = this.peekRef.current;
+      if (peek) { peek.style.left = this.pointer.x + "px"; peek.style.top = this.pointer.y + "px"; }
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+  }
+
+  /* ——— smooth (inertial) scroll ——— */
+  startSmoothScroll() {
+    if (this.props.smoothScroll === false || this.scrollBound) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    this.scrollBound = true;
+    let target = window.scrollY, current = window.scrollY, running = false;
+    const tick = () => {
+      current += (target - current) * 0.11;
+      if (Math.abs(target - current) < 0.5) { current = target; running = false; }
+      window.scrollTo(0, current);
+      if (running && !this.stopped) requestAnimationFrame(tick);
+    };
+    window.addEventListener("wheel", (e) => {
+      if (e.ctrlKey) return;
+      e.preventDefault();
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      target = Math.max(0, Math.min(max, (running ? target : window.scrollY) + e.deltaY));
+      if (!running) { running = true; current = window.scrollY; requestAnimationFrame(tick); }
+    }, { passive: false });
+  }
+
+  /* ——— scroll reveals, counters, parallax, hero canvas ——— */
+  hydrateImages() {
+    document.querySelectorAll("img[data-src]").forEach((img) => {
+      const s = img.getAttribute("data-src");
+      if (!s || s.indexOf("{{") >= 0) { img.style.display = "none"; return; }
+      img.style.display = "block";
+      if (img.getAttribute("src") !== s) img.setAttribute("src", s);
+    });
+  }
+
+  initScene() {
+    this.hydrateImages();
+    requestAnimationFrame(() => {
+      this.hydrateImages();
+      if (this.io) this.io.disconnect();
+      if (!this.revealed) this.revealed = [];
+      const nodes = document.querySelectorAll("[data-rev],[data-mask],[data-count]");
+      this.io = new IntersectionObserver((entries) => {
+        entries.forEach((en) => {
+          if (!en.isIntersecting) return;
+          const el = en.target;
+          const delay = parseInt(el.getAttribute("data-delay") || "0", 10);
+          if (el.hasAttribute("data-count")) { this.countUp(el); this.io.unobserve(el); return; }
+          setTimeout(() => {
+            el.classList.add("pn-in");
+            if (this.revealed.indexOf(el) < 0) this.revealed.push(el);
+          }, delay);
+          this.io.unobserve(el);
+        });
+      }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+      nodes.forEach((n) => this.io.observe(n));
+      this.keepRevealed();
+      this.initParallax();
+      this.initCanvas();
+    });
+  }
+
+  // React re-renders reset className, which would wipe reveals mid-animation:
+  // re-apply "pn-in" to everything already revealed until the DOM settles.
+  keepRevealed() {
+    if (this.keepTimer) return;
+    this.keepTimer = setInterval(() => {
+      if (this.stopped) { clearInterval(this.keepTimer); return; }
+      this.revealed = (this.revealed || []).filter((el) => el.isConnected);
+      this.revealed.forEach((el) => { if (!el.classList.contains("pn-in")) el.classList.add("pn-in"); });
+    }, 200);
+  }
+
+  countUp(el) {
+    const to = parseInt(el.getAttribute("data-count") || "0", 10);
+    const t0 = performance.now(), dur = 1400;
+    const step = (t) => {
+      const p = Math.min(1, (t - t0) / dur);
+      el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  initParallax() {
+    if (this.parallaxBound) return;
+    this.parallaxBound = true;
+    const run = () => {
+      document.querySelectorAll("[data-parallax]").forEach((el) => {
+        const k = parseFloat(el.getAttribute("data-parallax")) || 0.06;
+        const r = el.getBoundingClientRect();
+        const off = (r.top + r.height / 2 - window.innerHeight / 2) * -k;
+        el.style.transform = "translateY(" + off.toFixed(1) + "px)";
+      });
+    };
+    window.addEventListener("scroll", run, { passive: true });
+    run();
+  }
+
+  initCanvas() {
+    const c = this.canvasRef.current;
+    if (!c || c.dataset.ready) return;
+    c.dataset.ready = "1";
+    const ctx = c.getContext("2d");
+    let pts = [];
+    const size = () => {
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      c.width = c.offsetWidth * dpr; c.height = c.offsetHeight * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const n = Math.max(26, Math.round(c.offsetWidth / 34));
+      pts = Array.from({ length: n }, () => ({
+        x: Math.random() * c.offsetWidth, y: Math.random() * c.offsetHeight,
+        vx: (Math.random() - 0.5) * 0.28, vy: (Math.random() - 0.5) * 0.28,
+        r: 1.4 + Math.random() * 2.1
+      }));
+    };
+    size();
+    window.addEventListener("resize", size);
+    const draw = () => {
+      if (this.stopped || !c.isConnected) return;
+      const w = c.offsetWidth, h = c.offsetHeight;
+      ctx.clearRect(0, 0, w, h);
+      pts.forEach((p) => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > w) p.vx *= -1;
+        if (p.y < 0 || p.y > h) p.vy *= -1;
+      });
+      for (let i = 0; i < pts.length; i++) {
+        for (let j = i + 1; j < pts.length; j++) {
+          const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
+          const d = Math.hypot(dx, dy);
+          if (d < 150) {
+            ctx.strokeStyle = "rgba(198,113,57," + (0.18 * (1 - d / 150)).toFixed(3) + ")";
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.stroke();
+          }
+        }
+      }
+      pts.forEach((p) => {
+        ctx.fillStyle = "rgba(122,138,94,0.5)";
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    };
+    requestAnimationFrame(draw);
+  }
+
+  initTyped() {
+    let i = 0, j = 0, del = false;
+    const run = () => {
+      const el = this.typeRef.current;
+      if (!el) { this.typeTimer = setTimeout(run, 400); return; }
+      const word = TYPED[i];
+      j = del ? j - 1 : j + 1;
+      el.textContent = word.slice(0, j);
+      let wait = del ? 45 : 85;
+      if (!del && j === word.length) { del = true; wait = 1500; }
+      else if (del && j === 0) { del = false; i = (i + 1) % TYPED.length; wait = 350; }
+      this.typeTimer = setTimeout(run, wait);
+    };
+    run();
+  }
+
+  /* ——— page curtain transition ——— */
+  navigate(page, label) {
+    if (page === this.state.page) { window.scrollTo(0, 0); return; }
+    const cur = this.curtainRef.current, lab = this.curtainLabelRef.current;
+    const ease = "transform .75s cubic-bezier(0.76,0,0.24,1)";
+    if (!cur) { this.setState({ page: page, modal: null }); return; }
+    if (lab) { lab.textContent = label || ""; lab.style.transition = "opacity .4s ease"; lab.style.opacity = "1"; }
+    cur.style.transition = ease;
+    cur.style.transform = "translateY(0)";
+    setTimeout(() => {
+      this.setState({ page: page, modal: null });
+      window.scrollTo(0, 0);
+      if (lab) lab.style.opacity = "0";
+      cur.style.transform = "translateY(-100%)";
+      setTimeout(() => { cur.style.transition = "none"; cur.style.transform = "translateY(100%)"; }, 780);
+    }, 760);
+  }
+
+  openProject(p) {
+    this.setState({ modal: {
+      kicker: p.organisation, title: p.nom, meta: p.periode, image: p.image || "", body: p.description,
+      sections: [], chipGroups: [{ title: "Compétences mobilisées", items: p.competences }], links: p.links || []
+    } });
+  }
+
+  openExperience(e) {
+    this.setState({ modal: {
+      kicker: e.periode + " · " + e.lieu, title: e.entreprise, meta: e.poste, image: "", body: "",
+      sections: [{ title: "Missions principales", items: e.missions }], chipGroups: [], links: []
+    } });
+  }
+
+  // union of month indices so overlapping contracts are never double counted
+  monthsOf(spans) {
+    const now = new Date();
+    const nowIdx = now.getFullYear() * 12 + now.getMonth();
+    const mi = (str) => { const p = str.split("-"); return (+p[0]) * 12 + (+p[1]) - 1; };
+    const set = {};
+    spans.filter(Boolean).forEach((sp) => {
+      const a = mi(sp[0]);
+      const b = sp[1] ? mi(sp[1]) : nowIdx;
+      for (let m = a; m <= b; m++) set[m] = 1;
+    });
+    return Object.keys(set).length;
+  }
+
+  durationLabel(months) {
+    const y = Math.floor(months / 12), m = months % 12;
+    if (y === 0) return m + " mois";
+    return y + (y > 1 ? " ans" : " an") + (m ? " " + m + " mois" : "");
+  }
+
+  stats() {
+    const months = this.monthsOf(Object.keys(DATA.expSpans).map((k) => DATA.expSpans[k]));
+    const years = Math.max(1, Math.floor(months / 12));
+    return DATA.stats.map((s, i) => (i === 0 ? Object.assign({}, s, { n: years, desc: months % 12 ? "professionnelles (" + months + " mois cumulés)" : "professionnelles" }) : s));
+  }
+
+  mi(str) { const p = str.split("-"); return (+p[0]) * 12 + (+p[1]) - 1; }
+  nowIdx() { const n = new Date(); return n.getFullYear() * 12 + n.getMonth(); }
+
+  domOf(key) { return DATA.domains.filter((d) => d.key === key)[0] || DATA.domains[0]; }
+
+  jobs() {
+    return DATA.experiences.map((e, i) => {
+      const m = DATA.expMeta[e.periode] || {};
+      const sp = DATA.expSpans[e.periode] || ["2021-01", null];
+      const dom = this.domOf(m.dom);
+      return Object.assign({}, e, m, {
+        idx: i, kind: "job", start: this.mi(sp[0]), end: sp[1] ? this.mi(sp[1]) : this.nowIdx(),
+        color: dom.dot, domKey: dom.key, domName: dom.name,
+        techs: m.techs || dom.technologies, competences: m.competences || [], apports: m.apports || []
+      });
+    });
+  }
+
+  schools() {
+    return DATA.formation.map((fo, i) => {
+      const m = DATA.eduMeta[fo.periode] || { span: ["2020-09", "2021-06"] };
+      return Object.assign({}, fo, m, {
+        idx: i, kind: "edu", start: this.mi(m.span[0]), end: this.mi(m.span[1]), color: "#3d472b"
+      });
+    });
+  }
+
+  // a formation "contains" every job whose period overlaps it; the rest stay top-level
+  groups() {
+    const jobs = this.jobs(), edus = this.schools();
+    const ov = (x, y) => Math.min(x.end, y.end) - Math.max(x.start, y.start) + 1;
+    const owner = {};
+    jobs.forEach((j) => {
+      let best = -1, bo = 0;
+      edus.forEach((e, k) => { const o = ov(j, e); if (o > 0 && o > bo) { bo = o; best = k; } });
+      if (best >= 0) owner[j.idx] = best;
+    });
+    const groups = edus.map((e, k) => ({
+      head: e,
+      children: jobs.filter((j) => owner[j.idx] === k).sort((x, y) => y.end - x.end || y.start - x.start)
+    })).concat(jobs.filter((j) => owner[j.idx] === undefined).map((j) => ({ head: j, children: [] })));
+    return groups.sort((x, y) => {
+      const ex = Math.max.apply(null, [x.head.end].concat(x.children.map((c) => c.end)));
+      const ey = Math.max.apply(null, [y.head.end].concat(y.children.map((c) => c.end)));
+      return ey - ex || y.head.start - x.head.start;
+    });
+  }
+
+  card(r) {
+    const isJob = r.kind === "job";
+    const skills = isJob ? (r.competences || []).slice(0, 5) : [];
+    const name = isJob ? r.entreprise : r.ecole;
+    const orgs = (!isJob && r.orgs) || [];
+    const projs = DATA.projets.filter((p) => orgs.indexOf(p.organisation) >= 0);
+    return {
+      color: r.color,
+      bg: isJob ? "#ebddc5" : "#e1eecc",
+      stroke: isJob ? "rgba(32,30,29,0.08)" : "rgba(122,138,94,0.28)",
+      periode: r.periode,
+      duration: this.durationLabel(r.end - r.start + 1),
+      lieu: isJob ? r.lieu : "Études",
+      kindLabel: isJob ? r.domName : "Formation",
+      title: name,
+      subtitle: isJob ? r.poste : r.diplome,
+      recit: r.recit || "",
+      skills: skills, hasSkills: skills.length > 0,
+      logo: r.logo || "", hasLogo: !!r.logo, noLogo: !r.logo,
+      mono: name.replace(/[^A-Za-zÀ-ÿ ]/g, "").split(" ").filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join(""),
+      isJob: isJob,
+      open: isJob ? () => this.navigateExp(r.idx) : null,
+      projects: projs.map((p) => Object.assign({}, p, {
+        image: p.image || "assets/images/projects/lorawan-project.jpg",
+        open: () => this.openProject(p)
+      })),
+      hasProjects: projs.length > 0,
+      projectsLabel: projs.length > 1 ? "Projets académiques" : "Projet académique"
+    };
+  }
+
+  norm(x) { return (x || "").toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+
+  matchSkill(name, pool) {
+    const n = this.norm(name);
+    return pool.some((v) => { const w = this.norm(v); return w.indexOf(n) >= 0 || n.indexOf(w) >= 0; });
+  }
+
+  skillUsage(name) {
+    const jobs = this.jobs().filter((j) => this.matchSkill(name, (j.competences || []).concat(j.techs || []).concat([j.poste])));
+    const projects = DATA.projets.filter((p) => this.matchSkill(name, (p.competences || []).concat(p.tags || [])));
+    const months = this.monthsOf(jobs.map((j) => DATA.expSpans[j.periode]));
+    return { jobs: jobs, projects: projects, months: months };
+  }
+
+  projectList() {
+    return DATA.projets.map((p, i) => {
+      const dom = this.domOf(p.dom);
+      const first = (p.description || "").split(". ")[0];
+      return Object.assign({}, p, {
+        idx: i, num: String(i + 1).padStart(2, "0"),
+        domName: dom.name, domColor: dom.dot,
+        hasImage: !!p.image, noImage: !p.image,
+        domImage: dom.image,
+        excerpt: first.length > 165 ? first.slice(0, 162) + "…" : first + ".",
+        image: p.image || ""
+      });
+    });
+  }
+
+  frameOf(organisation) {
+    const keys = Object.keys(DATA.eduMeta);
+    for (let i = 0; i < keys.length; i++) {
+      const m = DATA.eduMeta[keys[i]];
+      if (m.orgs && m.orgs.indexOf(organisation) >= 0) {
+        const fo = DATA.formation.filter((x) => x.periode === keys[i])[0];
+        if (fo) return { title: fo.diplome, meta: fo.ecole + " · " + fo.periode };
+      }
+    }
+    return null;
+  }
+
+  navigateProj(i) {
+    const p = this.projectList()[i];
+    this.setState({ projIdx: i });
+    this.navigate("projdetail", p ? p.nom.split(" ").slice(0, 2).join(" ") : "Projet");
+  }
+
+  navigateExp(i) {
+    const j = this.jobs()[i];
+    this.setState({ expIdx: i });
+    this.navigate("expdetail", j ? j.entreprise : "Expérience");
+  }
+
+  openDomain(d) {
+    const exps = DATA.experiences.filter((e) => d.companies.indexOf(e.entreprise) >= 0)
+      .map((e) => e.entreprise + " — " + e.poste + " (" + e.periode + ")");
+    this.setState({ modal: {
+      kicker: "Domaine d'expertise", title: d.name, meta: d.description, image: d.image || "", body: "",
+      sections: [{ title: "Expériences liées", items: exps }],
+      chipGroups: [{ title: "Technologies", items: d.technologies }], links: []
+    } });
+  }
+
+  renderVals() {
+    const page = this.state.page;
+    const go = (p, label) => () => this.navigate(p, label);
+    const projets = DATA.projets.map((p, i) => Object.assign({}, p, {
+      num: String(i + 1).padStart(2, "0"),
+      image: p.image || "assets/images/projects/lorawan-project.jpg",
+      open: () => this.openProject(p)
+    }));
+    return {
+      nav: [
+        { label: "Accueil", go: go("home", "Accueil") },
+        { label: "À propos", go: go("apropos", "À propos") },
+        { label: "Expériences", go: () => { this.setState({ tlFilter: "all" }); this.navigate("experiences", "Parcours"); } },
+        { label: "Compétences", go: go("competences", "Compétences") },
+        { label: "Projets", go: go("projets", "Projets") },
+        { label: "Formation", go: () => { this.setState({ tlFilter: "edu" }); this.navigate("experiences", "Formation"); } },
+        { label: "Rendez-vous", go: go("rendezvous", "Rendez-vous") }
+      ],
+      isHome: page === "home",
+      isProjets: page === "projets",
+      isExperiences: page === "experiences",
+      isApropos: page === "apropos",
+      isCompetences: page === "competences",
+      isExpDetail: page === "expdetail",
+      isProjDetail: page === "projdetail",
+      isRendezvous: page === "rendezvous",
+      contactOptions: [
+        { title: "Prendre rendez-vous", desc: "Réservez un créneau de 30 minutes pour un appel.", cta: "Calendly", go: () => window.open("https://calendly.com/noukounwouiprince/30min", "_blank") },
+        { title: "LinkedIn", desc: "Connectons-nous sur le réseau professionnel.", cta: "Voir le profil", go: () => window.open("https://www.linkedin.com/in/prince-noukounwoui-ba1978217", "_blank") },
+        { title: "Email", desc: "Envoyez-moi un message détaillé.", cta: "Écrire un mail", go: () => { window.location.href = "mailto:noukounwouiprince@gmail.com"; } },
+        { title: "Téléphone", desc: "Message rapide ou appel direct.", cta: "06 12 71 99 03", go: () => { window.location.href = "tel:+33612719903"; } }
+      ],
+      goHome: go("home", "Accueil"),
+      goProjets: go("projets", "Projets"),
+      goExperiences: () => { this.setState({ tlFilter: "all" }); this.navigate("experiences", "Parcours"); },
+      curtainRef: this.curtainRef,
+      curtainLabelRef: this.curtainLabelRef,
+      cursorRef: this.cursorRef,
+      peekRef: this.peekRef,
+      peekImgRef: this.peekImgRef,
+      canvasRef: this.canvasRef,
+      typeRef: this.typeRef,
+      resume: DATA.resume,
+      highlights: DATA.highlights,
+      stats: this.stats(),
+      logoLoop: DATA.logos.concat(DATA.logos),
+      projets: this.projectList()
+        .filter((p) => this.state.projFilter === "all" || p.dom === this.state.projFilter)
+        .map((p) => Object.assign({}, p, {
+          open: () => this.openProject(p),
+          goPage: () => this.navigateProj(p.idx)
+        })),
+      projFilters: [{ key: "all", label: "Tous les projets" }]
+        .concat(DATA.domains.map((d) => ({ key: d.key, label: d.name })))
+        .map((fl) => {
+          const on = this.state.projFilter === fl.key;
+          return Object.assign({}, fl, {
+            bg: on ? "var(--pn-accent,#c67139)" : "transparent",
+            fg: on ? "#f5ead8" : "#474238",
+            border: on ? "var(--pn-accent,#c67139)" : "rgba(32,30,29,0.22)",
+            pick: () => this.setState({ projFilter: fl.key })
+          });
+        }),
+      proj: (() => {
+        const list = this.projectList();
+        const i = Math.max(0, Math.min(list.length - 1, this.state.projIdx));
+        const p = list[i], prev = list[i - 1], next = list[i + 1];
+        const frame = this.frameOf(p.organisation);
+        return Object.assign({}, p, {
+          hasLinks: !!(p.links && p.links.length),
+          hasFrame: !!frame,
+          frameTitle: frame ? frame.title : "",
+          frameMeta: frame ? frame.meta : "",
+          goFrame: () => { this.setState({ tlFilter: "edu" }); this.navigate("experiences", "Formation"); },
+          hasPrev: !!prev, prevLabel: prev ? prev.nom : "", prev: prev ? () => this.navigateProj(i - 1) : null,
+          hasNext: !!next, nextLabel: next ? next.nom : "", next: next ? () => this.navigateProj(i + 1) : null
+        });
+      })(),
+      featured: projets.slice(0, 3),
+      projectCount: DATA.projets.length,
+      formation: DATA.formation,
+      certifications: DATA.certifications,
+      domains: DATA.domains.map((d) => {
+        const on = this.state.domain === d.key;
+        const exps = DATA.experiences.filter((e) => d.companies.indexOf(e.entreprise) >= 0);
+        const projs = projets.filter((p) => p.dom === d.key);
+        const domMonths = this.monthsOf(exps.map((e) => DATA.expSpans[e.periode]));
+        return Object.assign({}, d, {
+          durationLabel: this.durationLabel(domMonths),
+          isOpen: on,
+          bg: on ? "#e1eecc" : "#ebddc5",
+          countLabel: exps.length + (exps.length > 1 ? " expériences · " : " expérience · ") + projs.length + (projs.length > 1 ? " projets" : " projet"),
+          toggleLabel: on ? "Replier —" : "Déplier +",
+          toggle: () => this.setState({ domain: on ? null : d.key }),
+          goto: () => { this.setState({ tlFilter: d.key }); this.navigate("experiences", "Parcours"); },
+          experiences: exps.map((e) => Object.assign({}, e, { open: () => this.openExperience(e) })),
+          projects: projs
+        });
+      }),
+      totalLabel: this.durationLabel(this.monthsOf(Object.keys(DATA.expSpans).map((k) => DATA.expSpans[k]))),
+      jobCount: DATA.experiences.length,
+      schoolCount: DATA.formation.length,
+      legend: DATA.domains.map((d) => ({ label: d.name, color: d.dot })).concat([{ label: "Formation", color: "#3d472b" }]),
+      filters: [{ key: "all", label: "Tout le parcours" }]
+        .concat(DATA.domains.map((d) => ({ key: d.key, label: d.name })))
+        .concat([{ key: "edu", label: "Formation" }])
+        .map((fl) => {
+          const on = this.state.tlFilter === fl.key;
+          return Object.assign({}, fl, {
+            bg: on ? "var(--pn-accent,#c67139)" : "transparent",
+            fg: on ? "#f5ead8" : "#474238",
+            border: on ? "var(--pn-accent,#c67139)" : "rgba(32,30,29,0.22)",
+            pick: () => this.setState({ tlFilter: fl.key })
+          });
+        }),
+      gantt: (() => {
+        const groups = this.groups();
+        const all = this.jobs().concat(this.schools());
+        const min = Math.min.apply(null, all.map((r) => r.start));
+        const max = Math.max.apply(null, all.map((r) => r.end));
+        const y0 = Math.floor(min / 12), y1 = Math.floor(max / 12);
+        const a0 = y0 * 12, span = (y1 - y0 + 1) * 12;
+        const years = []; for (let y = y0; y <= y1; y++) years.push(String(y));
+        const step = 100 / years.length;
+        const fi = this.state.tlFilter;
+        const bar = (r) => {
+          const lit = fi === "all" || (r.kind === "edu" ? fi === "edu" : fi === r.domKey);
+          return {
+            label: r.kind === "job" ? r.entreprise : r.ecole.split(" — ")[0],
+            title: (r.kind === "job" ? r.poste : r.diplome) + " · " + r.periode,
+            color: r.color, opacity: lit ? "1" : "0.22",
+            left: (((r.start - a0) / span) * 100).toFixed(2) + "%",
+            width: (((r.end - r.start + 1) / span) * 100).toFixed(2) + "%"
+          };
+        };
+        return {
+          years: years,
+          grid: "repeating-linear-gradient(to right, rgba(32,30,29,0.10) 0 1px, transparent 1px " + step.toFixed(3) + "%)",
+          groups: groups.map((g) => ({
+            head: bar(g.head),
+            children: g.children.map(bar),
+            pad: g.children.length ? "12px" : "0",
+            wrapBg: g.children.length ? "rgba(122,138,94,0.13)" : "transparent",
+            wrapBorder: g.children.length ? "1px solid rgba(122,138,94,0.35)" : "none"
+          }))
+        };
+      })(),
+      timeline: this.groups()
+        .map((g) => {
+          const fi = this.state.tlFilter;
+          const keepChild = (c) => fi === "all" || fi === c.domKey;
+          const children = g.children.filter(keepChild);
+          const headKeep = fi === "all" || (g.head.kind === "edu" ? fi === "edu" || children.length > 0 : fi === g.head.domKey);
+          return { head: g.head, children: children, keep: headKeep || children.length > 0 };
+        })
+        .filter((g) => g.keep)
+        .map((g) => ({
+          head: this.card(g.head),
+          children: g.children.map((c) => this.card(c)),
+          hasChildren: g.children.length > 0,
+          childLabel: g.children.length > 1 ? "Postes menés pendant ce diplôme" : "Poste mené pendant ce diplôme"
+        })),
+      exp: (() => {
+        const list = this.jobs();
+        const i = Math.max(0, Math.min(list.length - 1, this.state.expIdx));
+        const e = list[i], prev = list[i - 1], next = list[i + 1];
+        return Object.assign({}, e, {
+          duration: this.durationLabel(e.end - e.start + 1),
+          hasLogo: !!e.logo,
+          chiffres: e.chiffres || [], hasChiffres: !!(e.chiffres && e.chiffres.length),
+          projects: projets.filter((p) => p.dom === e.domKey),
+          hasProjects: projets.filter((p) => p.dom === e.domKey).length > 0,
+          hasPrev: !!prev, prevLabel: prev ? prev.entreprise : "",
+          prev: prev ? () => this.navigateExp(i - 1) : null,
+          hasNext: !!next, nextLabel: next ? next.entreprise : "",
+          next: next ? () => this.navigateExp(i + 1) : null
+        });
+      })(),
+      skillGroups: DATA.skillGroups.map((g) => Object.assign({}, g, {
+        skills: g.skills.map((sk) => {
+          const u = this.skillUsage(sk.name);
+          const on = this.state.skill === sk.name;
+          const n = u.jobs.length + u.projects.length;
+          return Object.assign({}, sk, {
+            countLabel: n ? String(n) : "",
+            bg: on ? "var(--pn-accent,#c67139)" : "#f9f4ed",
+            fg: on ? "#f5ead8" : "#201e1d",
+            border: on ? "var(--pn-accent,#c67139)" : "transparent",
+            pick: () => this.setState({ skill: sk.name })
+          });
+        })
+      })),
+      usage: (() => {
+        const name = this.state.skill;
+        const u = this.skillUsage(name);
+        const parts = [];
+        if (u.months) parts.push(this.durationLabel(u.months) + " de pratique en poste");
+        if (u.jobs.length) parts.push(u.jobs.length + (u.jobs.length > 1 ? " postes" : " poste"));
+        if (u.projects.length) parts.push(u.projects.length + (u.projects.length > 1 ? " projets" : " projet"));
+        return {
+          title: name,
+          summary: parts.length ? parts.join(" · ") + "." : "Compétence travaillée en formation et en autonomie, pas encore en poste.",
+          hasJobs: u.jobs.length > 0,
+          jobs: u.jobs.map((j) => ({
+            entreprise: j.entreprise,
+            meta: j.periode + " · " + this.durationLabel(j.end - j.start + 1) + " · " + j.lieu,
+            open: () => this.navigateExp(j.idx)
+          })),
+          hasProjects: u.projects.length > 0,
+          projects: u.projects.map((p) => ({
+            nom: p.nom, tagline: p.tagline,
+            image: p.image || "assets/images/projects/lorawan-project.jpg",
+            open: () => this.openProject(p)
+          }))
+        };
+      })(),
+      modal: this.state.modal,
+      closeModal: () => this.setState({ modal: null }),
+      stop: (e) => e.stopPropagation(),
+      downloadCV: () => window.open("https://github.com/Princeddn/myportfolio", "_blank"),
+      openCalendly: () => window.open("https://calendly.com/noukounwouiprince/30min", "_blank")
+    };
+  }
+}
+</script>
 </body>
-
 </html>
