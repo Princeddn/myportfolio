@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+<style>
+  body { margin:0; background:#F5F5F7; color:#1D1D1F; font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Segoe UI',system-ui,sans-serif; line-height:1.47; -webkit-font-smoothing:antialiased; }
+  a { color:#007AFF; text-decoration:none; }
+  a:hover { color:#0051D5; }
+  @keyframes floatPN { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
+  @keyframes blinkPN { 0%,50%{opacity:1} 51%,100%{opacity:0} }
+  @keyframes bouncePN { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(10px)} }
+</style>
+</helmet>
+
+<div style="background:#F5F5F7">
+
+  <nav style="position:sticky;top:0;width:100%;background:rgba(255,255,255,0.8);backdrop-filter:blur(20px) saturate(180%);z-index:1000;border-bottom:1px solid rgba(255,255,255,0.2);height:72px">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:0 32px;max-width:1200px;margin:0 auto;height:72px">
+      <span style="font-size:1.75rem;font-weight:600;color:#1D1D1F;letter-spacing:-0.02em">PN</span>
+      <ul style="display:flex;list-style:none;gap:8px;align-items:center;margin:0;padding:0">
+        <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="7">
+          <li>
+            <a href="{{ item.href }}" style="text-decoration:none;color:#1D1D1F;font-weight:500;font-size:14px;text-transform:uppercase;letter-spacing:0.5px;padding:12px 16px;border-radius:10px;display:flex;align-items:center;gap:8px;min-height:44px;white-space:nowrap" style-hover="color:#007AFF;background:rgba(0,122,255,0.12)">
+              <i class="{{ item.icon }}" style="font-size:16px;width:18px;height:18px;display:flex;align-items:center;justify-content:center"></i>
+              {{ item.label }}
+            </a>
+          </li>
+        </sc-for>
+      </ul>
+    </div>
+  </nav>
+
+  <section id="accueil" style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#F5F5F7 0%,rgba(245,245,247,0.8) 100%);position:relative;padding:72px 0;overflow:hidden">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;max-width:1200px;margin:0 auto;padding:0 2rem;position:relative;z-index:2">
+      <div>
+        <div style="margin-bottom:0.5rem"><span style="color:#86868B;font-size:1.1rem">Bonjour, je suis</span></div>
+        <h1 style="font-size:clamp(3rem,6vw,5rem);font-weight:700;color:#1D1D1F;margin:0 0 1rem;line-height:1.05;letter-spacing:-0.03em">Prince Noukounwoui</h1>
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1.5rem;font-size:1.3rem;line-height:1.4">
+          <span style="color:#86868B;font-weight:400">Spécialisé en</span>
+          <span style="color:#007AFF;font-weight:600;min-width:280px;text-align:left">IoT &amp; Domotique</span>
+          <span style="color:#007AFF;font-weight:300;animation:blinkPN 1s infinite">|</span>
+        </div>
+        <div style="display:flex;gap:2rem;margin-bottom:2rem;padding:1.5rem 0">
+          <sc-for list="{{ heroStats }}" as="s" hint-placeholder-count="3">
+            <div style="display:flex;flex-direction:column;align-items:center;text-align:center;min-width:120px">
+              <span style="font-size:2.5rem;font-weight:700;color:#007AFF;line-height:1;margin-bottom:0.25rem">{{ s.n }}</span>
+              <span style="font-size:0.9rem;color:#86868B;font-weight:500;text-transform:uppercase;letter-spacing:0.5px">{{ s.label }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <p style="font-size:1.1rem;color:#86868B;margin-bottom:2rem">📍 Lyon, Auvergne-Rhône-Alpes, France</p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap">
+          <a href="#" style="padding:16px 32px;border-radius:980px;font-weight:500;font-size:17px;display:inline-flex;align-items:center;gap:0.5rem;background:#007AFF;color:#FFFFFF"><i class="fas fa-download" style="font-size:0.9rem"></i> Télécharger CV</a>
+          <a href="#rendezvous" style="padding:16px 32px;border-radius:980px;font-weight:500;font-size:17px;display:inline-flex;align-items:center;gap:0.5rem;background:#FFFFFF;color:#007AFF;border:1px solid #D2D2D7"><i class="fas fa-envelope" style="font-size:0.9rem"></i> Me contacter</a>
+          <a href="#experiences" style="padding:16px 32px;border-radius:980px;font-weight:500;font-size:17px;display:inline-flex;align-items:center;gap:0.5rem;background:transparent;color:#1D1D1F;border:1px solid #D2D2D7"><i class="fas fa-briefcase" style="font-size:0.9rem"></i> Voir mes expériences</a>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center;align-items:center">
+        <div style="width:320px;height:320px;border-radius:50%;background:linear-gradient(135deg,#007AFF,#5856D6);box-shadow:0 8px 48px rgba(0,0,0,0.24);animation:floatPN 6s ease-in-out infinite;border:4px solid #FFFFFF;overflow:hidden">
+          <img src="assets/images/profile.jpg" alt="Prince Noukounwoui" style="width:100%;height:100%;object-fit:cover;border-radius:50%" />
+        </div>
+      </div>
+    </div>
+    <div style="position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);animation:bouncePN 2s infinite">
+      <div style="width:24px;height:24px;border:2px solid #007AFF;border-top:none;border-right:none;transform:rotate(-45deg)"></div>
+    </div>
+  </section>
+
+  <section id="apropos" style="padding:6rem 0;background:#F5F5F7">
+    <div style="max-width:1200px;margin:0 auto;padding:0 20px">
+      <h2 style="font-size:3rem;font-weight:700;text-align:center;margin:0 0 4rem;letter-spacing:-0.02em;line-height:1.1;display:flex;align-items:center;justify-content:center;gap:1rem"><i class="fas fa-user" style="color:#007AFF;font-size:2.5rem"></i> À propos de moi</h2>
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:4rem;align-items:start">
+        <div>
+          <div style="margin-bottom:2rem;display:flex;flex-wrap:wrap;gap:1rem;justify-content:center">
+            <span style="background:linear-gradient(135deg,#007AFF,#FF9500);color:#fff;padding:0.5rem 1rem;border-radius:20px;font-size:0.9rem;font-weight:600;box-shadow:0 4px 12px rgba(0,122,255,0.3)">💡 Innovation</span>
+            <span style="background:linear-gradient(135deg,#007AFF,#FF9500);color:#fff;padding:0.5rem 1rem;border-radius:20px;font-size:0.9rem;font-weight:600;box-shadow:0 4px 12px rgba(0,122,255,0.3)">⚡ Énergie</span>
+            <span style="background:linear-gradient(135deg,#007AFF,#FF9500);color:#fff;padding:0.5rem 1rem;border-radius:20px;font-size:0.9rem;font-weight:600;box-shadow:0 4px 12px rgba(0,122,255,0.3)">📡 IoT</span>
+          </div>
+          <p style="font-size:1.3rem;line-height:1.5;color:#86868B;font-weight:400">{{ resume }}</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;margin-top:3rem">
+            <sc-for list="{{ highlights }}" as="h" hint-placeholder-count="3">
+              <div style="display:flex;align-items:center;gap:1rem;padding:1.5rem;background:rgba(0,122,255,0.05);border-radius:16px;border-left:4px solid #007AFF">
+                <i class="{{ h.icon }}" style="font-size:1.5rem;color:#007AFF;width:2rem;text-align:center"></i>
+                <span style="font-weight:500;color:#1D1D1F">{{ h.label }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem">
+          <sc-for list="{{ aboutStats }}" as="s" hint-placeholder-count="4">
+            <div style="background:#FFFFFF;padding:2rem;border-radius:16px;text-align:center;box-shadow:0 2px 16px rgba(0,0,0,0.12);border:1px solid #D2D2D7">
+              <div style="font-size:2.5rem;margin-bottom:1rem">{{ s.icon }}</div>
+              <div style="font-size:3rem;font-weight:800;color:#007AFF;margin-bottom:0.5rem;line-height:1">{{ s.n }}</div>
+              <div style="font-size:1.1rem;font-weight:600;color:#1D1D1F;margin-bottom:0.25rem">{{ s.label }}</div>
+              <div style="font-size:0.9rem;color:#86868B">{{ s.desc }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experiences" style="padding:6rem 0;background:#F5F5F7">
+    <div style="max-width:1200px;margin:0 auto;padding:0 20px">
+      <h2 style="font-size:3rem;font-weight:700;text-align:center;margin:0 0 1rem;letter-spacing:-0.02em;display:flex;align-items:center;justify-content:center;gap:1rem"><i class="fas fa-briefcase" style="color:#007AFF;font-size:2.5rem"></i> Domaines d'expertise</h2>
+      <p style="text-align:center;color:#86868B;font-size:1.2rem;margin:0 0 4rem">Découvrez mes expériences organisées par domaine de compétence</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem">
+        <sc-for list="{{ domains }}" as="d" hint-placeholder-count="3">
+          <div onClick="{{ d.open }}" style="background:#FFFFFF;padding:2.5rem;border-radius:16px;box-shadow:0 2px 16px rgba(0,0,0,0.12);border:1px solid #D2D2D7;cursor:pointer">
+            <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#007AFF,#FF9500);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;box-shadow:0 4px 16px rgba(0,122,255,0.3);margin-bottom:1.5rem"><i class="{{ d.icon }}"></i></div>
+            <h3 style="font-size:1.4rem;font-weight:600;color:#1D1D1F;margin:0 0 0.5rem;letter-spacing:-0.01em">{{ d.name }}</h3>
+            <p style="color:#86868B;margin:0 0 1.5rem">{{ d.description }}</p>
+            <div style="display:flex;flex-wrap:wrap;gap:0.5rem">
+              <sc-for list="{{ d.technologies }}" as="t" hint-placeholder-count="5">
+                <span style="background:#F5F5F7;color:#1D1D1F;padding:0.4rem 0.8rem;border-radius:16px;font-size:0.8rem;font-weight:500;border:1px solid #D2D2D7">{{ t }}</span>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="competences" style="padding:6rem 0;background:#FFFFFF">
+    <div style="max-width:1200px;margin:0 auto;padding:0 20px">
+      <span style="font-family:'JetBrains Mono',monospace;color:#007AFF;font-size:0.9rem;letter-spacing:0.08em">/ Expertise technique</span>
+      <h2 style="font-size:3rem;font-weight:700;margin:0.5rem 0 1rem;letter-spacing:-0.02em">Compétences</h2>
+      <p style="color:#86868B;font-size:1.2rem;max-width:640px;margin:0 0 3rem">Architecture IoT, énergies renouvelables et développement — une vision transversale du bâtiment intelligent.</p>
+      <div>
+        <sc-for list="{{ skillGroups }}" as="g" hint-placeholder-count="3">
+          <div style="margin-bottom:8px;border-radius:16px;overflow:hidden;border:1px solid #D2D2D7;background:#fff">
+            <div style="display:flex;align-items:center;gap:10px;width:100%;padding:14px 16px;font-size:0.95rem;font-weight:600;color:#1D1D1F">
+              <span style="width:10px;height:10px;border-radius:50%;background:{{ g.color }};flex-shrink:0"></span>
+              <span style="flex:1">{{ g.name }}</span>
+              <span style="font-size:0.75rem;color:#86868B;background:#F5F5F7;padding:2px 8px;border-radius:99px">{{ g.count }}</span>
+            </div>
+            <div style="padding:0 16px 16px">
+              <div style="display:flex;flex-wrap:wrap;gap:0.75rem">
+                <sc-for list="{{ g.skills }}" as="s" hint-placeholder-count="6">
+                  <span style="display:inline-flex;align-items:center;gap:8px;background:#F5F5F7;border:1px solid #D2D2D7;border-radius:99px;padding:6px 14px;font-size:0.85rem;color:#1D1D1F">
+                    <sc-if value="{{ s.logo }}" hint-placeholder-val="{{ true }}"><img src="{{ s.logo }}" alt="" style="width:20px;height:20px;object-fit:contain" /></sc-if>
+                    {{ s.name }}
+                  </span>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="projets" style="padding:6rem 0;background:#F5F5F7">
+    <div style="max-width:1200px;margin:0 auto;padding:0 20px">
+      <h2 style="font-size:3rem;font-weight:700;text-align:center;margin:0 0 4rem;letter-spacing:-0.02em;display:flex;align-items:center;justify-content:center;gap:1rem"><i class="fas fa-rocket" style="color:#007AFF;font-size:2.5rem"></i> Projets</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:2rem">
+        <sc-for list="{{ projets }}" as="p" hint-placeholder-count="6">
+          <div style="background:#FFFFFF;border-radius:16px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,0.12);position:relative">
+            <div style="position:relative;height:240px;overflow:hidden;background:#F5F5F7">
+              <sc-if value="{{ p.image }}" hint-placeholder-val="{{ true }}">
+                <img src="{{ p.image }}" alt="" style="width:100%;height:100%;object-fit:cover" />
+              </sc-if>
+              <sc-if value="{{ p.noImage }}" hint-placeholder-val="{{ true }}">
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#007AFF,#FF9500);color:#fff;font-size:4rem"><i class="fas fa-rocket"></i></div>
+              </sc-if>
+            </div>
+            <div style="padding:1.5rem">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;gap:1rem">
+                <h3 style="font-size:1.3rem;font-weight:600;color:#1D1D1F;margin:0;line-height:1.3;flex:1">{{ p.nom }}</h3>
+                <span style="background:rgba(0,122,255,0.1);color:#007AFF;padding:0.25rem 0.75rem;border-radius:20px;font-size:0.8rem;font-weight:500;white-space:nowrap">{{ p.type }}</span>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1rem;color:#86868B;font-size:0.9rem">
+                <span style="display:flex;align-items:center;gap:0.5rem"><i class="fas fa-calendar"></i> {{ p.periode }}</span>
+                <span style="display:flex;align-items:center;gap:0.5rem"><i class="fas fa-building"></i> {{ p.organisation }}</span>
+              </div>
+              <p style="color:#86868B;line-height:1.6;margin-bottom:1.5rem">{{ p.description }}</p>
+              <div style="display:flex;flex-wrap:wrap;gap:0.5rem">
+                <sc-for list="{{ p.tags }}" as="t" hint-placeholder-count="4">
+                  <span style="background:#F5F5F7;color:#1D1D1F;padding:0.25rem 0.75rem;border-radius:15px;font-size:0.8rem;font-weight:500;border:1px solid #D2D2D7">{{ t }}</span>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="certifications" style="padding:6rem 0;background:#FFFFFF">
+    <div style="max-width:1200px;margin:0 auto;padding:0 20px">
+      <h2 style="font-size:3rem;font-weight:700;text-align:center;margin:0 0 4rem;letter-spacing:-0.02em;display:flex;align-items:center;justify-content:center;gap:1rem"><i class="fas fa-award" style="color:#007AFF;font-size:2.5rem"></i> Certifications</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:2rem">
+        <sc-for list="{{ certifications }}" as="c" hint-placeholder-count="3">
+          <div style="background:#FFFFFF;padding:2.5rem;border-radius:16px;box-shadow:0 2px 16px rgba(0,0,0,0.12);border:1px solid #D2D2D7;display:flex;flex-direction:column;align-items:center;text-align:center;gap:1.5rem">
+            <div style="width:64px;height:64px;display:flex;align-items:center;justify-content:center;background:rgba(0,122,255,0.1);border-radius:16px"><i class="fas fa-certificate" style="font-size:2rem;color:#007AFF"></i></div>
+            <h4 style="color:#1D1D1F;font-size:1.1rem;font-weight:600;line-height:1.4;margin:0">{{ c }}</h4>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="formation" style="padding:6rem 0;background:#F5F5F7">
+    <div style="max-width:1200px;margin:0 auto;padding:0 20px">
+      <h2 style="font-size:3rem;font-weight:700;text-align:center;margin:0 0 4rem;letter-spacing:-0.02em;display:flex;align-items:center;justify-content:center;gap:1rem"><i class="fas fa-graduation-cap" style="color:#007AFF;font-size:2.5rem"></i> Formation</h2>
+      <div style="max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:3rem">
+        <sc-for list="{{ formation }}" as="f" hint-placeholder-count="3">
+          <div style="position:relative;padding:2.5rem;background:#FFFFFF;border-radius:16px;box-shadow:0 2px 16px rgba(0,0,0,0.12);border:1px solid #D2D2D7;border-left:4px solid #007AFF">
+            <h3 style="color:#007AFF;font-size:1.4rem;margin:0 0 0.5rem;font-weight:600;letter-spacing:-0.01em">{{ f.ecole }}</h3>
+            <h4 style="color:#1D1D1F;font-size:1.2rem;margin:0 0 0.5rem;font-weight:500">{{ f.diplome }}</h4>
+            <div style="color:#FF9500;font-weight:600;margin-bottom:1rem;font-size:0.95rem">{{ f.periode }}</div>
+            <sc-if value="{{ f.hasComp }}" hint-placeholder-val="{{ true }}">
+              <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid #D2D2D7">
+                <div style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#86868B;margin-bottom:0.75rem">Compétences visées</div>
+                <ul style="list-style:none;margin:0;padding:0;display:grid;gap:0.5rem">
+                  <sc-for list="{{ f.competences }}" as="c" hint-placeholder-count="6">
+                    <li style="position:relative;padding-left:1.4rem;color:#86868B">{{ c }}</li>
+                  </sc-for>
+                </ul>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="rendezvous" style="padding:6rem 0;background:#F5F5F7">
+    <div style="max-width:1200px;margin:0 auto;padding:0 20px">
+      <h2 style="font-size:3rem;font-weight:700;text-align:center;margin:0 0 4rem;letter-spacing:-0.02em;display:flex;align-items:center;justify-content:center;gap:1rem"><i class="fas fa-calendar-alt" style="color:#007AFF;font-size:2.5rem"></i> Prendre Rendez-vous</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start">
+        <div>
+          <h3 style="font-size:1.8rem;font-weight:700;margin:0 0 1rem;letter-spacing:-0.02em">Discutons de vos projets</h3>
+          <p style="color:#86868B;font-size:1.1rem;line-height:1.6">Que ce soit pour une collaboration, un stage, ou simplement échanger sur les technologies IoT et les bâtiments intelligents, je serais ravi de vous rencontrer.</p>
+          <div style="display:flex;flex-direction:column;gap:1rem;margin-top:2rem">
+            <div style="display:flex;align-items:center;gap:1rem;color:#1D1D1F"><i class="fas fa-video" style="color:#007AFF;width:1.5rem"></i><span>Visioconférence</span></div>
+            <div style="display:flex;align-items:center;gap:1rem;color:#1D1D1F"><i class="fas fa-coffee" style="color:#007AFF;width:1.5rem"></i><span>Rencontre physique</span></div>
+            <div style="display:flex;align-items:center;gap:1rem;color:#1D1D1F"><i class="fas fa-phone" style="color:#007AFF;width:1.5rem"></i><span>Appel téléphonique</span></div>
+          </div>
+        </div>
+        <div>
+          <h4 style="font-size:1.1rem;font-weight:600;margin:0 0 1.5rem">Choisissez votre moyen de contact préféré</h4>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem">
+            <sc-for list="{{ contactOptions }}" as="c" hint-placeholder-count="4">
+              <div style="background:#FFFFFF;padding:1.5rem;border-radius:16px;border:1px solid #D2D2D7;box-shadow:0 2px 16px rgba(0,0,0,0.12);text-align:center">
+                <div style="width:48px;height:48px;margin:0 auto 1rem;border-radius:50%;background:{{ c.bg }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.2rem"><i class="{{ c.icon }}"></i></div>
+                <h5 style="margin:0 0 0.5rem;font-size:1rem;font-weight:600">{{ c.title }}</h5>
+                <p style="color:#86868B;font-size:0.9rem;margin:0 0 1rem">{{ c.desc }}</p>
+                <button style="padding:0.6rem 1.2rem;border-radius:980px;border:none;background:{{ c.bg }};color:#fff;font-size:0.9rem;font-weight:500;cursor:pointer">{{ c.cta }}</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="background:#000000;color:#FFFFFF;padding:3rem 0;text-align:center">
+    <div style="max-width:1200px;margin:0 auto;padding:0 20px">
+      <p style="margin:0;color:#A1A1A6;font-size:0.95rem">© 2025 Prince Noukounwoui. Tous droits réservés.</p>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      navItems: [
+        { href: "#accueil", icon: "fas fa-home", label: "Accueil" },
+        { href: "#apropos", icon: "fas fa-user", label: "À propos" },
+        { href: "#experiences", icon: "fas fa-briefcase", label: "Expériences" },
+        { href: "#competences", icon: "fas fa-cogs", label: "Compétences" },
+        { href: "#projets", icon: "fas fa-rocket", label: "Projets" },
+        { href: "#formation", icon: "fas fa-graduation-cap", label: "Formation" },
+        { href: "#rendezvous", icon: "fas fa-calendar-alt", label: "Rendez-vous" }
+      ],
+      heroStats: [
+        { n: "6", label: "ans d'expérience" },
+        { n: "6", label: "projets réalisés" },
+        { n: "3", label: "domaines maîtrisés" }
+      ],
+      resume: "Actuellement en alternance chez JEEDOM, je travaille sur l'intégration de solutions Smarthome, Smartbuilding et Smartcity, en mettant l'accent sur les technologies Zigbee et LoRaWAN. Mes tâches incluent le choix et les tests de produits, la création de dashboards énergétiques, ainsi que le support d'installations GTB. Mes expériences précédentes, notamment chez Qotto et Golf Business Company, m'ont permis de développer des compétences solides en maintenance photovoltaïque, analyse de données IoT et optimisation des infrastructures électriques.",
+      highlights: [
+        { icon: "fas fa-graduation-cap", label: "Master en Bâtiments Intelligents" },
+        { icon: "fas fa-briefcase", label: "Alternant chez JEEDOM" },
+        { icon: "fas fa-map-marker-alt", label: "Rennes, Bretagne" }
+      ],
+      aboutStats: [
+        { icon: "💼", n: "6", label: "Ans D'Expériences", desc: "professionnelles" },
+        { icon: "🚀", n: "3", label: "Projets", desc: "réalisés" },
+        { icon: "🛠️", n: "10", label: "Compétences", desc: "techniques" },
+        { icon: "📜", n: "3", label: "Certifications", desc: "obtenues" }
+      ],
+      domains: [
+        { name: "IoT & Domotique", icon: "fas fa-home", description: "Smart Home, Smart Building, Smart City", technologies: ["Zigbee", "LoRaWAN", "KNX", "Jeedom", "GTB/GTC", "Meshtastic"], open: () => {} },
+        { name: "Énergie Renouvelable", icon: "fas fa-solar-panel", description: "Systèmes solaires, monitoring énergétique", technologies: ["Photovoltaïque", "Monitoring IoT", "Analyse de données", "VRM", "PVSYST"], open: () => {} },
+        { name: "Réseau électrique & Électrotechnique", icon: "fas fa-cogs", description: "Réseaux électriques, cartographie, maintenance industrielle", technologies: ["QGIS", "ArcGIS", "Réseaux BT/HT", "Moteurs AC", "Cartographie GPS", "GlobalMapper"], open: () => {} }
+      ],
+      skillGroups: [
+        { name: "IoT & Domotique", color: "rgba(0, 122, 255, 0.8)", count: "6", skills: [
+          { name: "ZigBee", logo: "assets/logos/zigbee.png" },
+          { name: "LoRa", logo: "assets/logos/lora.png" },
+          { name: "LoRaWAN", logo: "assets/logos/LoRaWAN.png" },
+          { name: "KNX", logo: "" },
+          { name: "GTB/GTC", logo: "assets/logos/jeedom.png" },
+          { name: "Analyse de données IoT", logo: "" }
+        ] },
+        { name: "Énergie Renouvelable", color: "rgba(255, 204, 0, 0.8)", count: "3", skills: [
+          { name: "Maintenance photovoltaïque", logo: "assets/logos/Victron.png" },
+          { name: "PVSYST", logo: "assets/logos/PVsyst.png" },
+          { name: "Comsol", logo: "" }
+        ] },
+        { name: "Réseau électrique & Électrotechnique", color: "rgba(175, 82, 222, 0.8)", count: "6", skills: [
+          { name: "Électrotechnique", logo: "" },
+          { name: "QGIS / ArcGIS", logo: "" },
+          { name: "Autocad", logo: "assets/logos/Autocad.png" },
+          { name: "ArchiCAD", logo: "assets/logos/archicad.png" },
+          { name: "VBA Excel", logo: "" },
+          { name: "MatLab", logo: "" }
+        ] }
+      ],
+      projets: [
+        { nom: "LoRaWAN Plug and Play", periode: "Novembre 2024 - Avril 2025", organisation: "Université de Rennes", type: "Académique", description: "Développement d'une bibliothèque Python pour décoder les trames LoRaWAN. Cette bibliothèque permet d'extraire automatiquement les informations des capteurs (fabricant, modèle, données mesurées) et de reconnaître les capteurs grâce à l'analyse des trames.", tags: ["Python", "IoT", "LoRaWAN", "Capteurs", "Chirpstack"], image: "assets/images/projects/lorawan-project.jpg", noImage: false },
+        { nom: "Modélisation et stabilisation d'un pendule inversé", periode: "2023 - 2024", organisation: "UFR STGI – Université de Franche-Comté", type: "Académique", description: "Modélisation dynamique et stabilisation d'un pendule inversé monté sur chariot : équations du mouvement par la méthode de Lagrange, linéarisation, fonctions de transfert, représentation en espace d'état et commande PID réglée sous MATLAB/Simulink.", tags: ["Automatique", "PID", "Modélisation", "MATLAB", "Contrôle"], image: "", noImage: true },
+        { nom: "Création d'une mini station météo avec Arduino", periode: "Juillet 2021 - Août 2021", organisation: "Esmer", type: "Académique", description: "Mini station météo avec Arduino, intégrant des capteurs pour mesurer la vitesse du vent (anémomètre) et les précipitations (pluviomètre). Les données collectées sont affichées en temps réel sur un écran LCD.", tags: ["Arduino", "IoT", "Capteurs", "LCD"], image: "", noImage: true },
+        { nom: "Logiciel de dimensionnement de système photovoltaïque", periode: "Janvier 2020 - Février 2020", organisation: "Esmer", type: "Académique", description: "Logiciel complet pour le dimensionnement des systèmes photovoltaïques : taille optimale des installations solaires selon les besoins énergétiques, l'irradiation locale et les contraintes techniques. Interface graphique en Python.", tags: ["Python", "Énergie", "Interface", "Photovoltaïque"], image: "", noImage: true },
+        { nom: "Progiciel de dimensionnement de réseau électrique BT", periode: "Février 2022 - Juillet 2022", organisation: "Esmer", type: "Académique", description: "Logiciel de dimensionnement des réseaux électriques basse tension : sections de câbles, chutes de tension et dimensionnement des équipements de protection. Interface développée en VBA Excel.", tags: ["VBA", "Excel", "Électrique", "Dimensionnement"], image: "", noImage: true },
+        { nom: "Conception d'un biodigesteur pour la production de biogaz", periode: "Mars 2021 - Juin 2021", organisation: "Esmer", type: "Académique", description: "Conception d'un biodigesteur pour la production de biogaz à partir de déchets organiques : dimensionnement du réacteur, étude de faisabilité technique et économique, analyse des performances énergétiques et simulation sous Comsol.", tags: ["Biomasse", "Comsol", "Énergie", "Biodigesteur"], image: "", noImage: true }
+      ],
+      certifications: [
+        "Certificat Solutions Victron Energy pour les télécoms",
+        "LoRa et LoRaWAN pour l'Internet des Objets",
+        "Analyse et dépannage à distance par VRM"
+      ],
+      formation: [
+        { ecole: "Université de Rennes 1", diplome: "Master Ingénierie Durable des Bâtiments Communicants Intelligents", periode: "Septembre 2024 - Juin 2026", hasComp: true, competences: [
+          "Conception, intégration et mise en œuvre de solutions d'automatisation du bâtiment (GTB/GTC)",
+          "Réseaux et protocoles du bâtiment et de la ville (Wi‑Fi, Bluetooth, Zigbee, KNX, BACnet, DALI, EnOcean, LoRa, Modbus)",
+          "Gestion du bâti : thermique, acoustique, éclairage, énergie, confort et sécurité",
+          "Administration de réseaux informatiques hétérogènes et réseaux spécifiques du bâtiment",
+          "Programmation et communication réseau pour le bâtiment connecté",
+          "Modélisation, simulation, exploitation et optimisation du bâtiment"
+        ] },
+        { ecole: "Université de Franche-Comté", diplome: "Licence Ingénierie électrique et énergie", periode: "Septembre 2023 - Juin 2024", hasComp: false, competences: [] },
+        { ecole: "Esmer (École Supérieure des Métiers des Énergies Renouvelables)", diplome: "Licence professionnelle Génie électrique et énergie renouvelable", periode: "Novembre 2020 - Juin 2022", hasComp: false, competences: [] }
+      ],
+      contactOptions: [
+        { icon: "fas fa-calendar-alt", title: "Prendre rendez-vous", desc: "Réservez un créneau pour un appel téléphonique", cta: "Calendly", bg: "#007AFF" },
+        { icon: "fab fa-linkedin", title: "LinkedIn", desc: "Connectons-nous sur le réseau professionnel", cta: "Me contacter", bg: "#0A66C2" },
+        { icon: "fas fa-envelope", title: "Email", desc: "Envoyez-moi un message détaillé", cta: "Écrire un mail", bg: "#FF9500" },
+        { icon: "fas fa-sms", title: "SMS", desc: "Message rapide par téléphone", cta: "Envoyer SMS", bg: "#30D158" }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
